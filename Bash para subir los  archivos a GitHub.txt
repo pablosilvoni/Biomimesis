@@ -1,0 +1,3 @@
+git add .
+git commit -m "Explicación breve de lo que cambiaste o agregaste"
+git push origin main
