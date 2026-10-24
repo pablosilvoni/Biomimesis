@@ -1,0 +1,93 @@
+Te paso la Celda 3: 
+
+# ==============================================================================
+# CÉLULA 3: DATASET SINTÉTICO HÍBRIDO CORREGIDO (35% PURAS / 65% OLS)
+# ==============================================================================
+import os
+import pandas as pd
+import numpy as np
+from scipy.optimize import lsq_linear
+
+# Configuración del dataset sintético
+N_SAMPLES = 30000          # Número total de curvas sintéticas
+MAX_COEF = 6.0             # Cota superior para los coeficientes c_i >= 0
+ARCHIVO_BASES = "funciones_base_corregido_v10_intervalo.xlsx"
+
+print(f"⚙️ Generando dataset sintético con {N_SAMPLES} curvas (35% Puras / 65% OLS)...")
+
+# 1. Carga de la matriz de bases desde el archivo correcto
+if not os.path.exists(ARCHIVO_BASES):
+    raise FileNotFoundError(f"No se encontró el archivo '{ARCHIVO_BASES}'.")
+
+df_base = pd.read_excel(ARCHIVO_BASES, header=None)
+x_base_file = df_base.iloc[:, 0].values.astype(np.float64)
+A_base_full = df_base.iloc[:, 1:5].values.astype(np.float64)
+n_bases = A_base_full.shape[1]
+
+# Re-interpola la matriz A_base a la malla unificada de 999 puntos
+if len(x_base_file) != N_PUNTOS_MALLA or not np.allclose(x_base_file, X_MESH_999):
+    A_base = np.zeros((N_PUNTOS_MALLA, n_bases), dtype=np.float64)
+    for j in range(n_bases):
+        A_base[:, j] = np.interp(X_MESH_999, x_base_file, A_base_full[:, j])
+else:
+    A_base = A_base_full.copy()
+
+print(f"📂 Bases funcionales cargadas: {n_bases} bases en {N_PUNTOS_MALLA} puntos.")
+
+# 2. Evaluación de las cotas biofísicas de referencia
+cota_inferior = envolvente_inferior(X_MESH_999)
+cota_superior = envolvente_superior(X_MESH_999)
+
+# 3. Distribución de muestras: 35% Puras y 65% OLS dentro de la envolvente
+n_puras = int(0.35 * N_SAMPLES)      # 10,500 muestras
+n_dispersas = N_SAMPLES - n_puras    # 19,500 muestras
+
+Y_raw = np.zeros((N_SAMPLES, N_PUNTOS_MALLA), dtype=np.float64)
+C_targets = np.zeros((N_SAMPLES, n_bases), dtype=np.float64)
+
+idx_global = 0
+
+# --- A) GENERACIÓN DE BASES PURAS (35%) ---
+for _ in range(n_puras):
+    base_idx = RNG.integers(0, n_bases)
+    c_vec = np.zeros(n_bases, dtype=np.float64)
+    # Permitir que cubran todo el rango hasta MAX_COEF para alcanzar alta presión
+    c_vec[base_idx] = RNG.uniform(1.0, MAX_COEF)  
+    
+    y_target = np.dot(A_base, c_vec)
+    noise = RNG.normal(0.0, 0.005, size=N_PUNTOS_MALLA) * np.abs(y_target)
+    y_target = np.clip(y_target + noise, cota_inferior, cota_superior)
+    
+    Y_raw[idx_global, :] = y_target
+    C_targets[idx_global, :] = c_vec
+    idx_global += 1
+
+# --- B) GENERACIÓN DE COMBINACIONES DENTRO DE LA ENVOLVENTE (65%) ---
+alpha_samples = RNG.uniform(0.0, 1.0, size=(n_dispersas, 1))
+noise_amplitude = RNG.normal(0.0, 0.01, size=(n_dispersas, N_PUNTOS_MALLA))
+
+for i in range(n_dispersas):
+    # Interpolación convexa limpia dentro de la envolvente biofísica
+    y_target = cota_inferior + alpha_samples[i] * (cota_superior - cota_inferior)
+    y_target += noise_amplitude[i] * np.abs(y_target)
+    y_target = np.clip(y_target, cota_inferior, cota_superior)
+    
+    Y_raw[idx_global, :] = y_target
+
+    # Ajuste OLS acotado estricto para extraer el coeficiente real que produce los 80 kPa
+    res_lsq = lsq_linear(A_base, y_target, bounds=(0, MAX_COEF))
+    C_targets[idx_global, :] = res_lsq.x
+    idx_global += 1
+
+# Alias de compatibilidad global
+X_curvas = Y_raw
+Y_coef = C_targets
+
+# 4. Transformación logarítmica de las entradas para estabilidad de la RN
+X_log = safe_log_transform(Y_raw, offset=OFFSET_LOG)
+
+print(f" Dataset sintético híbrido corregido generado con éxito:")
+print(f"    • Curvas de Bases Puras (35%):  {n_puras}")
+print(f"    • Curvas Envolvente OLS (65%): {n_dispersas}")
+print(f"    • Forma de X_log (Entradas RN):  {X_log.shape}")
+print(f"    • Forma de C_targets (Salidas): {C_targets.shape}")

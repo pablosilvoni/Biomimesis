@@ -1,0 +1,435 @@
+\documentclass[11pt,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{graphicx,booktabs,xcolor,array}
+\usepackage{geometry}
+\geometry{a4paper,margin=2.5cm}
+\usepackage[expansion=false]{microtype}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\refname}{Referencias}
+\renewcommand{\abstractname}{Resumen}
+\renewcommand{\contentsname}{Índice}
+\renewcommand{\appendixname}{Apéndice}
+\newtheorem{proposicion}{Proposición}
+\newtheorem{corolario}{Corolario}[proposicion]
+\newtheorem{lema}{Lema}
+\theoremstyle{definition}
+\newtheorem{definicion}{Definición}
+\theoremstyle{remark}
+\newtheorem{observacion}{Observación}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\cl}{\operatorname{clip}}
+\newcommand{\pos}[1]{\left(#1\right)_{+}}
+\newcommand{\negp}[1]{\left(#1\right)_{-}}
+\newcommand{\kPa}{\,\mathrm{kPa}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\SSE}{SSE}
+\DeclareMathOperator{\SST}{SST}
+\DeclareMathOperator{\E}{\mathbb{E}}
+
+\title{\textbf{Reconstrucción de curvas presión--estiramiento en forma de J mediante una red neuronal generalizada con restricciones físicas:\\ análisis matemático, estructural y físico de la identificabilidad de los coeficientes}}
+\author{Pablo Silvoni\thanks{Correspondencia: pablosilvoni@yahoo.com. Afiliación institucional: \emph{[completar]}.}\\[2pt]\small Proyecto \emph{Biomimesis}}
+\date{Octubre de 2026}
+
+\sloppy\begin{document}
+\maketitle
+
+\begin{abstract}
+Se estudia la reconstrucción de curvas de presión intraluminal $P(\lambda)$ en forma de J, típicas de la pared arterial, como combinaciones lineales no negativas y acotadas, $P(\lambda)\approx\sum_{j=1}^{N}c_j A_j(\lambda)$ con $c_j\in[0,6]$, de una familia de $N=4$ funciones base lineales por tramos. Los datos proceden de un modelo de pared gruesa incompresible con ley constitutiva exponencial de tipo Fung, calibrado para una población normotensa joven (Tabla~3) y otra hipertensa tratada (Tabla~6). La región admisible se describe mediante la envolvente inferior/superior de ambas curvas. Se presentan cuatro resultados. \emph{(i)} Una cota estructural exacta: si las columnas del operador de diseño son no negativas y $c\ge 0$, entonces $A\bm c\ge 0$ y, por tanto, toda curva-objetivo con tramo negativo impone un suelo irreducible al error cuadrático; para la envolvente inferior original, que es negativa en el $31{,}7\,\%$ de la malla, $R^2\le 0{,}8675$. \emph{(ii)} La corrección consiste en recortar las curvas a presión $\ge 0$ antes de formar la envolvente, con lo que $R^2\ge 0{,}9962$ con las mismas bases y número de condición $13{,}90$. \emph{(iii)} Una demostración de que el mapa de datos, que recorta la curva $A\bm c$ a la envolvente, no es inyectivo en $c_1$ (saturación para $c_1\ge 4{,}0756$) ni en $c_4$ (para $c_4\le 1{,}2084$), de modo que el predictor óptimo en sentido de mínimos cuadrados es una media condicional y no el coeficiente verdadero; esto explica cuantitativamente la meseta observada en $c_1\approx 4{,}95$ (predicción teórica $5{,}04$). \emph{(iv)} Un diagnóstico de cobertura distribucional: el generador original de envolventes casi nunca produce saltos de proporción $\alpha(\lambda)$ cercanos a $1$ ($0{,}115\,\%$ de las muestras con salto $>0{,}5$), mientras que las curvas físicas $y_1,y_2$ equivalen a saltos de exactamente $1$; ello explica el error de generalización de $8{,}27\,\%$ (NRMSE) en $y_1$ frente a $1{,}01\,\%$ del óptimo de mínimos cuadrados. Se propone una familia de entrenamiento con transiciones abruptas y un protocolo de validación fuera de distribución. Los resultados experimentales de la versión corregida (V12) se declaran explícitamente como pendientes de medición.
+\end{abstract}
+
+\noindent\textbf{Palabras clave:} pared arterial; curva J; ley de Fung; mínimos cuadrados con cotas; condiciones KKT; identificabilidad; redes neuronales informadas por la física; media condicional; cobertura distribucional.
+
+\tableofcontents
+\newpage
+
+%=====================================================================
+\section{Introducción}
+La relación entre la presión intraluminal y la deformación circunferencial de una arteria es no lineal y presenta la conocida forma de ``J'': una zona inicial blanda dominada por la elastina, seguida de un endurecimiento brusco al reclutarse las fibras de colágeno \cite{Fung1967,Humphrey2002,Holzapfel2000}. Cambios en esta curva distinguen tejidos sanos de hipertensos y sirven de biomarcador mecánico.
+
+Una estrategia de reconstrucción consiste en aproximar cualquier curva $P(\lambda)$ dentro de la región delimitada por dos curvas de referencia mediante una combinación lineal de $N$ funciones base conocidas, con coeficientes no negativos y acotados (para conservar la interpretación mecánica de cada término como una contribución rígida $\ge 0$ de magnitud acotada). La inversión se realiza con una red neuronal ``generalizada'' (RN generalizada) que, dada la curva muestreada en una malla, devuelve el vector de coeficientes $\bm c\in[0,6]^N$.
+
+Este trabajo documenta el análisis matemático, estructural y físico necesario para que dicho esquema sea \emph{bien planteado} y \emph{entrenable}. El hilo conductor es la pregunta: \emph{¿qué parte del error observado es atribuible a la red, y qué parte es una limitación del problema?} Mostramos que una fracción dominante pertenece a la segunda categoría y es corregible a nivel de formulación, no de arquitectura.
+
+\paragraph{Contribuciones.}
+\begin{enumerate}
+\item Se formaliza el problema como mínimos cuadrados con cotas (Sec.~\ref{sec:lsq}) y se dan condiciones KKT necesarias y suficientes, unicidad y acondicionamiento exacto.
+\item Se demuestra una cota superior de $R^2$ válida para \emph{cualquier} método (Proposición~\ref{prop:cota}), y se identifica su origen físico (presiones negativas fuera de rango fisiológico).
+\item Se demuestra la no inyectividad del mapa de datos y se deduce el valor teórico del sesgo de la red (Proposición~\ref{prop:noinj}).
+\item Se cuantifica la brecha de cobertura entre el generador de datos y las curvas físicas y se propone una corrección con protocolo de validación.
+\end{enumerate}
+
+%=====================================================================
+\section{Modelo físico}\label{sec:fisica}
+\subsection{Cinemática de la pared gruesa incompresible}
+Sea una arteria cilíndrica de radio interno $R_i$ y espesor $H$ en configuración de referencia, con $h_0=H/R_i$. En la configuración deformada, con radio interno $r_i$ y espesor $h$, se define el estiramiento circunferencial interno $\lambda=r_i/R_i$. Con deformación axial nula, la incompresibilidad impone la conservación del área de la sección,
+\begin{equation}
+ (r_i+h)^2-r_i^2=(R_i+H)^2-R_i^2 .
+\end{equation}
+Dividiendo por $r_i^2=\lambda^2R_i^2$,
+\begin{equation}
+ \left(1+\frac{h}{r_i}\right)^{2}=1+\frac{(1+h_0)^2-1}{\lambda^{2}}
+ \quad\Longrightarrow\quad
+ \frac{h}{r_i}(\lambda)=\sqrt{1+\frac{(1+h_0)^2-1}{\lambda^2}}-1 .
+ \label{eq:cinem}
+\end{equation}
+La ecuación \eqref{eq:cinem} es decreciente en $\lambda$: al inflar, la pared se adelgaza relativamente.
+
+\subsection{Equilibrio y presión}
+El equilibrio radial integrado en el espesor da, para la presión transmural,
+\begin{equation}
+ P_i-P_e=\int_{r_i}^{r_i+h}\frac{\sigma_{\theta\theta}-\sigma_{rr}}{r}\,dr .
+\end{equation}
+Aproximando la tensión circunferencial por su promedio de pared $\bar\sigma_{\theta\theta}$ y despreciando $\sigma_{rr}$ frente a $\sigma_{\theta\theta}$ (hipótesis de pared de espesor moderado), resulta la ley de Laplace generalizada
+\begin{equation}
+ P(\lambda)=\bar\sigma_{\theta\theta}(\lambda)\,\ln\!\Bigl(1+\frac{h}{r_i}(\lambda)\Bigr)+P_a ,
+ \label{eq:laplace}
+\end{equation}
+donde $P_a$ es una presión de referencia (offset) de calibración.
+
+\subsection{Ley constitutiva de tipo Fung}
+La tensión promedio sigue la forma exponencial
+\begin{equation}
+ \bar\sigma_{\theta\theta}(\lambda)=a\bigl(e^{\,b(\lambda-1)}-1\bigr),\qquad a>0,\; b>0,
+ \label{eq:fung}
+\end{equation}
+que produce el endurecimiento exponencial característico de la J \cite{Fung1967}. Los parámetros de las dos poblaciones se recogen en la Tabla~\ref{tab:par}.
+
+\begin{table}[ht]
+\centering
+\caption{Parámetros del modelo \eqref{eq:cinem}--\eqref{eq:fung} para las dos curvas de referencia.}\label{tab:par}
+\begin{tabular}{lcccc}
+\toprule
+Curva & $a$ [kPa] & $b$ & $h_0$ & $P_a$ [kPa]\\
+\midrule
+$y_1$ (Tabla~3, normotensos jóvenes) & $39{,}87012495$ & $7{,}91934038$ & $0{,}1703$ & $5{,}63$\\
+$y_2$ (Tabla~6, hipertensos tratados) & $73{,}37535695$ & $10{,}40342667$ & $0{,}2197$ & $5{,}98$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Envolvente y dominio}
+Se trabaja en $\lambda\in[0{,}84,\,1{,}20]$ discretizado en $M=999$ puntos equiespaciados $\lambda_1<\dots<\lambda_M$. Las envolventes son
+\begin{equation}
+ y_{\min}(\lambda)=\min\{y_1(\lambda),y_2(\lambda)\},\qquad y_{\max}(\lambda)=\max\{y_1(\lambda),y_2(\lambda)\}.
+\end{equation}
+Las dos curvas se cruzan en $\lambda_\times\approx0{,}9962$ (Figura~\ref{fig:env}); a la izquierda domina $y_1$ como cota superior y a la derecha $y_2$. A $\lambda=1{,}2$, $y_1=23{,}27\kPa$ y $y_2=80{,}99\kPa$.
+
+\paragraph{Presiones negativas.} Como $\bar\sigma_{\theta\theta}<0$ para $\lambda<1$ y $P_a\approx 6\kPa$ es pequeño, \eqref{eq:laplace} produce presiones negativas cuando $\lambda$ es suficientemente menor que $1$: $y_2(0{,}84)=-9{,}65\kPa$. La envolvente inferior es negativa en el $31{,}7\,\%$ de la malla y cruza el cero en $\lambda\approx0{,}9543$. Una presión transmural negativa corresponde a un vaso colapsado, fuera del protocolo de inflado fisiológico; como se verá, esta región no solo carece de sentido fisiológico sino que es matemáticamente inalcanzable para el modelo de bases.
+
+\begin{figure}[ht]
+\centering\includegraphics[width=.78\linewidth]{fig/f1_envolvente.pdf}
+\caption{Curvas $y_1$, $y_2$ y su envolvente. La región sombreada en naranja es donde $y_{\min}<0$ ($31{,}7\,\%$ de la malla).}\label{fig:env}
+\end{figure}
+
+%=====================================================================
+\section{Representación por funciones base}\label{sec:bases}
+\subsection{Definición}
+Se utilizan $N=4$ rampas lineales por tramos con nodos $(k_1,k_2,k_3)=(0{,}95;\,1{,}05;\,1{,}1679)$ y pendientes $(m_1,\dots,m_4)=(0{,}552;\;1{,}2183;\;2{,}0;\;6{,}0)$:
+\begin{align}
+ A_1(\lambda)&=s\,m_1(\lambda-0{,}84),\\
+ A_j(\lambda)&=s\,m_j\,\pos{\lambda-k_{j-1}},\quad j=2,3,4,
+\end{align}
+con $\pos{u}=\max(0,u)$ y factor global $s=100$. Cada $A_j$ es no negativa, no decreciente y continua; sus valores en $\lambda=1{,}2$ son $A(1{,}2)=(19{,}872;\,30{,}4575;\,30{,}0;\,19{,}26)$. La estructura recuerda a la J: el término $j$ ``se enciende'' en $k_{j-1}$ y aporta rigidez creciente.
+
+\begin{figure}[ht]
+\centering\includegraphics[width=.72\linewidth]{fig/f2_bases.pdf}
+\caption{Funciones base $A_j(\lambda)$.}\label{fig:bases}
+\end{figure}
+
+\subsection{Matriz de diseño y acondicionamiento}
+Sea $A\in\R^{M\times N}$ con $A_{ij}=A_j(\lambda_i)$. Los valores singulares son
+\begin{equation}
+ \sigma(A)=(671{,}38;\;154{,}37;\;76{,}22;\;48{,}30),\qquad
+ \cond_2(A)=\frac{\sigma_{\max}}{\sigma_{\min}}=13{,}90 .
+\end{equation}
+\begin{observacion}
+El número de condición es invariante frente al escalado global $s$, pues $\cond(sA)=\cond(A)$; por tanto $s$ solo fija las unidades y el rango numérico de los coeficientes ($c_j\in[0,6]$ cubre pendientes efectivas $s\,m_j c_j$).
+\end{observacion}
+Como $\sigma_{\min}>0$, $A$ tiene rango columna completo, hecho que se usa en la Sec.~\ref{sec:lsq} para garantizar unicidad.
+
+%=====================================================================
+\section{El problema de mínimos cuadrados con cotas}\label{sec:lsq}
+\subsection{Planteamiento}
+Para una curva-objetivo $\bm b\in\R^M$ (los valores de $P$ en la malla), el coeficiente \emph{verdadero} (etiqueta) se define como
+\begin{equation}
+ \bm c^\star(\bm b)=\argmin_{\bm c\in[0,C]^N}\ \tfrac12\norm{A\bm c-\bm b}_2^2,\qquad C=6 .
+ \label{eq:bvls}
+\end{equation}
+\begin{proposicion}[Existencia, unicidad y KKT]\label{prop:kkt}
+El problema \eqref{eq:bvls} tiene solución única. Un punto factible $\bm c$ es solución si y solo si, con $\bm g=A^{\!\top}(A\bm c-\bm b)$,
+\begin{equation}
+ g_j\ge0\ \text{si } c_j=0,\qquad g_j\le0\ \text{si } c_j=C,\qquad g_j=0\ \text{si }0<c_j<C .
+\end{equation}
+\end{proposicion}
+\begin{proof}
+El conjunto factible es un cubo compacto y la función es continua, luego existe mínimo. Como $\sigma_{\min}(A)>0$, el hessiano $A^{\!\top}A\succ0$ y la función es estrictamente convexa, de donde la unicidad. La función es convexa y diferenciable y el conjunto es un politopo, de modo que las condiciones KKT son necesarias y suficientes \cite{Boyd2004}: el multiplicador asociado a $c_j\ge0$ es $\mu_j=g_j\ge0$ cuando la cota está activa, y el de $c_j\le C$ es $-g_j\ge 0$; la complementariedad conduce a las tres condiciones enunciadas.
+\end{proof}
+El problema de mínimos cuadrados con variables acotadas se resuelve de forma robusta con métodos de región de confianza reflexiva \cite{Stark1995,Branch1999}; en la implementación se emplea \texttt{lsq\_linear}, y la verificación de optimalidad se hace independientemente evaluando las condiciones anteriores (con el método \texttt{trust-constr} para contraste).
+
+\subsection{Relajación y coeficiente de determinación}
+Se definen $\SSE(\bm c)=\norm{A\bm c-\bm b}^2$, $\SST=\norm{\bm b-\bar b\bm 1}^2$ y $R^2=1-\SSE/\SST$. Sea $\bm c^{\mathrm{rel}}$ la solución sin cotas (mínimos cuadrados ordinarios, vía SVD). Como la cota restringe el conjunto de búsqueda,
+\begin{equation}
+ R^2_{\mathrm{real}}\ \le\ R^2_{\mathrm{rel}} .
+\end{equation}
+La diferencia mide el costo de exigir coeficientes en $[0,6]^N$ (interpretabilidad mecánica).
+
+%=====================================================================
+\section{Limitación estructural: cota universal de $R^2$}\label{sec:cota}
+\subsection{Resultado}
+Sea $\bm b_w=(1-w)\,\bm y_{\min}+w\,\bm y_{\max}$, $w\in[0,1]$, la familia que interpola entre la envolvente inferior y la superior.
+
+\begin{proposicion}[Cota estructural]\label{prop:cota}
+Si todas las columnas de $A$ son no negativas, entonces para todo $\bm c\ge0$ se cumple $A\bm c\ge0$ componente a componente y
+\begin{equation}
+ \SSE(\bm c)\ \ge\ S_-(\bm b):=\sum_{i=1}^{M}\negp{b_i}^{\,2},\qquad
+ R^2\ \le\ 1-\frac{S_-(\bm b)}{\SST(\bm b)},
+ \label{eq:cota}
+\end{equation}
+con $\negp{u}=\max(0,-u)$. La cota vale para cualquier algoritmo (red neuronal, evolutivo o exacto), pues solo usa la geometría del conjunto $\{A\bm c:\bm c\ge0\}$.
+\end{proposicion}
+\begin{proof}
+Sea $v_i=(A\bm c)_i\ge0$. Si $b_i\ge0$, el residuo cumple $(b_i-v_i)^2\ge0=\negp{b_i}^2$. Si $b_i<0$, entonces $b_i-v_i\le b_i<0$, de donde $(b_i-v_i)^2\ge b_i^2=\negp{b_i}^2$. Sumando sobre $i$ se obtiene el primer enunciado; el segundo sigue de la definición de $R^2$.
+\end{proof}
+
+\begin{corolario}
+Para $w=0$ (envolvente inferior original) se obtiene $S_-=11\,142{,}5\ \mathrm{kPa}^2$ y $\SST=84\,122{,}5\ \mathrm{kPa}^2$, por lo que
+\begin{equation}
+ R^2\le 1-\frac{11\,142{,}5}{84\,122{,}5}=0{,}8675 .
+\end{equation}
+\end{corolario}
+El valor máximo alcanzado numéricamente (con cotas) es $R^2=0{,}8648$ y el relajado (sin cotas) $0{,}8839$; este último puede superar a la cota porque admite $\bm c$ con signos negativos, fuera de las hipótesis de la Proposición~\ref{prop:cota}.
+
+\subsection{Localización del error}
+Del residuo del ajuste sin restricción de signo en $w=0$, el $82{,}1\,\%$ del SSE se concentra en $\lambda\in[0{,}84;0{,}90)$, el $12{,}7\,\%$ en $[0{,}90;0{,}9962)$ y solo el $5{,}2\,\%$ en $\lambda>\lambda_\times$. Si se ajusta únicamente en $\lambda\ge0{,}90$, el $R^2$ relajado sube a $0{,}9722$. Es decir, \emph{el mal ajuste no es un defecto de la forma de las bases en el rango fisiológico, sino de pretender reproducir presiones negativas con funciones no negativas}.
+
+\subsection{Alternativas evaluadas}
+\begin{enumerate}
+\item \textbf{Recortar el dominio a $\lambda\ge0{,}90$.} Con las bases actuales el número de condición en el subdominio sube a $26{,}1$ ($>25$, umbral de diseño) y $R^2_{\min}=0{,}965$.
+\item \textbf{Mantener el dominio completo y recortar la envolvente a presión $\ge0$} (opción adoptada). Se definen
+\begin{equation}
+ \tilde y_k=\pos{y_k},\quad \tilde y_{\min}=\min\{\tilde y_1,\tilde y_2\},\quad \tilde y_{\max}=\max\{\tilde y_1,\tilde y_2\}.
+\end{equation}
+Entonces $\negp{\tilde b_i}=0$ y la cota \eqref{eq:cota} se vuelve trivial ($\le1$).
+\end{enumerate}
+Una búsqueda evolutiva sobre los nodos y pendientes de las bases no produjo ganancia relevante de $R^2$, lo que confirma que el cuello de botella no estaba en las bases (Tabla~\ref{tab:r2}).
+
+\begin{table}[ht]
+\centering
+\caption{$R^2$ del ajuste de mínimos cuadrados con cotas, frente al peso $w$ de $\bm b_w$. V11: envolvente original; V12: envolvente recortada a $\ge0$. La columna ``cota'' es $1-S_-/\SST$ (Prop.~\ref{prop:cota}).}\label{tab:r2}
+\small
+\begin{tabular}{c cccc c}
+\toprule
+ & \multicolumn{3}{c}{V11 (sin recorte)} & & V12 (recorte)\\
+\cmidrule(lr){2-4}\cmidrule(lr){6-6}
+$w$ & $R^2_{\mathrm{rel}}$ & $R^2_{\mathrm{real}}$ & cota & & $R^2_{\mathrm{real}}$\\
+\midrule
+0{,}0 & 0{,}8839 & 0{,}8648 & 0{,}8675 & & 0{,}9962\\
+0{,}1 & 0{,}9250 & 0{,}9151 & 0{,}9173 & & 0{,}9975\\
+0{,}2 & 0{,}9518 & 0{,}9471 & 0{,}9492 & & 0{,}9979\\
+0{,}3 & 0{,}9692 & 0{,}9674 & 0{,}9696 & & 0{,}9980\\
+0{,}4 & 0{,}9805 & 0{,}9800 & 0{,}9824 & & 0{,}9980\\
+0{,}5 & 0{,}9877 & 0{,}9876 & 0{,}9904 & & 0{,}9978\\
+0{,}6 & 0{,}9921 & 0{,}9921 & 0{,}9952 & & 0{,}9977\\
+0{,}7 & 0{,}9948 & 0{,}9948 & 0{,}9979 & & 0{,}9975\\
+0{,}8 & 0{,}9963 & 0{,}9963 & 0{,}9993 & & 0{,}9973\\
+0{,}9 & 0{,}9969 & 0{,}9969 & 0{,}9999 & & 0{,}9972\\
+1{,}0 & 0{,}9970 & 0{,}9970 & 1{,}0000 & & 0{,}9970\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering\includegraphics[width=.78\linewidth]{fig/f4_r2.pdf}
+\caption{$R^2$ frente a $w$. El recorte a $\ge0$ eleva el mínimo de $0{,}8648$ a $0{,}9962$ con las mismas bases. Las curvas de V11 permanecen por debajo de la cota de la Proposición~\ref{prop:cota}.}\label{fig:r2}
+\end{figure}
+
+\subsection{Justificación física del recorte}
+Fijar $\tilde y=\pos{y}$ no distorsiona la zona fisiológica: $y_{\min}\ge0$ para $\lambda\ge0{,}9543$ y toda la envolvente superior es positiva en $\lambda\ge\lambda_\times$. Solo se modifica un tramo en el que el modelo \eqref{eq:laplace} predice colapso. En el $31{,}7\,\%$ de la malla la curva recortada se mantiene en cero, interpretable como ausencia de rigidez medible bajo presión transmural nula.
+
+%=====================================================================
+\section{Generación de datos y no inyectividad del mapa}\label{sec:datos}
+\subsection{Esquema de generación de la versión original}
+En el esquema original (V10) se construía una curva de entrada como
+\begin{equation}
+ \bm x(\bm c)=\cl\bigl(A\bm c,\ \bm y_{\min},\ \bm y_{\max}\bigr),\qquad \cl(u,\ell,h)=\min\{\max\{u,\ell\},h\},
+\end{equation}
+con la intención de que la curva presentada a la red estuviera siempre dentro de la envolvente, y se utilizaba $\bm c$ como etiqueta. Esto es matemáticamente inconsistente porque \emph{la etiqueta no es función de la entrada}: distintos $\bm c$ producen exactamente la misma $\bm x$.
+
+\subsection{No inyectividad}
+\begin{proposicion}[Saturación]\label{prop:noinj}
+Sean $A_j\ge0$ y $\Phi_j(c)=\cl(cA_j,\bm y_{\min},\bm y_{\max})$ la curva de entrada generada por la base $j$ sola.
+\begin{enumerate}
+\item[(a)] Si $c\ge c_j^{+}:=\max_{i:\,A_{ij}>0}\ y_{\max,i}/A_{ij}$, entonces $\Phi_j(c)=\Phi_j(c_j^{+})$.
+\item[(b)] Si $c\le c_j^{-}:=\min_{i:\,A_{ij}>0}\ y_{\min,i}/A_{ij}$, entonces $\Phi_j(c)=\Phi_j(c_j^{-})$.
+\end{enumerate}
+\end{proposicion}
+\begin{proof}
+(a) Para $c\ge c_j^+$ y $A_{ij}>0$ se tiene $cA_{ij}\ge y_{\max,i}$, luego $\cl(cA_{ij},y_{\min,i},y_{\max,i})=y_{\max,i}$, independiente de $c$. Si $A_{ij}=0$ la salida es $\cl(0,y_{\min,i},y_{\max,i})$, también independiente de $c$. (b) es análogo con $cA_{ij}\le y_{\min,i}$.
+\end{proof}
+Numéricamente: $c_1^{+}=4{,}0756$ (base 1) y $c_4^{-}=1{,}2084$ (base 4). Con $c_1\in[4{,}0756;\,6]$ la salida es idéntica (diferencia verificada $0{,}000\kPa$), igual que para $c_4\in[0;\,1{,}2084]$ (Figura~\ref{fig:noinj}). Aproximadamente $32\,\%$ del rango de $c_1$ y $20\,\%$ del de $c_4$ son indistinguibles para cualquier regresor.
+
+\begin{figure}[ht]
+\centering\includegraphics[width=\linewidth]{fig/f3_nginyectividad.pdf}
+\caption{No inyectividad del mapa de datos. (a) Para $c_1\ge c_1^{+}=4{,}0756$ las curvas coinciden con $y_{\max}$. (b) Para $c_4\le c_4^{-}=1{,}2084$ coinciden con $y_{\min}$.}\label{fig:noinj}
+\end{figure}
+
+\subsection{Consecuencia estadística: el sesgo a la media condicional}
+Para pérdida cuadrática, el predictor óptimo es la esperanza condicional $\hat c(\bm x)=\E[c\mid\bm x]$ \cite{Bishop2006}. En el conjunto saturado, $\bm x$ es constante y $\hat c_1=\E[c_1\mid c_1\ge c_1^{+}]$. Si $c_1$ se muestrea uniformemente en $[0,6]$ en esa región, resulta
+\begin{equation}
+ \hat c_1=\frac{c_1^{+}+6}{2}=\frac{4{,}0756+6}{2}=5{,}04 ,
+\end{equation}
+en buen acuerdo con la meseta observada $\approx4{,}95$ en la Celda~12 de V10 (la diferencia de $0{,}09$ es compatible con la mezcla de familias y el sesgo de regularización). Análogamente, $\hat c_4\le c_4^{-}$ y la salida de la red para $c_4$ forma un escalón cerca de $1{,}2$. Por tanto la meseta \emph{no es un fallo de entrenamiento}: es el óptimo del problema mal planteado.
+
+\subsection{Solución adoptada (V11--V12)}
+Se eliminó el recorte entre la entrada y la etiqueta. La etiqueta se obtiene como $\bm c^\star(\bm b)$ de \eqref{eq:bvls}, función determinista de la curva de entrada $\bm b$ (única por la Proposición~\ref{prop:kkt}), con lo que el mapa $\bm b\mapsto\bm c^\star$ es una función bien definida y el objetivo de aprendizaje es identificable. En V12 las curvas se recortan a $\ge0$ \emph{antes} de calcular la etiqueta (Sec.~\ref{sec:cota}).
+
+%=====================================================================
+\section{Red neuronal informada por la física}\label{sec:pinn}
+\subsection{Preprocesamiento}
+La entrada $\bm x\in\R^{999}$ se transforma con $\tilde{x}_i=\ln(x_i+\delta)$, $\delta=\bigl|\min_i y_{\min,i}\bigr|+5$ (en V12, $\delta=5$ pues $\tilde y_{\min}\ge0$), de modo que el argumento del logaritmo sea estrictamente positivo, y luego se estandariza (\texttt{StandardScaler}). Las salidas se estandarizan igualmente. Los escaladores se ajustan \emph{solo} con el conjunto de entrenamiento para evitar fugas de información; la partición estratificada por familia es $70/10/20\,\%$ (entrenamiento/validación/prueba).
+
+\subsection{Arquitectura}
+Perceptrón multicapa $999\to256\to128\to64\to4$ con activación ReLU, normalización de capa \cite{Ba2016} y regularización $L_2$ ($10^{-5}$); $298{\,}308$ parámetros. Optimizador Adam \cite{Kingma2015} con tasa $10^{-3}$ y recorte de gradiente (norma $1$). La salida se acota a $[0,6]$ en la evaluación.
+
+\subsection{Función de pérdida compuesta}
+Se sigue la idea de incorporar restricciones físicas en la función objetivo de la red \cite{Raissi2019}.
+Sea $\hat{\bm c}=f_\theta(\bm x)$. La pérdida es
+\begin{equation}
+ \mathcal L=\lambda_1\underbrace{\frac1N\norm{\hat{\bm c}-\bm c^\star}^2}_{\mathcal L_{\mathrm{coef}}}
+ +\lambda_2\underbrace{\frac{\norm{A\hat{\bm c}-A\bm c^\star}}{\norm{A\bm c^\star}+\epsilon}}_{\mathcal L_{\mathrm{rec}}}
+ +\lambda_3\underbrace{\frac1{|\mathcal Z|}\sum_{j\in\mathcal Z}\hat c_j^{\,2}}_{\mathcal L_{\mathrm{cruce}}},
+ \quad(\lambda_1,\lambda_2,\lambda_3)=(1,5,20),
+\end{equation}
+donde $\mathcal Z=\{j:\ c_j^\star<10^{-4}\}$ es el conjunto de coeficientes ``apagados'' (máscara) y $\mathcal L_{\mathrm{cruce}}$ penaliza la contaminación cruzada (\emph{crosstalk}): activar bases que el etiquetado exacto deja en cero. El término $\mathcal L_{\mathrm{rec}}$ es el componente ``informado por la física'': exige que la curva reconstruida con la matriz $A$ sea correcta, no solo los coeficientes. Dado que $\cond(A)=13{,}9$, un error relativo $\varepsilon$ en $\bm c$ puede amplificarse hasta $\sim 14\,\varepsilon$ en la reconstrucción y recíprocamente, por lo que ambos términos son complementarios.
+
+%=====================================================================
+\section{Cobertura distribucional}\label{sec:cobertura}
+\subsection{Parametrización por proporción $\alpha(\lambda)$}
+Las curvas de entrenamiento de la familia ``envolvente'' se generan como
+\begin{equation}
+ \bm b=(1-\bm\alpha)\odot\bm y_{\min}+\bm\alpha\odot\bm y_{\max},\qquad \alpha_i\in[-0{,}05;\,1{,}05],
+\end{equation}
+con $\bm\alpha$ de variación suave (cosenos de baja frecuencia). Las curvas físicas son casos extremos: $y_1=y_{\min}$ si $\lambda>\lambda_\times$ y $y_{\max}$ si $\lambda<\lambda_\times$ (y al revés para $y_2$), es decir, $\alpha(\lambda)$ es un \emph{escalón} entre $0$ y $1$ (Figura~\ref{fig:alpha}).
+
+\begin{figure}[ht]
+\centering\includegraphics[width=.72\linewidth]{fig/f6_alpha.pdf}
+\caption{Perfiles $\alpha(\lambda)$ típicos del generador (suave y con transición) frente a los escalones que definen $y_1$ e $y_2$.}\label{fig:alpha}
+\end{figure}
+
+\subsection{Diagnóstico}
+Se define el salto $\Delta\alpha=\bigl|\overline{\alpha}_{\lambda<0{,}95}-\overline{\alpha}_{\lambda>1{,}05}\bigr|$. Para $y_1,y_2$, $\Delta\alpha=1$. En el generador de V11 (envolvente suave) el percentil $99$ de $\Delta\alpha$ es $0{,}39$, el máximo $0{,}63$ y solo el $0{,}115\,\%$ de las muestras supera $0{,}5$; ninguna supera $0{,}8$. Por tanto $y_1,y_2$ están \emph{fuera de la distribución de entrenamiento} y el error de generalización era esperable aunque la red sea óptima dentro de su soporte. La Tabla~\ref{tab:v11y} confirma el patrón: error de $8{,}27\,\%$ en $y_1$.
+
+\subsection{Familia de transiciones (V12)}
+Se añadió una cuarta familia, \texttt{env\_transicion}, con
+\begin{equation}
+ \alpha(\lambda)=\alpha_L+(\alpha_R-\alpha_L)\,\varsigma\!\left(\frac{\lambda-\lambda_0}{w}\right)+\text{perturbación suave},\quad \varsigma(u)=\frac1{1+e^{-u}},
+\end{equation}
+con $\lambda_0\sim U(0{,}88;\,1{,}15)$, ancho $w=10^{U(-2{,}7;\,-1{,}1)}$ y, en el $50\,\%$ de los casos, saltos extremos $0\leftrightarrow1$ ($\alpha_{L,R}$ cerca de $0$ y $1$). Una simulación del muestreador (Figura~\ref{fig:swing}) da $48\,\%$ de muestras con $\Delta\alpha>0{,}5$ y $19{,}7\,\%$ con $\Delta\alpha>0{,}8$, frente a $0{,}115\,\%$ y $0\,\%$ de la versión anterior.
+
+\begin{figure}[ht]
+\centering\includegraphics[width=.72\linewidth]{fig/f5_swing.pdf}
+\caption{Distribución del salto $|\Delta\alpha|$ (escala logarítmica) en V11 y V12 (réplica del muestreador, $2\times10^4$ curvas cada una). La línea discontinua marca el valor de $y_1,y_2$.}\label{fig:swing}
+\end{figure}
+
+%=====================================================================
+\section{Resultados}\label{sec:res}
+\subsection{Versión V11 (con recorte de rango limitado)}
+La Tabla~\ref{tab:v11c} resume la recuperación de coeficientes sobre el conjunto de prueba, y la Tabla~\ref{tab:v11y} el desempeño sobre las curvas físicas.
+
+\begin{table}[ht]
+\centering
+\caption{V11, conjunto de prueba: recuperación de coeficientes.}\label{tab:v11c}
+\begin{tabular}{lcccc}
+\toprule
+ & $c_1$ & $c_2$ & $c_3$ & $c_4$\\
+\midrule
+$R^2$ & $0{,}99993$ & $0{,}99992$ & $0{,}99990$ & $0{,}99985$\\
+MAE & $0{,}00538$ & $0{,}00628$ & $0{,}00682$ & $0{,}00897$\\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+\begin{tabular}{lc}
+\toprule
+$R^2$ curva reconstruida frente a etiqueta & $0{,}999846$\\
+$R^2$ frente a la entrada & $0{,}986629$\\
+MAE / RMSE [kPa] & $0{,}0949$ / $0{,}2193$\\
+NRMSE & $0{,}1097\,\%$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Por familias, el $R^2$ de la reconstrucción es $0{,}99993$ (pura), $0{,}99979$ (combinada) y $0{,}96678$ (envolvente), lo que ubica el error remanente en la familia más difícil, coherentemente con la Sec.~\ref{sec:cobertura}. El entrenamiento requirió $21{,}08$ min ($500$ épocas); la mejor época fue la última ($500$) con $\text{val\_loss}=0{,}001852$ y MAE de validación $0{,}006769$: el entrenamiento \emph{no había convergido}.
+
+\begin{table}[ht]
+\centering
+\caption{V11, curvas físicas. KKT: óptimo de mínimos cuadrados con cotas. PINN: salida de la red.}\label{tab:v11y}
+\small
+\begin{tabular}{llcccc}
+\toprule
+Curva & Método & $(c_1,c_2,c_3,c_4)$ & $R^2$ & NRMSE\\
+\midrule
+$y_1$ & KKT & $(0{,}5225;\,0{,}1637;\,0{,}1916;\,0{,}1217)$ & $0{,}998657$ & $1{,}0090\,\%$\\
+$y_1$ & PINN & $(0{,}5494;\,0{,}0990;\,0{,}0857;\,0{,}0649)$ & $0{,}909797$ & $8{,}2687\,\%$\\
+$y_2$ & KKT & $(0;\;1{,}0328;\;1{,}1895;\;0{,}7718)$ & $0{,}978606$ & $3{,}9033\,\%$\\
+$y_2$ & PINN & $(0;\;0{,}8561;\;1{,}2030;\;0{,}5576)$ & $0{,}964414$ & $5{,}0341\,\%$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Verificación de las bases (Celda 1, V11)}
+$\cond(A)=13{,}90$; $R^2_{\mathrm{real}}$ por peso $w$ entre $0{,}8648$ y $0{,}9970$, con media $0{,}9672$; el mínimo cae bajo el umbral $0{,}95$, coherente con la Proposición~\ref{prop:cota} y resuelto por el recorte (Tabla~\ref{tab:r2}).
+
+\subsection{Versión V12: protocolo de validación (resultados pendientes)}
+\textbf{Los resultados de entrenamiento completo de V12 aún no han sido medidos} y no se afirma aquí ningún valor. Se verificó únicamente que el cuaderno ejecuta de extremo a extremo con un entrenamiento reducido (conjunto reducido, $3$ épocas), y que el ajuste de mínimos cuadrados cumple la Tabla~\ref{tab:r2}. El protocolo a ejecutar es:
+\begin{enumerate}
+\item \textbf{Convergencia.} $1000$ épocas con \texttt{EarlyStopping} (paciencia $35$); criterio: mejor época estrictamente anterior a la última.
+\item \textbf{Curvas físicas.} NRMSE de $y_1$ y $y_2$ frente al óptimo KKT; criterio de éxito: brecha $\lesssim1$ punto porcentual (para $y_1$ V11 fue $7{,}26$ puntos).
+\item \textbf{Fuera de distribución (Celda 12b).} Perfiles $\alpha$ de doble transición y senoidales; métrica: brecha $\mathrm{NRMSE}_{\mathrm{PINN}}-\mathrm{NRMSE}_{\mathrm{KKT}}$.
+\item \textbf{Por familia.} MAE y $R^2$ en las cuatro familias (\texttt{pura}, \texttt{combinada}, \texttt{env\_suave}, \texttt{env\_transicion}).
+\end{enumerate}
+
+%=====================================================================
+\section{Discusión}
+\paragraph{Qué era limitación del problema y qué del modelo.} El suelo $R^2\le0{,}8675$ (Prop.~\ref{prop:cota}) y la saturación de $c_1,c_4$ (Prop.~\ref{prop:noinj}) son propiedades del planteamiento: ninguna red, por grande que fuera, las evitaría. La brecha en $y_1$ es, en cambio, un problema de datos (cobertura) corregible por muestreo. Esta distinción evita gastar esfuerzo en cambiar la arquitectura.
+
+\paragraph{Límites del recorte a $\ge0$.} Un coeficiente solo puede interpretarse como contribución mecánica en el rango donde la presión es $\ge0$. Los valores de $\lambda<0{,}954$ pierden información (todas las curvas coinciden con cero en la zona cercana a $0{,}84$), y la identificabilidad de $c_1$ en esa zona depende solo de la zona $\lambda\ge0{,}954$.
+
+\paragraph{Hipótesis a revisar.} (i) La aproximación $\sigma_{rr}\approx0$ y el promedio de pared en \eqref{eq:laplace}. (ii) La hipótesis uniforme en $c_1\in[0,6]$ usada para el valor teórico $5{,}04$. (iii) La interpretación del offset $P_a$.
+
+\paragraph{Mejoras posibles.} Una pérdida de reconstrucción ponderada por el escalón (mayor peso en $\lambda$ alto), un programa de tasa de aprendizaje con decaimiento para asegurar convergencia, y un modelo de salida con proyección explícita al cubo $[0,6]^4$.
+
+%=====================================================================
+\section{Conclusiones}
+\begin{enumerate}
+\item Con coeficientes no negativos y bases no negativas, $R^2\le1-S_-/\SST$ para cualquier método; en la envolvente original esto implica $R^2\le0{,}8675$. Recortar las curvas a presión $\ge0$ lo elimina y produce $R^2\ge0{,}9962$ con las mismas bases (número de condición $13{,}90$).
+\item El mapa $\bm c\mapsto\cl(A\bm c,\bm y_{\min},\bm y_{\max})$ no es inyectivo para $c_1\ge4{,}0756$ y $c_4\le1{,}2084$; la red óptima devuelve medias condicionales ($5{,}04$ para $c_1$), lo que explica cuantitativamente la meseta observada. Etiquetar con el óptimo KKT de la curva de entrada elimina la inconsistencia.
+\item El generador original no cubría los escalones $\alpha$ que definen $y_1$ e $y_2$ ($0{,}115\,\%$ de las muestras con $\Delta\alpha>0{,}5$); la familia con transiciones eleva esa fracción a $\sim48\,\%$ (simulación). La mejora efectiva en $y_1$ y $y_2$ queda por medir en V12.
+\end{enumerate}
+
+\section*{Disponibilidad de datos y código}
+El cuaderno \texttt{curva\_j\_entrenamiento\_v12.ipynb} contiene el generador, el etiquetado KKT, el entrenamiento y las evaluaciones descritas.
+
+\begin{thebibliography}{99}
+\bibitem{Fung1967} Fung, Y.C. (1967). Elasticity of soft tissues in simple elongation. \emph{Am. J. Physiol.} 213(6):1532--1544.
+\bibitem{Humphrey2002} Humphrey, J.D. (2002). \emph{Cardiovascular Solid Mechanics: Cells, Tissues, and Organs}. Springer.
+\bibitem{Holzapfel2000} Holzapfel, G.A., Gasser, T.C., Ogden, R.W. (2000). A new constitutive framework for arterial wall mechanics and a comparative study of material models. \emph{J. Elasticity} 61:1--48.
+\bibitem{Boyd2004} Boyd, S., Vandenberghe, L. (2004). \emph{Convex Optimization}. Cambridge University Press.
+\bibitem{Stark1995} Stark, P.B., Parker, R.L. (1995). Bounded-variable least-squares: an algorithm and applications. \emph{Comput. Stat.} 10:129--141.
+\bibitem{Branch1999} Branch, M.A., Coleman, T.F., Li, Y. (1999). A subspace, interior, and conjugate gradient method for large-scale bound-constrained minimization problems. \emph{SIAM J. Sci. Comput.} 21(1):1--23.
+\bibitem{Bishop2006} Bishop, C.M. (2006). \emph{Pattern Recognition and Machine Learning}. Springer.
+\bibitem{Ba2016} Ba, J.L., Kiros, J.R., Hinton, G.E. (2016). Layer normalization. \emph{arXiv:1607.06450}.
+\bibitem{Kingma2015} Kingma, D.P., Ba, J. (2015). Adam: a method for stochastic optimization. \emph{ICLR}.
+\bibitem{Raissi2019} Raissi, M., Perdikaris, P., Karniadakis, G.E. (2019). Physics-informed neural networks. \emph{J. Comput. Phys.} 378:686--707.
+\end{thebibliography}
+
+\end{document}

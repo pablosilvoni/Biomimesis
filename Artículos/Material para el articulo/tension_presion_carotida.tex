@@ -1,0 +1,369 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot,es-tabla]{babel}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx,booktabs,float,caption,subcaption}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor,enumitem}
+\captionsetup{font=small,labelfont=bf}
+\setlist{itemsep=2pt,topsep=4pt}
+\newcommand{\stt}{\sigma_{\theta\theta}}
+\newcommand{\srr}{\sigma_{rr}}
+\newcommand{\lt}{\lambda_\theta}
+
+\title{Tensión circunferencial y presión en la carótida humana:\\
+comparación entre datos in vivo y ex vivo}
+\author{Pablo Silvoni}
+\date{Octubre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Se estudia la relación entre la tensión circunferencial de Cauchy $\stt$, el estiramiento circunferencial $\lt$ y la presión luminal $P_i$ en la carótida común humana. Se combinan los datos in vivo de Masson et al.\ (2011) con los datos ex vivo de Sommer y Holzapfel (2012).
+
+A partir del modelo constitutivo, la cinemática y los parámetros individuales publicados por Masson (16 sujetos normotensos y 25 hipertensos) se reconstruyen las curvas $\stt(\lt)$ de cada sujeto. Sus medias reproducen las curvas medias publicadas con un error de 1,2--1,7\,\%. Luego se integra el equilibrio radial a través de la pared para obtener la presión. Los resultados principales son:
+\begin{enumerate}[label=(\roman*)]
+\item la tensión publicada, $\stt(r_m)$, es el máximo transmural, y la tensión media de la pared es entre un 9 y un 18\,\% menor;
+\item la presión perivascular es de unos 3~kPa;
+\item vale la identidad exacta $P_i r_i-P_a r_m=h\bar\sigma$, de la cual las fórmulas de pared delgada son aproximaciones;
+\item el rango de estiramientos medido in vivo corresponde a $P_i\approx80$--120~mmHg.
+\end{enumerate}
+Para comparar con los datos ex vivo, ambos conjuntos se refieren a la misma configuración (el tubo descargado). Sin tono muscular, las arterias de Masson alcanzan 100~mmHg con $\lt\approx1{,}15$--1,25, según el radio en que se mida. La curva ex vivo de Sommer necesita $\lt\approx1{,}38$.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%=====================================================================
+\section{Introducción}
+%=====================================================================
+La pared arterial responde a la presión con una curva de tipo J: es complaciente a bajos estiramientos y se rigidiza de forma exponencial a medida que se reclutan las fibras de colágeno. Esa curva puede expresarse de dos maneras:
+\begin{itemize}
+\item como tensión en función del estiramiento, que es una magnitud local del material;
+\item como presión en función del estiramiento, que es una magnitud global de la arteria.
+\end{itemize}
+Además, puede obtenerse en el laboratorio (ex vivo) o a partir de mediciones clínicas (in vivo). Pasar de una forma a otra y de un tipo de dato al otro exige precisar varias cosas: en qué radio se evalúa la tensión, respecto de qué configuración se mide el estiramiento y qué cargas actúan sobre la pared.
+
+Este trabajo responde tres preguntas:
+\begin{enumerate}
+\item ¿Qué magnitud exacta representan las curvas tensión--estiramiento in vivo de Masson et al.\ (2011), y pueden reconstruirse a partir de los parámetros publicados?
+\item ¿Cómo se obtiene la presión luminal a partir de esa tensión, y qué error cometen las fórmulas de pared delgada?
+\item ¿En qué condiciones son comparables esas curvas con la curva ex vivo de Sommer y Holzapfel (2012)?
+\end{enumerate}
+
+%=====================================================================
+\section{Datos y gráficas de referencia}
+%=====================================================================
+\subsection{Datos in vivo: Masson et al.\ (2011)}
+Masson et al.\ midieron in vivo la carótida común de cada sujeto: diámetro, espesor íntima--media (IMT) y presión a lo largo del ciclo cardíaco. Con esos datos ajustaron, sujeto por sujeto, un modelo constitutivo con cuatro componentes:
+\begin{itemize}
+\item elastina (neo-Hookeano);
+\item cuatro familias de fibras de colágeno;
+\item tono muscular activo;
+\item presión perivascular.
+\end{itemize}
+El artículo publica los parámetros de 16 sujetos normotensos (NT, Tabla~2) y de 25 hipertensos tratados (HT, Tabla~4). Sus Figs.~5a y 7a (Fig.~\ref{fig:masson}) muestran $\stt$ en función de $\lt$ para cada sujeto y para cuatro curvas medias.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.48\textwidth}\includegraphics[width=\linewidth]{img/orig-000.jpg}\caption{Fig.~5a: jóvenes y mayores (NT).}\end{subfigure}\hfill
+\begin{subfigure}{0.48\textwidth}\includegraphics[width=\linewidth]{img/orig-001.jpg}\caption{Fig.~7a: NT y HT.}\end{subfigure}
+\caption{Gráficas de referencia in vivo: tensión circunferencial de Cauchy en función de $\lt$ (Masson et al.\ 2011).}
+\label{fig:masson}
+\end{figure}
+
+Los grupos son los del artículo:
+\begin{itemize}
+\item \textbf{Young}: NT de hasta 42 años ($n=7$).
+\item \textbf{Old}: NT de 53 años o más ($n=9$).
+\item \textbf{NT}: NT de 39 años o más ($n=11$), apareados en edad con los HT.
+\item \textbf{HT}: los 25 hipertensos.
+\end{itemize}
+
+Las curvas medias se digitalizaron para validar la reconstrucción. Sus rangos de $\lt$ son 1,045--1,132 (Young), 1,069--1,119 (Old) y 1,067--1,117 (NT y HT). La Tabla~\ref{tab:param} resume los parámetros por grupo.
+
+\begin{table}[H]
+\centering\small\input{tab_param.tex}
+\caption{Parámetros de Masson et al.\ (Tablas 2 y 4), media $\pm$ DE por grupo. En todos los grupos, $c_2\approx13$--14 y $c_2^{circ}\approx13$--14.}
+\label{tab:param}
+\end{table}
+
+\subsection{Datos ex vivo: Sommer y Holzapfel (2012)}
+Sommer y Holzapfel ensayaron carótidas humanas de donantes, intactas y separadas por capas, mediante ensayos de inflación--extensión. La curva presión--estiramiento de las arterias intactas (su Fig.~6a, en la Fig.~\ref{fig:sommer}) se representa aquí con el ajuste exponencial
+\begin{equation}
+P_i=0{,}1427\left(e^{11{,}9103(\lambda-1)}-1\right)\ \text{kPa}.
+\label{eq:sommer}
+\end{equation}
+
+\begin{figure}[H]
+\centering\includegraphics[width=0.5\textwidth]{img/orig-002.jpg}
+\caption{Gráfica de referencia ex vivo: presión interna en función del estiramiento circunferencial (Sommer y Holzapfel 2012, Fig.~6a).}
+\label{fig:sommer}
+\end{figure}
+
+\subsection{Pared delgada: Urquiza (2009)}
+En su tesis sobre hemodinámica computacional del sistema arterial, Urquiza usa la relación de pared delgada $(p-p_{ext})R=\sigma h$ (Ec.~3.13). En la sección~\ref{sec:aprox} se la analiza como aproximación del equilibrio exacto.
+
+%=====================================================================
+\section{Modelo mecánico}
+%=====================================================================
+\subsection{Cinemática}
+La configuración de referencia, libre de tensiones, es el sector abierto que resulta de cortar radialmente la arteria. Tiene radio externo de la media $R_m$ y semiángulo $\Theta_0$, que en los 41 sujetos está entre $128^\circ$ y $134^\circ$. Con estiramiento axial $\lambda_z$ fijo (entre 1,07 y 1,12) e incompresibilidad, el punto de radio $R$ pasa al radio $r$ según
+\begin{equation}
+R=\sqrt{R_m^2-\frac{\pi\lambda_z}{\Theta_0}\left(r_m^2-r^2\right)},\qquad
+\lt(r)=\frac{\pi r}{\Theta_0 R},\qquad \lambda_r=\frac{1}{\lt\lambda_z}.
+\label{eq:cinematica}
+\end{equation}
+El $\lt$ de las curvas publicadas es $\lt(r_m)$, evaluado en el borde media--adventicia. Por efecto del ángulo de apertura, $\lt$ es casi uniforme a través de la pared: para $\lt(r_m)=1{,}10$ y $h=0{,}6$~mm, en la luz vale entre 1,085 y 1,098.
+
+\begin{figure}[H]
+\centering\includegraphics[width=0.48\textwidth]{img/esquema.pdf}
+\caption{Geometría transmural. $r_i$: radio luminal. $r_m=r_i+h$: borde media--adventicia, donde se evalúa $\stt$. $h$: espesor íntima--media. $P_i$: presión luminal. $P_a$: presión perivascular. El radio medio $\bar r=r_i+h/2$ es distinto de $r_m$.}
+\label{fig:esquema}
+\end{figure}
+
+Los parámetros publicados no incluyen el IMT de cada sujeto. Por eso se adopta $h=0{,}6$~mm y se estudia la sensibilidad para 0,4 y 0,8~mm. Para $\lt=1{,}10$, la mediana de $r_m$ es 3,8~mm (rango 2,8--4,5), de modo que $h/r_i\approx0{,}12$, 0,19 y 0,27 para los tres espesores.
+
+\subsection{Ley constitutiva}
+La diferencia de tensiones principales (Masson, Ec.~4 y 6--8) es
+\begin{equation}
+\stt-\srr=c\left(\lt^2-\lambda_r^2\right)+\lt^2\sum_{k=1}^{4}c_1^{k}E_k\,e^{c_2^{k}E_k^2}\sin^2\alpha_k
++T_m\lt\left[1-\left(\frac{\lambda_m-\lt}{\lambda_m-\lambda_0}\right)^2\right],
+\label{eq:constitutiva}
+\end{equation}
+con $E_k=\lambda_k^2-1$ y $\lambda_k^2=\lt^2\sin^2\alpha_k+\lambda_z^2\cos^2\alpha_k$. Las cuatro familias de fibras son:
+\begin{itemize}
+\item axial: $\alpha=0$;
+\item circunferencial: $\alpha=90^\circ$, con parámetros $c_1^{circ}$ y $c_2^{circ}$;
+\item dos diagonales: $\pm\alpha$.
+\end{itemize}
+La axial y las diagonales comparten $c_1$ y $c_2$. La presión hidrostática se cancela en la diferencia y no aparece en (\ref{eq:constitutiva}).
+
+\subsection{Equilibrio y condiciones de borde}
+El equilibrio radial es $\partial_r\srr=(\stt-\srr)/r$, con condiciones de borde $\srr(r_i)=-P_i$ y $\srr(r_m)=-P_a$. Integrando:
+\begin{equation}
+P_i-P_a=\int_{r_i}^{r_m}\frac{\stt-\srr}{r}\,dr .
+\label{eq:equilibrio}
+\end{equation}
+Como $\frac{d}{dr}(r\srr)=\stt$, se obtiene además la identidad exacta
+\begin{equation}
+\boxed{\;P_i\,r_i-P_a\,r_m=\int_{r_i}^{r_m}\stt\,dr=h\,\bar\sigma\;}
+\qquad\Longrightarrow\qquad
+P_i=\frac{h\,\bar\sigma+r_m P_a}{r_i},
+\label{eq:identidad}
+\end{equation}
+donde $\bar\sigma$ es el promedio transmural de $\stt$. Es la ley de Laplace sin aproximación: vale para cualquier espesor y cualquier distribución de tensiones.
+
+\subsection{Presión perivascular}
+La presión que ejercen los tejidos que rodean la arteria se modela como $P_a=a\exp(b\,r_m/r_m^{td})$, con $r_m^{td}$ el radio en telediástole. En el rango medido, $r_m/r_m^{td}$ es apenas mayor que 1. Por eso se toma el valor telediastólico $P_a=a\,e^{b}$ de cada sujeto, elección que la sección~\ref{sec:recon} valida.
+
+%=====================================================================
+\section{Reconstrucción de las curvas de referencia}
+\label{sec:recon}
+%=====================================================================
+Con (\ref{eq:cinematica})--(\ref{eq:constitutiva}) y $\srr(r_m)=-P_a$, la tensión en el borde externo es
+\[
+\stt(r_m)=\big[\stt-\srr\big]_{r_m}-P_a .
+\]
+Se evaluó en cada uno de los 41 sujetos y se promedió por grupo. La Fig.~\ref{fig:recon} reproduce las Figs.~5a y 7a. La Tabla~\ref{tab:val} cuantifica el acuerdo:
+\begin{itemize}
+\item sin el término $P_a$, el error es de 3--4~kPa;
+\item con él, baja a 0,6--0,9~kPa (1,2--1,7\,\%), que es el orden del error de digitalización.
+\end{itemize}
+Esto confirma tres cosas: los parámetros, los grupos y la condición de borde $\srr(r_m)=-P_a$ con la que se construyeron las figuras publicadas.
+
+\begin{figure}[H]
+\centering\includegraphics[width=\textwidth]{img/ref_reconstruidas.pdf}
+\caption{Reconstrucción de las gráficas de referencia con los parámetros individuales. Líneas finas: sujetos. Línea gruesa: media del grupo en el rango medido. Punteado: extrapolación. Círculos: media publicada (digitalizada).}
+\label{fig:recon}
+\end{figure}
+
+\begin{table}[H]
+\centering\small\input{tab_val.tex}
+\caption{Error entre la media reconstruida y la media publicada, en el rango medido.}
+\label{tab:val}
+\end{table}
+
+\paragraph{Fuera del rango medido.} Las 41 curvas son positivas, monótonas y convexas en $1{,}00\le\lt\le1{,}20$. Por debajo de $\lt\approx0{,}95$--1,00, el modelo da $\stt<0$, y cerca de $\lt=1{,}20$ alcanza unos 900~kPa. El intervalo $[1{,}02;1{,}16]$ cubre todos los rangos medidos con una extrapolación moderada.
+
+%=====================================================================
+\section{Distribución transmural de la tensión}
+%=====================================================================
+Integrando (\ref{eq:equilibrio}) desde $r_m$ hacia la luz se obtienen $\srr(r)$ y $\stt(r)=\srr+(\stt-\srr)$ (Fig.~\ref{fig:perfil}). En los 41 sujetos, con los tres espesores y los tres niveles de estiramiento estudiados, $\stt$ crece desde la luz hacia afuera. Por lo tanto, la tensión publicada, $\stt(r_m)$, es el \textbf{máximo} transmural. La tensión media es entre un 9 y un 18\,\% menor (Tabla~\ref{tab:trans}): la diferencia crece con el espesor y disminuye con el estiramiento.
+
+\begin{figure}[H]
+\centering\includegraphics[width=\textwidth]{img/perfil_transmural.pdf}
+\caption{Perfiles transmurales de $\stt$ y $\srr$ en dos sujetos representativos, para $\lt(r_m)=1{,}10$.}
+\label{fig:perfil}
+\end{figure}
+
+\begin{table}[H]
+\centering\small\input{tab_trans.tex}
+\caption{Cociente entre la tensión media de la pared y la tensión en $r_m$, y fracción de sujetos con el máximo en $r_m$.}
+\label{tab:trans}
+\end{table}
+
+%=====================================================================
+\section{Presión perivascular y estado de referencia}
+%=====================================================================
+La Tabla~\ref{tab:pa} da $P_a=a\,e^b$ por grupo. La mediana está entre 2,9 y 4,0~kPa (22--30~mmHg). La dispersión entre sujetos es grande (0,13--6,1~kPa), lo que desaconseja usar un único valor por grupo para análisis individuales.
+
+\begin{table}[H]
+\centering\small\input{tab_pa2.tex}
+\caption{Presión perivascular telediastólica por grupo.}
+\label{tab:pa}
+\end{table}
+
+Conviene subrayar que $\lt=1$ no es un estado sin carga. El estiramiento se mide desde el sector abierto, y en $\lt=1$ el modelo da $\stt\approx19$~kPa en mediana (rango 1,3--39,5). Por lo tanto, $P_i(\lt=1)\neq P_a$. El estado sin carga es el tubo cerrado sin presión ni tono, que corresponde a $\lt(r_m)\approx0{,}988$ (sección~\ref{sec:exvivo}).
+
+%=====================================================================
+\section{De la tensión a la presión: fórmulas aproximadas}
+\label{sec:aprox}
+%=====================================================================
+Si en (\ref{eq:equilibrio}) se desprecia $\srr$ frente a $\stt$ y se supone $\stt$ uniforme, resulta
+\begin{equation}
+P_i\approx\sigma\ln(1+x)+P_a,\qquad x=h/r_i .
+\label{eq:ln}
+\end{equation}
+El aproximante de Padé [1/1] de $\ln(1+x)$ es $x/(1+x/2)=h/\bar r$, que coincide con la forma de pared delgada de Urquiza evaluada en el radio medio. La ley de Laplace en $r_i$ usa simplemente $x$. Como aproximaciones de la función $\ln(1+x)$:
+\begin{itemize}
+\item el sesgo de Laplace es $\approx x/2$, es decir, +6 a +14\,\% en este rango;
+\item el de Padé/Urquiza es $\approx -x^2/12$, menor que 0,7\,\% (Fig.~\ref{fig:pade}).
+\end{itemize}
+
+\begin{figure}[H]
+\centering\includegraphics[width=0.58\textwidth]{img/pade.pdf}
+\caption{Error de las aproximaciones de $\ln(1+x)$. Banda gris: rango de $h/r_i$ de este estudio.}
+\label{fig:pade}
+\end{figure}
+
+El error dominante, sin embargo, no está en aproximar el logaritmo sino en la propia hipótesis de (\ref{eq:ln}). La Tabla~\ref{tab:aprox} compara cada fórmula con el $P_i$ exacto:
+\begin{itemize}
+\item Con la tensión media $\bar\sigma$, (\ref{eq:ln}) subestima de forma sistemática: alrededor de $-10$\,\% para $h=0{,}6$~mm y hasta $-21$\,\% en el peor caso.
+\item Con la tensión en $r_m$, los errores se compensan y la mediana es cercana a cero, pero los errores individuales van de $-8$ a $+17$\,\%.
+\item La identidad (\ref{eq:identidad}) no tiene error.
+\end{itemize}
+
+\begin{table}[H]
+\centering\small
+\resizebox{\textwidth}{!}{\begin{tabular}{ccrrrr}
+\toprule
+$h$ [mm] & $\lt(r_m)$ & $\bar\sigma\ln(1+x)+P_a$ & $\stt(r_m)\ln(1+x)+P_a$ & Urquiza, $\stt(r_m)$ & Laplace, $\stt(r_m)$\\
+\midrule
+0,4 & 1,10 & $-7{,}3$ [$-10{,}2$; $-4{,}8$] & $-2{,}0$ [$-6{,}0$; $+4{,}1$] & $-2{,}0$ [$-6{,}0$; $+4{,}0$] & $+2{,}0$ [$-4{,}3$; $+9{,}7$]\\
+0,6 & 1,07 & $-11{,}6$ [$-16{,}2$; $-7{,}5$] & $+1{,}7$ [$-6{,}8$; $+16{,}7$] & $+1{,}6$ [$-6{,}9$; $+16{,}4$] & $+8{,}8$ [$-3{,}7$; $+27{,}0$]\\
+0,6 & 1,10 & $-10{,}5$ [$-14{,}7$; $-7{,}2$] & $-0{,}9$ [$-7{,}2$; $+7{,}3$] & $-1{,}1$ [$-7{,}3$; $+7{,}1$] & $+6{,}3$ [$-3{,}7$; $+16{,}8$]\\
+0,6 & 1,12 & $-9{,}9$ [$-13{,}7$; $-7{,}1$] & $-3{,}1$ [$-7{,}6$; $+1{,}5$] & $-3{,}3$ [$-7{,}7$; $+1{,}3$] & $+4{,}1$ [$-3{,}8$; $+10{,}5$]\\
+0,8 & 1,10 & $-13{,}7$ [$-19{,}1$; $-9{,}8$] & $+0{,}6$ [$-7{,}7$; $+11{,}2$] & $+0{,}3$ [$-7{,}9$; $+10{,}7$] & $+11{,}8$ [$-1{,}9$; $+25{,}2$]\\
+\bottomrule
+\end{tabular}}
+\caption{Error relativo [\%] respecto del $P_i$ exacto: mediana [mínimo; máximo] sobre los 41 sujetos.}
+\label{tab:aprox}
+\end{table}
+
+%=====================================================================
+\section{Tablas por cohorte}
+%=====================================================================
+Para cada grupo y cada $\lt(r_m)$, las Tablas~\ref{tab:young}--\ref{tab:ht} dan:
+\begin{itemize}
+\item la tensión media y su desviación estándar entre sujetos;
+\item el valor publicado (digitalizado);
+\item la presión luminal exacta, con $h=0{,}6$~mm.
+\end{itemize}
+Las filas en \textit{cursiva} están fuera del rango medido. Dentro de ese rango, $P_i$ va de unos 80 a 120~mmHg (Fig.~\ref{fig:pi}), el rango diástole--sístole esperable. Es una verificación independiente de la coherencia del conjunto: parámetros, cinemática, $P_a$ y $h$.
+
+\begin{table}[H]\centering\small\input{tab_coh_Young.tex}\caption{Young ($n=7$).}\label{tab:young}\end{table}
+\begin{table}[H]\centering\small\input{tab_coh_Old.tex}\caption{Old ($n=9$).}\label{tab:old}\end{table}
+\begin{table}[H]\centering\small\input{tab_coh_NT.tex}\caption{NT ($n=11$).}\label{tab:nt}\end{table}
+\begin{table}[H]\centering\small\input{tab_coh_HT.tex}\caption{HT ($n=25$).}\label{tab:ht}\end{table}
+
+\begin{figure}[H]
+\centering\includegraphics[width=0.7\textwidth]{img/Pi_lambda.pdf}
+\caption{Presión luminal media por grupo, por integración transmural exacta ($h=0{,}6$~mm). Trazo grueso: rango medido.}
+\label{fig:pi}
+\end{figure}
+
+%=====================================================================
+\section{Comparación ex vivo -- in vivo}
+\label{sec:exvivo}
+%=====================================================================
+Los estiramientos de ambos estudios no se miden desde la misma configuración: Masson parte del sector abierto y Sommer del tubo cerrado descargado. Para compararlos, se calculó con el modelo de Masson la configuración descargada de cada sujeto, sin presión, sin tono y sin $P_a$, con el $\lambda_z$ in vivo. En ella, $\lt(r_m)=0{,}988$ (rango 0,977--0,997) y el espesor es de unos 0,72~mm. Con esa referencia común, la Fig.~\ref{fig:exvivo} compara tres curvas:
+\begin{itemize}
+\item \textbf{Masson in vivo}, con tono y $P_a$: llega a 100~mmHg con $\lt=1{,}11$ (1,07--1,16).
+\item \textbf{Masson pasivo}, la misma arteria sin tono ni $P_a$, que es la condición de un ensayo ex vivo: llega a 100~mmHg con $\lt=1{,}155$ en $r_m$ (1,11--1,23), 1,19 en el radio medio y 1,25 en la luz (1,17--1,36).
+\item \textbf{Sommer ex vivo}: necesita $\lt=1{,}38$ para 100~mmHg; con $\lt=1{,}10$ da apenas 2,5~mmHg.
+\end{itemize}
+
+\begin{figure}[H]
+\centering\includegraphics[width=0.75\textwidth]{img/exvivo_invivo.pdf}
+\caption{Presión en función del estiramiento referido al tubo descargado: Masson in vivo, Masson pasivo (sin tono ni $P_a$) y ajuste de Sommer ex vivo. Banda gris: 70--130~mmHg.}
+\label{fig:exvivo}
+\end{figure}
+
+\paragraph{Interpretación.} El cambio de configuración de referencia mueve poco el $\lt$ de Masson, apenas un 1,2\,\%. Lo que más acerca las curvas es quitar el tono, que las desplaza hacia la derecha, y el radio donde se mide $\lt$. Aun así queda una brecha: 1,15--1,25 contra 1,38. Entre las causas posibles están:
+\begin{enumerate}
+\item la definición de $\lambda$ en el ensayo ex vivo (diámetro externo, radio medio u otro);
+\item el estiramiento axial del ensayo, si difiere del in vivo;
+\item el estado post mortem de las muestras y la edad de los donantes;
+\item la extrapolación del modelo pasivo de Masson, cuyos parámetros pasivos se identificaron junto con el tono.
+\end{enumerate}
+En consecuencia, un estiramiento ex vivo de $\approx1{,}38$ para la presión fisiológica no puede compararse directamente con el $\lt\approx1{,}10$ in vivo: los dos números están referidos a configuraciones y condiciones de carga distintas.
+
+%=====================================================================
+\section{Discusión}
+%=====================================================================
+Los resultados muestran que la interpretación de una curva tensión--estiramiento in vivo depende de tres elecciones que suelen quedar implícitas.
+
+\paragraph{Dónde se evalúa la tensión.} Con tensiones residuales, el gradiente transmural es pequeño pero no nulo, y la tensión en el borde externo es la máxima. Confundir $r_m$ con el radio medio, o $\stt(r_m)$ con la tensión media, introduce errores del orden del 10\,\% en la presión deducida.
+
+\paragraph{Qué cargas actúan sobre la pared.} La presión perivascular no es despreciable: $\approx3$~kPa, alrededor de un cuarto de la presión diastólica. Omitirla desplaza las curvas de tensión 3--4~kPa y, en la ecuación de equilibrio, debe ponderarse por $r_m/r_i$ y no sumarse sin más.
+
+\paragraph{Respecto de qué se mide el estiramiento.} El valor $\lt=1$ referido al sector abierto no es un estado sin carga, y el estado descargado tampoco es libre de tensiones. Toda comparación entre estudios exige expresar los estiramientos en una referencia común.
+
+\paragraph{Limitaciones.}
+\begin{itemize}
+\item El IMT individual no está disponible, por lo que la presión depende de la hipótesis $h=0{,}6$~mm, cuya sensibilidad se informa.
+\item Las curvas medias se digitalizaron de figuras impresas, con un error estimado del 1--2\,\%.
+\item La comparación ex vivo se apoya en un ajuste exponencial de la curva de Sommer y en la extrapolación del modelo pasivo de Masson fuera del rango en que se identificó.
+\end{itemize}
+
+%=====================================================================
+\section{Recomendaciones}
+%=====================================================================
+\begin{enumerate}
+\item \textbf{Usar la tensión tal como se publica.} Trabajar con $\stt(r_m)$ en el intervalo $\lt\in[1{,}02;1{,}16]$, distinguiendo explícitamente la parte medida de la extrapolada.
+\item \textbf{Partir de los parámetros publicados.} Usar las Tablas~2 y 4 de Masson como fuente primaria y las curvas digitalizadas solo para validar, informando el error de reconstrucción.
+\item \textbf{Presión perivascular por sujeto.} Usar $P_a=a\,e^b$ de cada sujeto; si se usa un valor por grupo, que sea la mediana y con su dispersión.
+\item \textbf{Presión luminal por integración.} Calcular $P_i$ integrando (\ref{eq:equilibrio}), o con la identidad (\ref{eq:identidad}) si se conoce $\bar\sigma$. Si solo se dispone de $\stt(r_m)$, la fórmula logarítmica o la de Urquiza dan una mediana sin sesgo, pero con una incertidumbre individual de $\pm$8--17\,\% que debe declararse.
+\item \textbf{Declarar el espesor.} Informar $h$ como hipótesis y su sensibilidad; usar el IMT individual cuando esté disponible.
+\item \textbf{Fórmulas de pared delgada con sus cotas.} Presentar Laplace y Padé/Urquiza como aproximaciones de $\ln(1+x)$ con errores $\approx x/2$ y $\approx x^2/12$, sin atribuirles la precisión del cálculo de presión.
+\item \textbf{Comparar ex vivo e in vivo en una referencia común.} Comparar curvas pasivas, verificar la definición de $\lambda$ y el $\lambda_z$ de cada ensayo, y tratar la brecha remanente como un resultado a discutir.
+\item \textbf{No usar $\lt=1$ como estado sin carga.} Si se necesita ese estado, calcularlo resolviendo $P_i=0$ sin tono ni $P_a$.
+\end{enumerate}
+
+%=====================================================================
+\section{Conclusiones}
+%=====================================================================
+\begin{enumerate}
+\item Las curvas tensión--estiramiento in vivo de Masson se reconstruyen sujeto por sujeto con un error del 1--2\,\%, siempre que se incluya la presión perivascular de cada sujeto.
+\item La tensión publicada es el máximo transmural, en $r_m$; la media de la pared es entre un 9 y un 18\,\% menor.
+\item La presión perivascular es de unos 3~kPa, y $\lt=1$ no es un estado sin carga.
+\item La identidad exacta $P_i r_i-P_a r_m=h\bar\sigma$ es la referencia para pasar de tensión a presión. La fórmula logarítmica con tensión uniforme subestima la presión en torno al 10\,\%.
+\item El rango medido in vivo corresponde a 80--120~mmHg, coherente con la fisiología.
+\item Referidas al tubo descargado y sin tono, las arterias de Masson alcanzan 100~mmHg con $\lt=1{,}15$--1,25, y la de Sommer con 1,38. La diferencia entre in vivo y ex vivo se explica en parte por el tono y por la configuración de referencia, pero no del todo.
+\end{enumerate}
+
+\appendix
+\section{Método numérico}
+Para cada sujeto, $\lt(r_m)$ y $h$ determinan $r_m=\lt\Theta_0R_m/\pi$ y $r_i=r_m-h$. En una malla de 400 radios se calculan $R(r)$ y $\lt(r)$ con (\ref{eq:cinematica}) y la diferencia $\stt-\srr$ con (\ref{eq:constitutiva}). Luego se integra (\ref{eq:equilibrio}) desde $r_m$, con $\srr(r_m)=-P_a$, mediante la regla del trapecio. La identidad (\ref{eq:identidad}) se verifica numéricamente con un error relativo menor que 0,01\,\%. La configuración descargada se obtiene resolviendo $P_i=0$ con $T_m=P_a=0$ por el método de Brent.
+
+\begin{thebibliography}{9}
+\bibitem{masson} Masson I., Beaussier H., Boutouyrie P., Laurent S., Humphrey J.D., Zidi M. (2011). Carotid artery mechanical properties and stresses quantified using in vivo data from normotensive and hypertensive humans. \emph{Biomechanics and Modeling in Mechanobiology} 10:867--882.
+\bibitem{sommer} Sommer G., Holzapfel G.A. (2012). 3D constitutive modeling of the biaxial mechanical response of intact and layer-dissected human carotid arteries. \emph{Journal of the Mechanical Behavior of Biomedical Materials} 5:116--128.
+\bibitem{urquiza} Urquiza S.A. (2009). \emph{Hemodinámica computacional del sistema arterial humano}. Tesis doctoral, Instituto Balseiro, Universidad Nacional de Cuyo.
+\end{thebibliography}
+\end{document}

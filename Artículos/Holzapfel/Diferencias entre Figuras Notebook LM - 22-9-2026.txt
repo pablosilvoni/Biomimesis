@@ -1,0 +1,44 @@
+Figura 5a
+
+0%
+100   1.15                 
+100   1.13
+
+10%
+100   1.14
+100   1.10
+
+20%   
+100   1.12
+100   1.075
+
+30%
+100   1.09
+100   1.06
+
+Figura 6a es una sola curva experimental y una sola curva teórica, aqui tu figura muestra 4 curvas teóricas y 4 experimentales.
+
+Figura 7a
+
+0%
+28    1.03
+29    1.115
+
+5%
+34    1.03
+32    1.095
+
+10%
+32    1.03
+32.5  1.085
+
+15%
+32.5  1.03
+34    1.075
+
+20%
+33  1.025
+32  1.060  
+
+
+

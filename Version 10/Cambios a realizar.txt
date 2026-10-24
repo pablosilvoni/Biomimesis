@@ -1,0 +1,9 @@
+
+Celda 9  Coeficiente c1
+Celda 13 Coeficiente c1
+Celda 16 Coeficiente c1
+Escalas horizontal y vertical de la Salida de la Celda 15
+Dibujar la salida de la celda 15 en los siguientes intervalos:
+
+Dominio = 0,8 <= Lambda <= 1,2
+Imagen =  0 <= Presion Pi <= 200

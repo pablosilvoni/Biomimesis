@@ -1,0 +1,137 @@
+# ==============================================================================
+# CÉLULA 0: OPTIMIZACIÓN GLOBAL CON ALGORITMO EVOLUTIVO
+# ==============================================================================
+"""
+Script de Optimización Global con Algoritmo Evolutivo:
+Busca rigurosamente si existe alguna combinación de 4 rampas (nudos y pendientes) 
+que logre un R2_real > 0.98 en todo el dominio con cond(A) < 25.
+"""
+
+import numpy as np
+import pandas as pd
+from scipy.linalg import svd
+from scipy.optimize import lsq_linear, differential_evolution
+
+# --- 1. CONFIGURACIÓN DEL DOMINIO Y ENVOLVENTES ---
+X_MIN = 0.84
+X_MAX = 1.20
+N_PUNTOS = 999
+x = np.linspace(X_MIN, X_MAX, N_PUNTOS)
+COEF_MIN, COEF_MAX = 0.0, 6.0
+UMBRAL_COND = 25.0
+
+H_RI_0_T3 = 0.1703
+PA_T3 = 5.63
+H_RI_0_T6 = 0.2197
+PA_T6 = 5.98
+
+def h_ri_cinematica(x, h_ri_0):
+    return np.sqrt(1.0 + ((1.0 + h_ri_0)**2 - 1.0) / (np.maximum(x, 1e-4)**2)) - 1.0
+
+def sigma_bar_tabla3(x):
+    return 39.87012495 * (np.exp(7.91934038 * (x - 1.0)) - 1.0)
+
+def sigma_bar_tabla6(x):
+    return 73.37535695 * (np.exp(10.40342667 * (x - 1.0)) - 1.0)
+
+y_inf = np.minimum(
+    sigma_bar_tabla3(x) * np.log(1.0 + h_ri_cinematica(x, H_RI_0_T3)) + PA_T3,
+    sigma_bar_tabla6(x) * np.log(1.0 + h_ri_cinematica(x, H_RI_0_T6)) + PA_T6
+)
+y_sup = np.maximum(
+    sigma_bar_tabla3(x) * np.log(1.0 + h_ri_cinematica(x, H_RI_0_T3)) + PA_T3,
+    sigma_bar_tabla6(x) * np.log(1.0 + h_ri_cinematica(x, H_RI_0_T6)) + PA_T6
+)
+
+pesos = np.linspace(0.0, 1.0, 11)
+
+# --- 2. FUNCIÓN OBJETIVO PARA OPTIMIZACIÓN GLOBAL ---
+def objetivo(params):
+    # params: [k1, k2, k3, m1, m2, m3, m4, escala]
+    k1, k2, k3 = params[0], params[1], params[2]
+    
+    # Restricción estricta de orden de nudos
+    if not (X_MIN < k1 < k2 < k3 < X_MAX):
+        return 1e6  # Penalización severa si los nudos se cruzan o salen del dominio
+        
+    m = params[3:7]
+    escala = params[7]
+    
+    # Construir bases
+    g1 = m[0] * (x - X_MIN)
+    g2 = m[1] * np.maximum(0.0, x - k1)
+    g3 = m[2] * np.maximum(0.0, x - k2)
+    g4 = m[3] * np.maximum(0.0, x - k3)
+    A_raw = np.column_stack([g1, g2, g3, g4])
+    
+    # Chequear número de condición
+    try:
+        s = svd(A_raw, compute_uv=False)
+        cond = s[0] / s[-1]
+    except:
+        return 1e6
+        
+    if cond >= UMBRAL_COND:
+        return cond * 10.0  # Penalizar si supera el límite de condición
+        
+    A_test = A_raw * escala
+    
+    r2_vals = []
+    for w in pesos:
+        b_test = (1.0 - w) * y_inf + w * y_sup
+        res = lsq_linear(A_test, b_test, bounds=(COEF_MIN, COEF_MAX))
+        if not res.success:
+            return 1e6
+        r2 = 1 - np.sum((b_test - A_test @ res.x) ** 2) / np.sum((b_test - b_test.mean()) ** 2)
+        r2_vals.append(r2)
+        
+    min_r2 = min(r2_vals)
+    
+    # Queremos MAXIMIZAR el mínimo R2 (por lo tanto minimizamos su negativo)
+    # y penalizar suavemente si el cond(A) es alto o el R2 mínimo es bajo
+    return -min_r2 + (cond / 100.0)
+
+# Límites de búsqueda para [k1, k2, k3, m1, m2, m3, m4, escala]
+bounds = [
+    (0.85, 0.95),  # k1
+    (0.96, 1.05),  # k2
+    (1.06, 1.18),  # k3
+    (0.5,  2.0),   # m1
+    (1.0,  3.0),   # m2
+    (2.0,  4.5),   # m3
+    (3.0,  6.0),   # m4
+    (20.0, 100.0)  # escala
+]
+
+print("🧬 Ejecutando algoritmo evolutivo de optimización global (esto puede tomar unos segundos)...")
+resultado = differential_evolution(objetivo, bounds, strategy='best1bin', maxiter=50, popsize=15, seed=42, disp=True)
+
+# Extraer mejor solución
+mejores_params = resultado.x
+k_opt = mejores_params[0:3]
+m_opt = mejores_params[3:7]
+esc_opt = mejores_params[7]
+
+# Reconstruir matriz óptima final
+g1 = m_opt[0] * (x - X_MIN)
+g2 = m_opt[1] * np.maximum(0.0, x - k_opt[0])
+g3 = m_opt[2] * np.maximum(0.0, x - k_opt[1])
+g4 = m_opt[3] * np.maximum(0.0, x - k_opt[2])
+A_final = np.column_stack([g1, g2, g3, g4]) * esc_opt
+
+s_final = svd(A_final, compute_uv=False)
+cond_final = s_final[0] / s_final[-1]
+
+print("\n" + "=" * 50)
+print(f"📊 RESULTADO DE LA OPTIMIZACIÓN GLOBAL")
+print("=" * 50)
+print(f" • Nudos [k1, k2, k3] : {np.round(k_opt, 4)}")
+print(f" • Pendientes [m1..m4]: {np.round(m_opt, 4)}")
+print(f" • Factor de escala   : {esc_opt:.2f}")
+print(f" • cond(A) resultante : {cond_final:.4f}")
+print("=" * 50)
+
+# Guardar
+ARCHIVO_SALIDA = "funciones_base_corregido_v10_intervalo.xlsx"
+pd.DataFrame(np.column_stack([x, A_final])).to_excel(ARCHIVO_SALIDA, header=False, index=False)
+print(f"💾 Archivo actualizado guardado en '{ARCHIVO_SALIDA}'.")
