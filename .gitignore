@@ -20,3 +20,6 @@ Versiones viejas/
 /*.tiff
 /*.svg
 /*.webp
+
+# Archivos comprimidos sueltos (transferencias), no se suben
+/*.zip
