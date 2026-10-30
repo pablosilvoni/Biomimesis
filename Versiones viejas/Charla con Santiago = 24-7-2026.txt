@@ -1,3 +1,0 @@
-Entrenar la RN con las bases, quebradas donde estan quebradas las funciones de base y tambien que esten quebradas en otros puntos.
-
-Método numérico de la cuadratura de gauss. Robustez
