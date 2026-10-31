@@ -1,0 +1,1477 @@
+escenario,método,sujeto,e_máx %
+"ruido 0,1 %",1) Ajuste exacto,NT01,1.4975311667248858
+"ruido 0,1 %",2) Red sola,NT01,2.8381840315774136
+"ruido 0,1 %",3) Red → ajuste exacto,NT01,1.498633313583954
+"ruido 0,1 %",1) Ajuste exacto,NT02,6.505466101228742
+"ruido 0,1 %",2) Red sola,NT02,10.896782953963772
+"ruido 0,1 %",3) Red → ajuste exacto,NT02,0.525334170438694
+"ruido 0,1 %",1) Ajuste exacto,NT03,1.2116045041519246
+"ruido 0,1 %",2) Red sola,NT03,21.80539595431017
+"ruido 0,1 %",3) Red → ajuste exacto,NT03,1.2067011594485704
+"ruido 0,1 %",1) Ajuste exacto,NT04,0.8952641751383897
+"ruido 0,1 %",2) Red sola,NT04,20.699200994546015
+"ruido 0,1 %",3) Red → ajuste exacto,NT04,0.9002785021103784
+"ruido 0,1 %",1) Ajuste exacto,NT05,1.0792664042112732
+"ruido 0,1 %",2) Red sola,NT05,1.2582830543126138
+"ruido 0,1 %",3) Red → ajuste exacto,NT05,0.7696576350966795
+"ruido 0,1 %",1) Ajuste exacto,NT06,1.6023478616343212
+"ruido 0,1 %",2) Red sola,NT06,14.469563478205007
+"ruido 0,1 %",3) Red → ajuste exacto,NT06,1.598787067322652
+"ruido 0,1 %",1) Ajuste exacto,NT07,0.7977939589188295
+"ruido 0,1 %",2) Red sola,NT07,2.569679790155147
+"ruido 0,1 %",3) Red → ajuste exacto,NT07,0.7979140677875883
+"ruido 0,1 %",1) Ajuste exacto,NT08,1.9753632862300396
+"ruido 0,1 %",2) Red sola,NT08,3.336179102551011
+"ruido 0,1 %",3) Red → ajuste exacto,NT08,1.808340741614748
+"ruido 0,1 %",1) Ajuste exacto,NT09,1.195029759793806
+"ruido 0,1 %",2) Red sola,NT09,2.980032560268689
+"ruido 0,1 %",3) Red → ajuste exacto,NT09,1.2794969062847765
+"ruido 0,1 %",1) Ajuste exacto,NT10,0.8146228418187903
+"ruido 0,1 %",2) Red sola,NT10,3.496280476364065
+"ruido 0,1 %",3) Red → ajuste exacto,NT10,1.337384481568457
+"ruido 0,1 %",1) Ajuste exacto,NT11,1.0359915888346918
+"ruido 0,1 %",2) Red sola,NT11,3.0623629810065633
+"ruido 0,1 %",3) Red → ajuste exacto,NT11,1.0139149798268332
+"ruido 0,1 %",1) Ajuste exacto,NT12,1.3475018155062093
+"ruido 0,1 %",2) Red sola,NT12,1.031583557971732
+"ruido 0,1 %",3) Red → ajuste exacto,NT12,1.5965475335154586
+"ruido 0,1 %",1) Ajuste exacto,NT13,1.3091492559575344
+"ruido 0,1 %",2) Red sola,NT13,3.028448563212188
+"ruido 0,1 %",3) Red → ajuste exacto,NT13,1.2149690062409466
+"ruido 0,1 %",1) Ajuste exacto,NT14,1.2695266580667808
+"ruido 0,1 %",2) Red sola,NT14,7.431441198713496
+"ruido 0,1 %",3) Red → ajuste exacto,NT14,1.181326276869925
+"ruido 0,1 %",1) Ajuste exacto,NT15,1.1509676525468788
+"ruido 0,1 %",2) Red sola,NT15,3.6503518608165098
+"ruido 0,1 %",3) Red → ajuste exacto,NT15,1.150279479956471
+"ruido 0,1 %",1) Ajuste exacto,NT16,2.4103255705362487
+"ruido 0,1 %",2) Red sola,NT16,9.07667908248166
+"ruido 0,1 %",3) Red → ajuste exacto,NT16,2.539192730296595
+"ruido 0,1 %",1) Ajuste exacto,HT01,1.5704359779929071
+"ruido 0,1 %",2) Red sola,HT01,6.08454202728755
+"ruido 0,1 %",3) Red → ajuste exacto,HT01,0.8625648723408619
+"ruido 0,1 %",1) Ajuste exacto,HT02,0.9312850369103292
+"ruido 0,1 %",2) Red sola,HT02,2.6969653627781303
+"ruido 0,1 %",3) Red → ajuste exacto,HT02,0.9235639689014931
+"ruido 0,1 %",1) Ajuste exacto,HT03,1.5188973470716869
+"ruido 0,1 %",2) Red sola,HT03,5.5079177844607266
+"ruido 0,1 %",3) Red → ajuste exacto,HT03,1.094035437327632
+"ruido 0,1 %",1) Ajuste exacto,HT04,0.8802895436408744
+"ruido 0,1 %",2) Red sola,HT04,11.907806953076987
+"ruido 0,1 %",3) Red → ajuste exacto,HT04,0.874851283132443
+"ruido 0,1 %",1) Ajuste exacto,HT05,1.5212729396518716
+"ruido 0,1 %",2) Red sola,HT05,82.25297668108865
+"ruido 0,1 %",3) Red → ajuste exacto,HT05,1.4746389537510718
+"ruido 0,1 %",1) Ajuste exacto,HT06,1.1220469161820774
+"ruido 0,1 %",2) Red sola,HT06,4.845673925733117
+"ruido 0,1 %",3) Red → ajuste exacto,HT06,1.1184587617539532
+"ruido 0,1 %",1) Ajuste exacto,HT07,1.05311486245332
+"ruido 0,1 %",2) Red sola,HT07,10.826493954129264
+"ruido 0,1 %",3) Red → ajuste exacto,HT07,1.0531146809788636
+"ruido 0,1 %",1) Ajuste exacto,HT08,0.7445690126663822
+"ruido 0,1 %",2) Red sola,HT08,7.975776543127537
+"ruido 0,1 %",3) Red → ajuste exacto,HT08,0.7387635485412662
+"ruido 0,1 %",1) Ajuste exacto,HT09,1.1884504004781786
+"ruido 0,1 %",2) Red sola,HT09,4.596154775315714
+"ruido 0,1 %",3) Red → ajuste exacto,HT09,1.1884509601199131
+"ruido 0,1 %",1) Ajuste exacto,HT10,1.7103338908863785
+"ruido 0,1 %",2) Red sola,HT10,2.485196501124969
+"ruido 0,1 %",3) Red → ajuste exacto,HT10,1.214356262562596
+"ruido 0,1 %",1) Ajuste exacto,HT11,2.1390941173172853
+"ruido 0,1 %",2) Red sola,HT11,0.8281413650054534
+"ruido 0,1 %",3) Red → ajuste exacto,HT11,1.2111708401953358
+"ruido 0,1 %",1) Ajuste exacto,HT12,2.726499497235089
+"ruido 0,1 %",2) Red sola,HT12,12.137569373846265
+"ruido 0,1 %",3) Red → ajuste exacto,HT12,1.9670365316163176
+"ruido 0,1 %",1) Ajuste exacto,HT13,0.9358035849742937
+"ruido 0,1 %",2) Red sola,HT13,3.3784742110299804
+"ruido 0,1 %",3) Red → ajuste exacto,HT13,1.0119833540194227
+"ruido 0,1 %",1) Ajuste exacto,HT14,2.0728695510576856
+"ruido 0,1 %",2) Red sola,HT14,5.39445072131392
+"ruido 0,1 %",3) Red → ajuste exacto,HT14,2.0845738453820855
+"ruido 0,1 %",1) Ajuste exacto,HT15,0.9422297820995216
+"ruido 0,1 %",2) Red sola,HT15,1.9057187577802994
+"ruido 0,1 %",3) Red → ajuste exacto,HT15,0.8579360236703638
+"ruido 0,1 %",1) Ajuste exacto,HT16,2.005608050527456
+"ruido 0,1 %",2) Red sola,HT16,3.5143084374592672
+"ruido 0,1 %",3) Red → ajuste exacto,HT16,1.7361517726919757
+"ruido 0,1 %",1) Ajuste exacto,HT17,1.75143480520417
+"ruido 0,1 %",2) Red sola,HT17,5.941927201276981
+"ruido 0,1 %",3) Red → ajuste exacto,HT17,1.488123111486969
+"ruido 0,1 %",1) Ajuste exacto,HT18,1.2090169120958638
+"ruido 0,1 %",2) Red sola,HT18,10.00081462298642
+"ruido 0,1 %",3) Red → ajuste exacto,HT18,1.0010071185878529
+"ruido 0,1 %",1) Ajuste exacto,HT19,2.139157303679837
+"ruido 0,1 %",2) Red sola,HT19,2.261071027666194
+"ruido 0,1 %",3) Red → ajuste exacto,HT19,1.526397912645644
+"ruido 0,1 %",1) Ajuste exacto,HT20,0.9370694976510578
+"ruido 0,1 %",2) Red sola,HT20,6.714537663659766
+"ruido 0,1 %",3) Red → ajuste exacto,HT20,0.888324608127434
+"ruido 0,1 %",1) Ajuste exacto,HT21,0.8747638155847717
+"ruido 0,1 %",2) Red sola,HT21,1.3457758742013546
+"ruido 0,1 %",3) Red → ajuste exacto,HT21,1.0262324599280637
+"ruido 0,1 %",1) Ajuste exacto,HT22,1.5234107115431885
+"ruido 0,1 %",2) Red sola,HT22,4.000667141598616
+"ruido 0,1 %",3) Red → ajuste exacto,HT22,0.8567838900532458
+"ruido 0,1 %",1) Ajuste exacto,HT23,1.5727348589386714
+"ruido 0,1 %",2) Red sola,HT23,3.535859816666227
+"ruido 0,1 %",3) Red → ajuste exacto,HT23,1.5920694037365872
+"ruido 0,1 %",1) Ajuste exacto,HT24,0.8508519467265984
+"ruido 0,1 %",2) Red sola,HT24,1.9007882891473975
+"ruido 0,1 %",3) Red → ajuste exacto,HT24,0.8267155954856765
+"ruido 0,1 %",1) Ajuste exacto,HT25,0.9519804179791426
+"ruido 0,1 %",2) Red sola,HT25,3.54938156282034
+"ruido 0,1 %",3) Red → ajuste exacto,HT25,0.9419796151618522
+"ruido 0,1 %",1) Ajuste exacto,NT01,1.3447924774070643
+"ruido 0,1 %",2) Red sola,NT01,6.512578985535652
+"ruido 0,1 %",3) Red → ajuste exacto,NT01,2.391565994512223
+"ruido 0,1 %",1) Ajuste exacto,NT02,1.0181544703111962
+"ruido 0,1 %",2) Red sola,NT02,5.500339411398699
+"ruido 0,1 %",3) Red → ajuste exacto,NT02,1.003540022873655
+"ruido 0,1 %",1) Ajuste exacto,NT03,1.4323540092109062
+"ruido 0,1 %",2) Red sola,NT03,21.54037921823594
+"ruido 0,1 %",3) Red → ajuste exacto,NT03,1.7786644697774985
+"ruido 0,1 %",1) Ajuste exacto,NT04,1.383348578874782
+"ruido 0,1 %",2) Red sola,NT04,20.51218646620931
+"ruido 0,1 %",3) Red → ajuste exacto,NT04,1.343432965869388
+"ruido 0,1 %",1) Ajuste exacto,NT05,1.1192094053467916
+"ruido 0,1 %",2) Red sola,NT05,1.8767458364506457
+"ruido 0,1 %",3) Red → ajuste exacto,NT05,1.4078014298253272
+"ruido 0,1 %",1) Ajuste exacto,NT06,1.0571253560965561
+"ruido 0,1 %",2) Red sola,NT06,7.237768990310152
+"ruido 0,1 %",3) Red → ajuste exacto,NT06,1.0589945632985247
+"ruido 0,1 %",1) Ajuste exacto,NT07,0.7586276989446196
+"ruido 0,1 %",2) Red sola,NT07,1.975621699165605
+"ruido 0,1 %",3) Red → ajuste exacto,NT07,0.7354493810722343
+"ruido 0,1 %",1) Ajuste exacto,NT08,3.3050593327786504
+"ruido 0,1 %",2) Red sola,NT08,4.481116196598339
+"ruido 0,1 %",3) Red → ajuste exacto,NT08,2.554603187574828
+"ruido 0,1 %",1) Ajuste exacto,NT09,1.3762773596829772
+"ruido 0,1 %",2) Red sola,NT09,3.4116224667084722
+"ruido 0,1 %",3) Red → ajuste exacto,NT09,1.5191204290897482
+"ruido 0,1 %",1) Ajuste exacto,NT10,2.086188147775471
+"ruido 0,1 %",2) Red sola,NT10,4.181629169579596
+"ruido 0,1 %",3) Red → ajuste exacto,NT10,2.086191513097033
+"ruido 0,1 %",1) Ajuste exacto,NT11,1.0516017267745188
+"ruido 0,1 %",2) Red sola,NT11,2.1596544447011503
+"ruido 0,1 %",3) Red → ajuste exacto,NT11,1.0520898723182521
+"ruido 0,1 %",1) Ajuste exacto,NT12,1.4077992366195933
+"ruido 0,1 %",2) Red sola,NT12,1.5738822702102935
+"ruido 0,1 %",3) Red → ajuste exacto,NT12,1.3061853759784634
+"ruido 0,1 %",1) Ajuste exacto,NT13,1.9690212761951744
+"ruido 0,1 %",2) Red sola,NT13,6.584574542755697
+"ruido 0,1 %",3) Red → ajuste exacto,NT13,1.1157530134436473
+"ruido 0,1 %",1) Ajuste exacto,NT14,1.3374276836548558
+"ruido 0,1 %",2) Red sola,NT14,8.572337460745052
+"ruido 0,1 %",3) Red → ajuste exacto,NT14,1.600173856720326
+"ruido 0,1 %",1) Ajuste exacto,NT15,1.047972228721915
+"ruido 0,1 %",2) Red sola,NT15,3.788538635361522
+"ruido 0,1 %",3) Red → ajuste exacto,NT15,1.2448423663943085
+"ruido 0,1 %",1) Ajuste exacto,NT16,2.376868620909996
+"ruido 0,1 %",2) Red sola,NT16,2.9984481171848403
+"ruido 0,1 %",3) Red → ajuste exacto,NT16,0.6458314405858399
+"ruido 0,1 %",1) Ajuste exacto,HT01,1.586797736068842
+"ruido 0,1 %",2) Red sola,HT01,9.844665669894885
+"ruido 0,1 %",3) Red → ajuste exacto,HT01,0.7375457308144355
+"ruido 0,1 %",1) Ajuste exacto,HT02,0.870579824290554
+"ruido 0,1 %",2) Red sola,HT02,2.421242634726491
+"ruido 0,1 %",3) Red → ajuste exacto,HT02,0.8701095016411853
+"ruido 0,1 %",1) Ajuste exacto,HT03,0.8209500175625417
+"ruido 0,1 %",2) Red sola,HT03,9.542222300890773
+"ruido 0,1 %",3) Red → ajuste exacto,HT03,1.3071214596422658
+"ruido 0,1 %",1) Ajuste exacto,HT04,2.168554101024623
+"ruido 0,1 %",2) Red sola,HT04,6.053638441206331
+"ruido 0,1 %",3) Red → ajuste exacto,HT04,1.7802299909882706
+"ruido 0,1 %",1) Ajuste exacto,HT05,1.1917369005746115
+"ruido 0,1 %",2) Red sola,HT05,56.834817315289044
+"ruido 0,1 %",3) Red → ajuste exacto,HT05,1.224733460056388
+"ruido 0,1 %",1) Ajuste exacto,HT06,17.474882616423574
+"ruido 0,1 %",2) Red sola,HT06,4.977109389856712
+"ruido 0,1 %",3) Red → ajuste exacto,HT06,0.9140566862833424
+"ruido 0,1 %",1) Ajuste exacto,HT07,1.26523786609631
+"ruido 0,1 %",2) Red sola,HT07,3.888605510301102
+"ruido 0,1 %",3) Red → ajuste exacto,HT07,1.20222767175524
+"ruido 0,1 %",1) Ajuste exacto,HT08,0.8705716083122322
+"ruido 0,1 %",2) Red sola,HT08,2.224022958514467
+"ruido 0,1 %",3) Red → ajuste exacto,HT08,0.8449434171231279
+"ruido 0,1 %",1) Ajuste exacto,HT09,0.8725201109821326
+"ruido 0,1 %",2) Red sola,HT09,2.197591561630525
+"ruido 0,1 %",3) Red → ajuste exacto,HT09,0.8710645663122498
+"ruido 0,1 %",1) Ajuste exacto,HT10,0.6338910719637624
+"ruido 0,1 %",2) Red sola,HT10,8.81216360840417
+"ruido 0,1 %",3) Red → ajuste exacto,HT10,1.0791058871258064
+"ruido 0,1 %",1) Ajuste exacto,HT11,1.0379939681024455
+"ruido 0,1 %",2) Red sola,HT11,0.8343511038979056
+"ruido 0,1 %",3) Red → ajuste exacto,HT11,1.0434943003337662
+"ruido 0,1 %",1) Ajuste exacto,HT12,0.7180313014741565
+"ruido 0,1 %",2) Red sola,HT12,4.749367365409904
+"ruido 0,1 %",3) Red → ajuste exacto,HT12,0.5851312592145876
+"ruido 0,1 %",1) Ajuste exacto,HT13,2.2444612188809536
+"ruido 0,1 %",2) Red sola,HT13,4.150526177107504
+"ruido 0,1 %",3) Red → ajuste exacto,HT13,1.2402775506885535
+"ruido 0,1 %",1) Ajuste exacto,HT14,1.0171618219698628
+"ruido 0,1 %",2) Red sola,HT14,8.688162490753724
+"ruido 0,1 %",3) Red → ajuste exacto,HT14,1.0163669797676043
+"ruido 0,1 %",1) Ajuste exacto,HT15,1.1689836272182121
+"ruido 0,1 %",2) Red sola,HT15,9.88915349800346
+"ruido 0,1 %",3) Red → ajuste exacto,HT15,1.1689844967515415
+"ruido 0,1 %",1) Ajuste exacto,HT16,0.8181896620420378
+"ruido 0,1 %",2) Red sola,HT16,2.957070308575668
+"ruido 0,1 %",3) Red → ajuste exacto,HT16,0.7519396082015511
+"ruido 0,1 %",1) Ajuste exacto,HT17,1.0351110321816763
+"ruido 0,1 %",2) Red sola,HT17,5.722774866038952
+"ruido 0,1 %",3) Red → ajuste exacto,HT17,1.3424770432574347
+"ruido 0,1 %",1) Ajuste exacto,HT18,1.1542948852397727
+"ruido 0,1 %",2) Red sola,HT18,6.040031904312727
+"ruido 0,1 %",3) Red → ajuste exacto,HT18,0.9565062772749893
+"ruido 0,1 %",1) Ajuste exacto,HT19,1.308478685128041
+"ruido 0,1 %",2) Red sola,HT19,1.1667395175677606
+"ruido 0,1 %",3) Red → ajuste exacto,HT19,1.319650872531067
+"ruido 0,1 %",1) Ajuste exacto,HT20,1.3611904801417842
+"ruido 0,1 %",2) Red sola,HT20,2.2130980377736944
+"ruido 0,1 %",3) Red → ajuste exacto,HT20,1.3215272794299282
+"ruido 0,1 %",1) Ajuste exacto,HT21,1.405911238561902
+"ruido 0,1 %",2) Red sola,HT21,2.886661900661832
+"ruido 0,1 %",3) Red → ajuste exacto,HT21,1.406969170439177
+"ruido 0,1 %",1) Ajuste exacto,HT22,0.7822977294727848
+"ruido 0,1 %",2) Red sola,HT22,4.0542268188408395
+"ruido 0,1 %",3) Red → ajuste exacto,HT22,0.7820916706774308
+"ruido 0,1 %",1) Ajuste exacto,HT23,2.0302736855372636
+"ruido 0,1 %",2) Red sola,HT23,3.823543396978174
+"ruido 0,1 %",3) Red → ajuste exacto,HT23,1.982055468138309
+"ruido 0,1 %",1) Ajuste exacto,HT24,1.6006164031390568
+"ruido 0,1 %",2) Red sola,HT24,3.9048462345457677
+"ruido 0,1 %",3) Red → ajuste exacto,HT24,1.17851108497828
+"ruido 0,1 %",1) Ajuste exacto,HT25,1.1761811237945758
+"ruido 0,1 %",2) Red sola,HT25,2.7685483387738867
+"ruido 0,1 %",3) Red → ajuste exacto,HT25,1.1578438187502489
+"ruido 0,1 %",1) Ajuste exacto,NT01,0.8207343286358725
+"ruido 0,1 %",2) Red sola,NT01,5.096141192761253
+"ruido 0,1 %",3) Red → ajuste exacto,NT01,0.8297663663342256
+"ruido 0,1 %",1) Ajuste exacto,NT02,1.0678930660690278
+"ruido 0,1 %",2) Red sola,NT02,10.814343676148534
+"ruido 0,1 %",3) Red → ajuste exacto,NT02,0.9693685640033161
+"ruido 0,1 %",1) Ajuste exacto,NT03,2.0100036724047983
+"ruido 0,1 %",2) Red sola,NT03,24.772671104417686
+"ruido 0,1 %",3) Red → ajuste exacto,NT03,1.5431478034954889
+"ruido 0,1 %",1) Ajuste exacto,NT04,0.831008616829903
+"ruido 0,1 %",2) Red sola,NT04,27.509173186892852
+"ruido 0,1 %",3) Red → ajuste exacto,NT04,0.85968399860078
+"ruido 0,1 %",1) Ajuste exacto,NT05,1.1678383322999246
+"ruido 0,1 %",2) Red sola,NT05,3.5884586492016197
+"ruido 0,1 %",3) Red → ajuste exacto,NT05,0.7748105476386854
+"ruido 0,1 %",1) Ajuste exacto,NT06,1.207531062375128
+"ruido 0,1 %",2) Red sola,NT06,2.889098797139092
+"ruido 0,1 %",3) Red → ajuste exacto,NT06,1.736830245455205
+"ruido 0,1 %",1) Ajuste exacto,NT07,1.0049032486419855
+"ruido 0,1 %",2) Red sola,NT07,3.102837930935638
+"ruido 0,1 %",3) Red → ajuste exacto,NT07,0.810891530805519
+"ruido 0,1 %",1) Ajuste exacto,NT08,2.090052382001763
+"ruido 0,1 %",2) Red sola,NT08,3.53532171378871
+"ruido 0,1 %",3) Red → ajuste exacto,NT08,1.9391779030509289
+"ruido 0,1 %",1) Ajuste exacto,NT09,1.1043789572059783
+"ruido 0,1 %",2) Red sola,NT09,2.351292292212497
+"ruido 0,1 %",3) Red → ajuste exacto,NT09,1.0757649349735507
+"ruido 0,1 %",1) Ajuste exacto,NT10,0.867917147081336
+"ruido 0,1 %",2) Red sola,NT10,11.343491975038473
+"ruido 0,1 %",3) Red → ajuste exacto,NT10,0.8667098727359458
+"ruido 0,1 %",1) Ajuste exacto,NT11,1.0670362324826492
+"ruido 0,1 %",2) Red sola,NT11,1.4922876960895148
+"ruido 0,1 %",3) Red → ajuste exacto,NT11,1.0611933999354497
+"ruido 0,1 %",1) Ajuste exacto,NT12,2.2175653678400753
+"ruido 0,1 %",2) Red sola,NT12,4.964123517698472
+"ruido 0,1 %",3) Red → ajuste exacto,NT12,1.9726394089909673
+"ruido 0,1 %",1) Ajuste exacto,NT13,0.8670244559516733
+"ruido 0,1 %",2) Red sola,NT13,7.435533376957769
+"ruido 0,1 %",3) Red → ajuste exacto,NT13,1.6419792597149454
+"ruido 0,1 %",1) Ajuste exacto,NT14,10.34640128973943
+"ruido 0,1 %",2) Red sola,NT14,12.657244290071144
+"ruido 0,1 %",3) Red → ajuste exacto,NT14,0.8976309764051563
+"ruido 0,1 %",1) Ajuste exacto,NT15,1.6286556847772735
+"ruido 0,1 %",2) Red sola,NT15,7.4921192723531265
+"ruido 0,1 %",3) Red → ajuste exacto,NT15,1.8247828956732888
+"ruido 0,1 %",1) Ajuste exacto,NT16,1.5300292976975158
+"ruido 0,1 %",2) Red sola,NT16,3.5692616066434324
+"ruido 0,1 %",3) Red → ajuste exacto,NT16,1.5795774936668494
+"ruido 0,1 %",1) Ajuste exacto,HT01,1.3727032830556367
+"ruido 0,1 %",2) Red sola,HT01,5.2226947757936895
+"ruido 0,1 %",3) Red → ajuste exacto,HT01,1.3895265182412662
+"ruido 0,1 %",1) Ajuste exacto,HT02,1.0861992833771366
+"ruido 0,1 %",2) Red sola,HT02,4.045234804594629
+"ruido 0,1 %",3) Red → ajuste exacto,HT02,1.031232775975432
+"ruido 0,1 %",1) Ajuste exacto,HT03,1.456649099222326
+"ruido 0,1 %",2) Red sola,HT03,8.027654682484021
+"ruido 0,1 %",3) Red → ajuste exacto,HT03,1.4565430519613658
+"ruido 0,1 %",1) Ajuste exacto,HT04,1.585071545837116
+"ruido 0,1 %",2) Red sola,HT04,12.917114776723125
+"ruido 0,1 %",3) Red → ajuste exacto,HT04,0.8505326479413369
+"ruido 0,1 %",1) Ajuste exacto,HT05,0.8383490523221078
+"ruido 0,1 %",2) Red sola,HT05,56.51176510642764
+"ruido 0,1 %",3) Red → ajuste exacto,HT05,1.0662327675938432
+"ruido 0,1 %",1) Ajuste exacto,HT06,0.8520502017622698
+"ruido 0,1 %",2) Red sola,HT06,6.416377004899946
+"ruido 0,1 %",3) Red → ajuste exacto,HT06,0.8520514267799361
+"ruido 0,1 %",1) Ajuste exacto,HT07,1.75542902880141
+"ruido 0,1 %",2) Red sola,HT07,9.363071924920213
+"ruido 0,1 %",3) Red → ajuste exacto,HT07,1.7513781126051124
+"ruido 0,1 %",1) Ajuste exacto,HT08,0.9603275729183719
+"ruido 0,1 %",2) Red sola,HT08,5.134223173666841
+"ruido 0,1 %",3) Red → ajuste exacto,HT08,0.9361512859211556
+"ruido 0,1 %",1) Ajuste exacto,HT09,1.4329985518686592
+"ruido 0,1 %",2) Red sola,HT09,2.1646071678591294
+"ruido 0,1 %",3) Red → ajuste exacto,HT09,1.2598409339145575
+"ruido 0,1 %",1) Ajuste exacto,HT10,1.4120728076126834
+"ruido 0,1 %",2) Red sola,HT10,3.1531980742762014
+"ruido 0,1 %",3) Red → ajuste exacto,HT10,1.5166451934708909
+"ruido 0,1 %",1) Ajuste exacto,HT11,0.9742898683904587
+"ruido 0,1 %",2) Red sola,HT11,1.2940906659071894
+"ruido 0,1 %",3) Red → ajuste exacto,HT11,0.865300931504516
+"ruido 0,1 %",1) Ajuste exacto,HT12,1.2198002479188403
+"ruido 0,1 %",2) Red sola,HT12,10.49624439481293
+"ruido 0,1 %",3) Red → ajuste exacto,HT12,1.3559415176312388
+"ruido 0,1 %",1) Ajuste exacto,HT13,1.1799598354948513
+"ruido 0,1 %",2) Red sola,HT13,3.5980027840337434
+"ruido 0,1 %",3) Red → ajuste exacto,HT13,1.1799553005982633
+"ruido 0,1 %",1) Ajuste exacto,HT14,1.1863271958113752
+"ruido 0,1 %",2) Red sola,HT14,7.132971047795064
+"ruido 0,1 %",3) Red → ajuste exacto,HT14,1.0266985398188142
+"ruido 0,1 %",1) Ajuste exacto,HT15,1.2941844690298385
+"ruido 0,1 %",2) Red sola,HT15,21.123836394410965
+"ruido 0,1 %",3) Red → ajuste exacto,HT15,1.2931017623591141
+"ruido 0,1 %",1) Ajuste exacto,HT16,1.1309499054630547
+"ruido 0,1 %",2) Red sola,HT16,1.980572910868156
+"ruido 0,1 %",3) Red → ajuste exacto,HT16,0.8583367662168239
+"ruido 0,1 %",1) Ajuste exacto,HT17,1.5556753961121612
+"ruido 0,1 %",2) Red sola,HT17,3.112342103037162
+"ruido 0,1 %",3) Red → ajuste exacto,HT17,0.8940459124567134
+"ruido 0,1 %",1) Ajuste exacto,HT18,0.9227626502131607
+"ruido 0,1 %",2) Red sola,HT18,28.01587368454934
+"ruido 0,1 %",3) Red → ajuste exacto,HT18,0.9260441401351157
+"ruido 0,1 %",1) Ajuste exacto,HT19,2.104651960894549
+"ruido 0,1 %",2) Red sola,HT19,2.8590586107196945
+"ruido 0,1 %",3) Red → ajuste exacto,HT19,0.9988600678749797
+"ruido 0,1 %",1) Ajuste exacto,HT20,2.133731066812039
+"ruido 0,1 %",2) Red sola,HT20,3.521285025831858
+"ruido 0,1 %",3) Red → ajuste exacto,HT20,0.766012369715471
+"ruido 0,1 %",1) Ajuste exacto,HT21,1.5450630154513485
+"ruido 0,1 %",2) Red sola,HT21,2.792537131052242
+"ruido 0,1 %",3) Red → ajuste exacto,HT21,1.4064039798380574
+"ruido 0,1 %",1) Ajuste exacto,HT22,2.1286833035075228
+"ruido 0,1 %",2) Red sola,HT22,4.966114308105296
+"ruido 0,1 %",3) Red → ajuste exacto,HT22,0.932998152772104
+"ruido 0,1 %",1) Ajuste exacto,HT23,1.4625849344675002
+"ruido 0,1 %",2) Red sola,HT23,1.8128693842608963
+"ruido 0,1 %",3) Red → ajuste exacto,HT23,1.4623472387316752
+"ruido 0,1 %",1) Ajuste exacto,HT24,1.591711819237688
+"ruido 0,1 %",2) Red sola,HT24,3.1799296715466623
+"ruido 0,1 %",3) Red → ajuste exacto,HT24,1.5908200809664952
+"ruido 0,1 %",1) Ajuste exacto,HT25,0.7786515811058935
+"ruido 0,1 %",2) Red sola,HT25,2.672857047441801
+"ruido 0,1 %",3) Red → ajuste exacto,HT25,0.7415565006382052
+"ruido 0,3 %",1) Ajuste exacto,NT01,2.470636504257118
+"ruido 0,3 %",2) Red sola,NT01,11.540807194741681
+"ruido 0,3 %",3) Red → ajuste exacto,NT01,2.5386648017050217
+"ruido 0,3 %",1) Ajuste exacto,NT02,2.35661082424544
+"ruido 0,3 %",2) Red sola,NT02,17.833850845976798
+"ruido 0,3 %",3) Red → ajuste exacto,NT02,1.2331014547294614
+"ruido 0,3 %",1) Ajuste exacto,NT03,4.5767695335439305
+"ruido 0,3 %",2) Red sola,NT03,16.82553047290906
+"ruido 0,3 %",3) Red → ajuste exacto,NT03,3.739852731052781
+"ruido 0,3 %",1) Ajuste exacto,NT04,2.6480972368002256
+"ruido 0,3 %",2) Red sola,NT04,14.066738048336367
+"ruido 0,3 %",3) Red → ajuste exacto,NT04,2.6373443585570224
+"ruido 0,3 %",1) Ajuste exacto,NT05,2.649374944799549
+"ruido 0,3 %",2) Red sola,NT05,4.261419376514132
+"ruido 0,3 %",3) Red → ajuste exacto,NT05,1.2237192762915583
+"ruido 0,3 %",1) Ajuste exacto,NT06,2.807443311331195
+"ruido 0,3 %",2) Red sola,NT06,36.25710769050507
+"ruido 0,3 %",3) Red → ajuste exacto,NT06,2.354144741421043
+"ruido 0,3 %",1) Ajuste exacto,NT07,1.4553461500039577
+"ruido 0,3 %",2) Red sola,NT07,1.3681224474417926
+"ruido 0,3 %",3) Red → ajuste exacto,NT07,1.486767018336004
+"ruido 0,3 %",1) Ajuste exacto,NT08,14.421683581844253
+"ruido 0,3 %",2) Red sola,NT08,17.977588750073863
+"ruido 0,3 %",3) Red → ajuste exacto,NT08,2.3572617150695643
+"ruido 0,3 %",1) Ajuste exacto,NT09,4.896313306890658
+"ruido 0,3 %",2) Red sola,NT09,10.973170441293709
+"ruido 0,3 %",3) Red → ajuste exacto,NT09,1.4581951915435694
+"ruido 0,3 %",1) Ajuste exacto,NT10,2.970206914657534
+"ruido 0,3 %",2) Red sola,NT10,14.921325858693859
+"ruido 0,3 %",3) Red → ajuste exacto,NT10,3.4942122292119553
+"ruido 0,3 %",1) Ajuste exacto,NT11,1.7060857211829215
+"ruido 0,3 %",2) Red sola,NT11,2.9032484065366484
+"ruido 0,3 %",3) Red → ajuste exacto,NT11,1.7214370902633311
+"ruido 0,3 %",1) Ajuste exacto,NT12,5.7942989305595445
+"ruido 0,3 %",2) Red sola,NT12,24.069295346525642
+"ruido 0,3 %",3) Red → ajuste exacto,NT12,5.623591845204926
+"ruido 0,3 %",1) Ajuste exacto,NT13,2.0193454854407102
+"ruido 0,3 %",2) Red sola,NT13,11.398578556168395
+"ruido 0,3 %",3) Red → ajuste exacto,NT13,1.8749368478496502
+"ruido 0,3 %",1) Ajuste exacto,NT14,2.2375979757441367
+"ruido 0,3 %",2) Red sola,NT14,23.553297792212
+"ruido 0,3 %",3) Red → ajuste exacto,NT14,2.1610215644999693
+"ruido 0,3 %",1) Ajuste exacto,NT15,2.446235430252211
+"ruido 0,3 %",2) Red sola,NT15,4.496212386212878
+"ruido 0,3 %",3) Red → ajuste exacto,NT15,1.5012447822317943
+"ruido 0,3 %",1) Ajuste exacto,NT16,1.2350794240133696
+"ruido 0,3 %",2) Red sola,NT16,7.764028176513977
+"ruido 0,3 %",3) Red → ajuste exacto,NT16,1.4301439474544182
+"ruido 0,3 %",1) Ajuste exacto,HT01,1.5425448905632588
+"ruido 0,3 %",2) Red sola,HT01,9.913387951108744
+"ruido 0,3 %",3) Red → ajuste exacto,HT01,2.228651796525047
+"ruido 0,3 %",1) Ajuste exacto,HT02,1.5791428488036445
+"ruido 0,3 %",2) Red sola,HT02,4.659858686212883
+"ruido 0,3 %",3) Red → ajuste exacto,HT02,1.4495577395449264
+"ruido 0,3 %",1) Ajuste exacto,HT03,1.8908398035004501
+"ruido 0,3 %",2) Red sola,HT03,8.286606501860494
+"ruido 0,3 %",3) Red → ajuste exacto,HT03,1.9526790439671593
+"ruido 0,3 %",1) Ajuste exacto,HT04,3.0723525151075766
+"ruido 0,3 %",2) Red sola,HT04,4.545032557325808
+"ruido 0,3 %",3) Red → ajuste exacto,HT04,3.0981738885713273
+"ruido 0,3 %",1) Ajuste exacto,HT05,3.737891481256781
+"ruido 0,3 %",2) Red sola,HT05,23.805427887186458
+"ruido 0,3 %",3) Red → ajuste exacto,HT05,3.714008958715081
+"ruido 0,3 %",1) Ajuste exacto,HT06,1.9677184997914816
+"ruido 0,3 %",2) Red sola,HT06,9.296716316274726
+"ruido 0,3 %",3) Red → ajuste exacto,HT06,2.366713773732327
+"ruido 0,3 %",1) Ajuste exacto,HT07,2.3151591951511756
+"ruido 0,3 %",2) Red sola,HT07,136.05466796611537
+"ruido 0,3 %",3) Red → ajuste exacto,HT07,2.5510355568552923
+"ruido 0,3 %",1) Ajuste exacto,HT08,3.7349063236726736
+"ruido 0,3 %",2) Red sola,HT08,6.391636840717443
+"ruido 0,3 %",3) Red → ajuste exacto,HT08,3.5677344770393016
+"ruido 0,3 %",1) Ajuste exacto,HT09,5.762577506678415
+"ruido 0,3 %",2) Red sola,HT09,1.7895972876255053
+"ruido 0,3 %",3) Red → ajuste exacto,HT09,2.0432920200868727
+"ruido 0,3 %",1) Ajuste exacto,HT10,2.849454693494479
+"ruido 0,3 %",2) Red sola,HT10,12.94184921452465
+"ruido 0,3 %",3) Red → ajuste exacto,HT10,3.662352354692937
+"ruido 0,3 %",1) Ajuste exacto,HT11,2.930569427936888
+"ruido 0,3 %",2) Red sola,HT11,6.018929400824924
+"ruido 0,3 %",3) Red → ajuste exacto,HT11,2.4715919517612317
+"ruido 0,3 %",1) Ajuste exacto,HT12,4.92326768808736
+"ruido 0,3 %",2) Red sola,HT12,11.036365851316052
+"ruido 0,3 %",3) Red → ajuste exacto,HT12,4.925873953528989
+"ruido 0,3 %",1) Ajuste exacto,HT13,1.371183042344463
+"ruido 0,3 %",2) Red sola,HT13,0.9539129088609943
+"ruido 0,3 %",3) Red → ajuste exacto,HT13,1.3770669208291626
+"ruido 0,3 %",1) Ajuste exacto,HT14,3.3222370835618156
+"ruido 0,3 %",2) Red sola,HT14,5.430089081444039
+"ruido 0,3 %",3) Red → ajuste exacto,HT14,5.950437797278337
+"ruido 0,3 %",1) Ajuste exacto,HT15,3.5204884298982577
+"ruido 0,3 %",2) Red sola,HT15,4.305685658481876
+"ruido 0,3 %",3) Red → ajuste exacto,HT15,3.84213317051877
+"ruido 0,3 %",1) Ajuste exacto,HT16,3.308736218614572
+"ruido 0,3 %",2) Red sola,HT16,4.05210702978885
+"ruido 0,3 %",3) Red → ajuste exacto,HT16,2.823062980135274
+"ruido 0,3 %",1) Ajuste exacto,HT17,2.2848985311664465
+"ruido 0,3 %",2) Red sola,HT17,8.000289114340642
+"ruido 0,3 %",3) Red → ajuste exacto,HT17,1.5729522988191613
+"ruido 0,3 %",1) Ajuste exacto,HT18,2.479575389206124
+"ruido 0,3 %",2) Red sola,HT18,91.01966110983092
+"ruido 0,3 %",3) Red → ajuste exacto,HT18,3.76674269595419
+"ruido 0,3 %",1) Ajuste exacto,HT19,1.639503868473031
+"ruido 0,3 %",2) Red sola,HT19,4.814288261738974
+"ruido 0,3 %",3) Red → ajuste exacto,HT19,1.64171504524715
+"ruido 0,3 %",1) Ajuste exacto,HT20,2.1132977487731743
+"ruido 0,3 %",2) Red sola,HT20,9.935005655591635
+"ruido 0,3 %",3) Red → ajuste exacto,HT20,2.713485177756546
+"ruido 0,3 %",1) Ajuste exacto,HT21,3.507094362892594
+"ruido 0,3 %",2) Red sola,HT21,9.11122241056003
+"ruido 0,3 %",3) Red → ajuste exacto,HT21,3.441633025979032
+"ruido 0,3 %",1) Ajuste exacto,HT22,16.841583544640937
+"ruido 0,3 %",2) Red sola,HT22,6.895192855856981
+"ruido 0,3 %",3) Red → ajuste exacto,HT22,2.068720133302102
+"ruido 0,3 %",1) Ajuste exacto,HT23,1.4869321893679437
+"ruido 0,3 %",2) Red sola,HT23,2.9814651947055277
+"ruido 0,3 %",3) Red → ajuste exacto,HT23,1.5858385870968386
+"ruido 0,3 %",1) Ajuste exacto,HT24,5.549451446373108
+"ruido 0,3 %",2) Red sola,HT24,6.108655923400558
+"ruido 0,3 %",3) Red → ajuste exacto,HT24,1.8001496424855485
+"ruido 0,3 %",1) Ajuste exacto,HT25,2.612012556362652
+"ruido 0,3 %",2) Red sola,HT25,10.023958912300639
+"ruido 0,3 %",3) Red → ajuste exacto,HT25,1.8615748249330029
+"ruido 0,3 %",1) Ajuste exacto,NT01,2.6968531565342926
+"ruido 0,3 %",2) Red sola,NT01,3.352217817173635
+"ruido 0,3 %",3) Red → ajuste exacto,NT01,1.9513197110717777
+"ruido 0,3 %",1) Ajuste exacto,NT02,2.500700741731032
+"ruido 0,3 %",2) Red sola,NT02,13.855047716151482
+"ruido 0,3 %",3) Red → ajuste exacto,NT02,1.4164686211212727
+"ruido 0,3 %",1) Ajuste exacto,NT03,2.9824192863931884
+"ruido 0,3 %",2) Red sola,NT03,30.496577959611212
+"ruido 0,3 %",3) Red → ajuste exacto,NT03,2.811606757868855
+"ruido 0,3 %",1) Ajuste exacto,NT04,2.7086150899350327
+"ruido 0,3 %",2) Red sola,NT04,21.025638287230425
+"ruido 0,3 %",3) Red → ajuste exacto,NT04,1.7973490415159952
+"ruido 0,3 %",1) Ajuste exacto,NT05,3.9846540627019382
+"ruido 0,3 %",2) Red sola,NT05,2.631206549596065
+"ruido 0,3 %",3) Red → ajuste exacto,NT05,0.9500049362758887
+"ruido 0,3 %",1) Ajuste exacto,NT06,2.0495979263464292
+"ruido 0,3 %",2) Red sola,NT06,13.735150512394164
+"ruido 0,3 %",3) Red → ajuste exacto,NT06,2.001114210626198
+"ruido 0,3 %",1) Ajuste exacto,NT07,1.6767976293720102
+"ruido 0,3 %",2) Red sola,NT07,2.9927253463547974
+"ruido 0,3 %",3) Red → ajuste exacto,NT07,1.7287878392736316
+"ruido 0,3 %",1) Ajuste exacto,NT08,5.9582785497165185
+"ruido 0,3 %",2) Red sola,NT08,9.522951042247366
+"ruido 0,3 %",3) Red → ajuste exacto,NT08,3.838395976046856
+"ruido 0,3 %",1) Ajuste exacto,NT09,2.145032807250714
+"ruido 0,3 %",2) Red sola,NT09,6.5715792855453135
+"ruido 0,3 %",3) Red → ajuste exacto,NT09,1.920208156070934
+"ruido 0,3 %",1) Ajuste exacto,NT10,2.2850949243083183
+"ruido 0,3 %",2) Red sola,NT10,6.872224675179178
+"ruido 0,3 %",3) Red → ajuste exacto,NT10,2.366351182079812
+"ruido 0,3 %",1) Ajuste exacto,NT11,1.7060753777443043
+"ruido 0,3 %",2) Red sola,NT11,6.433426246480902
+"ruido 0,3 %",3) Red → ajuste exacto,NT11,1.252087114855679
+"ruido 0,3 %",1) Ajuste exacto,NT12,2.3155738605617797
+"ruido 0,3 %",2) Red sola,NT12,45.409045611267
+"ruido 0,3 %",3) Red → ajuste exacto,NT12,2.3261588257025165
+"ruido 0,3 %",1) Ajuste exacto,NT13,1.9949431273501952
+"ruido 0,3 %",2) Red sola,NT13,48.967646368171344
+"ruido 0,3 %",3) Red → ajuste exacto,NT13,1.9029161901179505
+"ruido 0,3 %",1) Ajuste exacto,NT14,3.5357996944016463
+"ruido 0,3 %",2) Red sola,NT14,6.112621321668916
+"ruido 0,3 %",3) Red → ajuste exacto,NT14,3.5506981159623323
+"ruido 0,3 %",1) Ajuste exacto,NT15,1.644055772402217
+"ruido 0,3 %",2) Red sola,NT15,19.02764914415376
+"ruido 0,3 %",3) Red → ajuste exacto,NT15,2.304315975421823
+"ruido 0,3 %",1) Ajuste exacto,NT16,7.046700118630623
+"ruido 0,3 %",2) Red sola,NT16,6.32274045147097
+"ruido 0,3 %",3) Red → ajuste exacto,NT16,3.4193871793670985
+"ruido 0,3 %",1) Ajuste exacto,HT01,1.6612148446191635
+"ruido 0,3 %",2) Red sola,HT01,9.05630903806215
+"ruido 0,3 %",3) Red → ajuste exacto,HT01,1.6404478136001395
+"ruido 0,3 %",1) Ajuste exacto,HT02,2.827855998235231
+"ruido 0,3 %",2) Red sola,HT02,4.973565918104837
+"ruido 0,3 %",3) Red → ajuste exacto,HT02,2.8210457229727437
+"ruido 0,3 %",1) Ajuste exacto,HT03,6.657358887756541
+"ruido 0,3 %",2) Red sola,HT03,5.760482016221961
+"ruido 0,3 %",3) Red → ajuste exacto,HT03,3.197410587739238
+"ruido 0,3 %",1) Ajuste exacto,HT04,4.6028584184703245
+"ruido 0,3 %",2) Red sola,HT04,17.645504216540676
+"ruido 0,3 %",3) Red → ajuste exacto,HT04,4.102189881454948
+"ruido 0,3 %",1) Ajuste exacto,HT05,3.0270891346763307
+"ruido 0,3 %",2) Red sola,HT05,139.58149708854413
+"ruido 0,3 %",3) Red → ajuste exacto,HT05,1.4604873091233352
+"ruido 0,3 %",1) Ajuste exacto,HT06,2.3697929383652148
+"ruido 0,3 %",2) Red sola,HT06,9.062304225147932
+"ruido 0,3 %",3) Red → ajuste exacto,HT06,2.508244313995001
+"ruido 0,3 %",1) Ajuste exacto,HT07,1.1055498425247978
+"ruido 0,3 %",2) Red sola,HT07,26.492279086186343
+"ruido 0,3 %",3) Red → ajuste exacto,HT07,1.5679165067103158
+"ruido 0,3 %",1) Ajuste exacto,HT08,3.1696661883009556
+"ruido 0,3 %",2) Red sola,HT08,5.238860692999114
+"ruido 0,3 %",3) Red → ajuste exacto,HT08,1.8747390134467923
+"ruido 0,3 %",1) Ajuste exacto,HT09,2.6267058966524286
+"ruido 0,3 %",2) Red sola,HT09,5.674343638739779
+"ruido 0,3 %",3) Red → ajuste exacto,HT09,1.92682037125319
+"ruido 0,3 %",1) Ajuste exacto,HT10,3.4349452981710047
+"ruido 0,3 %",2) Red sola,HT10,7.44442065042405
+"ruido 0,3 %",3) Red → ajuste exacto,HT10,3.8566667274142197
+"ruido 0,3 %",1) Ajuste exacto,HT11,2.631811168594028
+"ruido 0,3 %",2) Red sola,HT11,11.883475466139782
+"ruido 0,3 %",3) Red → ajuste exacto,HT11,2.7491236591234127
+"ruido 0,3 %",1) Ajuste exacto,HT12,2.383378334031918
+"ruido 0,3 %",2) Red sola,HT12,9.772049777199436
+"ruido 0,3 %",3) Red → ajuste exacto,HT12,5.2353707176083315
+"ruido 0,3 %",1) Ajuste exacto,HT13,1.0447568112491288
+"ruido 0,3 %",2) Red sola,HT13,6.446176475742659
+"ruido 0,3 %",3) Red → ajuste exacto,HT13,1.094798647880507
+"ruido 0,3 %",1) Ajuste exacto,HT14,2.986729949933525
+"ruido 0,3 %",2) Red sola,HT14,25.69847823967401
+"ruido 0,3 %",3) Red → ajuste exacto,HT14,2.7603581868606257
+"ruido 0,3 %",1) Ajuste exacto,HT15,2.3462830414724656
+"ruido 0,3 %",2) Red sola,HT15,8.724978300958165
+"ruido 0,3 %",3) Red → ajuste exacto,HT15,2.042808178778003
+"ruido 0,3 %",1) Ajuste exacto,HT16,2.9770858748351627
+"ruido 0,3 %",2) Red sola,HT16,6.174492491777913
+"ruido 0,3 %",3) Red → ajuste exacto,HT16,1.4964499666133442
+"ruido 0,3 %",1) Ajuste exacto,HT17,1.6261278319334482
+"ruido 0,3 %",2) Red sola,HT17,11.265369094580333
+"ruido 0,3 %",3) Red → ajuste exacto,HT17,1.4858675538785124
+"ruido 0,3 %",1) Ajuste exacto,HT18,1.7211767808846858
+"ruido 0,3 %",2) Red sola,HT18,12.050985907930215
+"ruido 0,3 %",3) Red → ajuste exacto,HT18,2.121818272117219
+"ruido 0,3 %",1) Ajuste exacto,HT19,2.0181293657687815
+"ruido 0,3 %",2) Red sola,HT19,5.958756168822032
+"ruido 0,3 %",3) Red → ajuste exacto,HT19,1.261195106029753
+"ruido 0,3 %",1) Ajuste exacto,HT20,2.900040669960087
+"ruido 0,3 %",2) Red sola,HT20,21.13920477370831
+"ruido 0,3 %",3) Red → ajuste exacto,HT20,3.852197459087877
+"ruido 0,3 %",1) Ajuste exacto,HT21,1.8229499180812119
+"ruido 0,3 %",2) Red sola,HT21,8.29030113650217
+"ruido 0,3 %",3) Red → ajuste exacto,HT21,1.8206102912016253
+"ruido 0,3 %",1) Ajuste exacto,HT22,1.6199373906919
+"ruido 0,3 %",2) Red sola,HT22,4.911854806915437
+"ruido 0,3 %",3) Red → ajuste exacto,HT22,1.4802736727109378
+"ruido 0,3 %",1) Ajuste exacto,HT23,1.9383648946616647
+"ruido 0,3 %",2) Red sola,HT23,10.457949854490659
+"ruido 0,3 %",3) Red → ajuste exacto,HT23,2.003108340786781
+"ruido 0,3 %",1) Ajuste exacto,HT24,2.8662361637879123
+"ruido 0,3 %",2) Red sola,HT24,4.110364133318234
+"ruido 0,3 %",3) Red → ajuste exacto,HT24,2.264267709638083
+"ruido 0,3 %",1) Ajuste exacto,HT25,2.2485469491930488
+"ruido 0,3 %",2) Red sola,HT25,11.878766749875496
+"ruido 0,3 %",3) Red → ajuste exacto,HT25,2.305651526099408
+"ruido 0,3 %",1) Ajuste exacto,NT01,2.0974561431270007
+"ruido 0,3 %",2) Red sola,NT01,7.172243471620348
+"ruido 0,3 %",3) Red → ajuste exacto,NT01,1.8995207869561899
+"ruido 0,3 %",1) Ajuste exacto,NT02,2.833018250027803
+"ruido 0,3 %",2) Red sola,NT02,12.014430942765111
+"ruido 0,3 %",3) Red → ajuste exacto,NT02,2.6070881913965414
+"ruido 0,3 %",1) Ajuste exacto,NT03,3.4153600232796153
+"ruido 0,3 %",2) Red sola,NT03,21.13602726454021
+"ruido 0,3 %",3) Red → ajuste exacto,NT03,3.36039391632722
+"ruido 0,3 %",1) Ajuste exacto,NT04,1.7794173191244824
+"ruido 0,3 %",2) Red sola,NT04,18.93169270860714
+"ruido 0,3 %",3) Red → ajuste exacto,NT04,2.244290907612302
+"ruido 0,3 %",1) Ajuste exacto,NT05,1.651799833241269
+"ruido 0,3 %",2) Red sola,NT05,14.976748847983501
+"ruido 0,3 %",3) Red → ajuste exacto,NT05,1.2978423000084942
+"ruido 0,3 %",1) Ajuste exacto,NT06,4.374571768403594
+"ruido 0,3 %",2) Red sola,NT06,14.543074502073727
+"ruido 0,3 %",3) Red → ajuste exacto,NT06,4.303195768200603
+"ruido 0,3 %",1) Ajuste exacto,NT07,2.4433048813072604
+"ruido 0,3 %",2) Red sola,NT07,2.907762723791058
+"ruido 0,3 %",3) Red → ajuste exacto,NT07,2.432743642669305
+"ruido 0,3 %",1) Ajuste exacto,NT08,10.973924970209591
+"ruido 0,3 %",2) Red sola,NT08,9.64138974673456
+"ruido 0,3 %",3) Red → ajuste exacto,NT08,4.395196281176869
+"ruido 0,3 %",1) Ajuste exacto,NT09,3.0423119668334833
+"ruido 0,3 %",2) Red sola,NT09,19.159596739777086
+"ruido 0,3 %",3) Red → ajuste exacto,NT09,1.3698143334714201
+"ruido 0,3 %",1) Ajuste exacto,NT10,2.1801160368269565
+"ruido 0,3 %",2) Red sola,NT10,2.6233690465371997
+"ruido 0,3 %",3) Red → ajuste exacto,NT10,2.1915648791115894
+"ruido 0,3 %",1) Ajuste exacto,NT11,2.6305270589220693
+"ruido 0,3 %",2) Red sola,NT11,22.172948217674854
+"ruido 0,3 %",3) Red → ajuste exacto,NT11,4.074395242533268
+"ruido 0,3 %",1) Ajuste exacto,NT12,3.3523688206859927
+"ruido 0,3 %",2) Red sola,NT12,3.377572151863218
+"ruido 0,3 %",3) Red → ajuste exacto,NT12,2.103385166062424
+"ruido 0,3 %",1) Ajuste exacto,NT13,2.5709849002024017
+"ruido 0,3 %",2) Red sola,NT13,10.956419782073883
+"ruido 0,3 %",3) Red → ajuste exacto,NT13,2.45999595016341
+"ruido 0,3 %",1) Ajuste exacto,NT14,7.056625270037514
+"ruido 0,3 %",2) Red sola,NT14,54.236240093756145
+"ruido 0,3 %",3) Red → ajuste exacto,NT14,7.455096824323126
+"ruido 0,3 %",1) Ajuste exacto,NT15,2.8010205885947426
+"ruido 0,3 %",2) Red sola,NT15,3.927096643687701
+"ruido 0,3 %",3) Red → ajuste exacto,NT15,2.2252154645119226
+"ruido 0,3 %",1) Ajuste exacto,NT16,2.2812142063789707
+"ruido 0,3 %",2) Red sola,NT16,8.213034948100232
+"ruido 0,3 %",3) Red → ajuste exacto,NT16,2.3917068020689656
+"ruido 0,3 %",1) Ajuste exacto,HT01,2.050345131879262
+"ruido 0,3 %",2) Red sola,HT01,2.2176979974916953
+"ruido 0,3 %",3) Red → ajuste exacto,HT01,1.9401038611526378
+"ruido 0,3 %",1) Ajuste exacto,HT02,2.1425631238709064
+"ruido 0,3 %",2) Red sola,HT02,2.4624953679399852
+"ruido 0,3 %",3) Red → ajuste exacto,HT02,2.1313888678591
+"ruido 0,3 %",1) Ajuste exacto,HT03,1.9962588079818022
+"ruido 0,3 %",2) Red sola,HT03,6.158511563146608
+"ruido 0,3 %",3) Red → ajuste exacto,HT03,3.444033472115953
+"ruido 0,3 %",1) Ajuste exacto,HT04,2.885559871874827
+"ruido 0,3 %",2) Red sola,HT04,12.820744952285597
+"ruido 0,3 %",3) Red → ajuste exacto,HT04,2.010894199818195
+"ruido 0,3 %",1) Ajuste exacto,HT05,2.199049726688297
+"ruido 0,3 %",2) Red sola,HT05,24.263614823474803
+"ruido 0,3 %",3) Red → ajuste exacto,HT05,1.655166853924045
+"ruido 0,3 %",1) Ajuste exacto,HT06,1.452034499183257
+"ruido 0,3 %",2) Red sola,HT06,23.033546570681448
+"ruido 0,3 %",3) Red → ajuste exacto,HT06,2.0209153728329237
+"ruido 0,3 %",1) Ajuste exacto,HT07,1.8078566597355816
+"ruido 0,3 %",2) Red sola,HT07,37.251883293264605
+"ruido 0,3 %",3) Red → ajuste exacto,HT07,1.2386995135157468
+"ruido 0,3 %",1) Ajuste exacto,HT08,2.529297805043036
+"ruido 0,3 %",2) Red sola,HT08,20.630646029978884
+"ruido 0,3 %",3) Red → ajuste exacto,HT08,4.170309338722806
+"ruido 0,3 %",1) Ajuste exacto,HT09,2.2672433931593754
+"ruido 0,3 %",2) Red sola,HT09,4.3236146620746085
+"ruido 0,3 %",3) Red → ajuste exacto,HT09,1.129936711064477
+"ruido 0,3 %",1) Ajuste exacto,HT10,4.322213231110953
+"ruido 0,3 %",2) Red sola,HT10,15.996951501415058
+"ruido 0,3 %",3) Red → ajuste exacto,HT10,6.590328543020015
+"ruido 0,3 %",1) Ajuste exacto,HT11,3.3904451099257553
+"ruido 0,3 %",2) Red sola,HT11,7.54790875574154
+"ruido 0,3 %",3) Red → ajuste exacto,HT11,5.788436989398941
+"ruido 0,3 %",1) Ajuste exacto,HT12,2.870145406629341
+"ruido 0,3 %",2) Red sola,HT12,23.044638908326753
+"ruido 0,3 %",3) Red → ajuste exacto,HT12,2.8827959083825028
+"ruido 0,3 %",1) Ajuste exacto,HT13,3.3818997918233578
+"ruido 0,3 %",2) Red sola,HT13,3.3624318613727207
+"ruido 0,3 %",3) Red → ajuste exacto,HT13,2.316048433739865
+"ruido 0,3 %",1) Ajuste exacto,HT14,1.1970791360181792
+"ruido 0,3 %",2) Red sola,HT14,20.53698356803515
+"ruido 0,3 %",3) Red → ajuste exacto,HT14,1.499447841740033
+"ruido 0,3 %",1) Ajuste exacto,HT15,2.6860471774164063
+"ruido 0,3 %",2) Red sola,HT15,61.53516677436748
+"ruido 0,3 %",3) Red → ajuste exacto,HT15,2.851009439555565
+"ruido 0,3 %",1) Ajuste exacto,HT16,2.9186859852102063
+"ruido 0,3 %",2) Red sola,HT16,9.069167542472035
+"ruido 0,3 %",3) Red → ajuste exacto,HT16,2.701427424762547
+"ruido 0,3 %",1) Ajuste exacto,HT17,3.8468458416650075
+"ruido 0,3 %",2) Red sola,HT17,13.693120057391823
+"ruido 0,3 %",3) Red → ajuste exacto,HT17,3.959040254405626
+"ruido 0,3 %",1) Ajuste exacto,HT18,3.4328484104874946
+"ruido 0,3 %",2) Red sola,HT18,36.701033377554424
+"ruido 0,3 %",3) Red → ajuste exacto,HT18,3.377875092870747
+"ruido 0,3 %",1) Ajuste exacto,HT19,4.180273997622963
+"ruido 0,3 %",2) Red sola,HT19,0.9972879724893411
+"ruido 0,3 %",3) Red → ajuste exacto,HT19,4.181310803831912
+"ruido 0,3 %",1) Ajuste exacto,HT20,7.4498600792639404
+"ruido 0,3 %",2) Red sola,HT20,13.268806413431731
+"ruido 0,3 %",3) Red → ajuste exacto,HT20,3.0809884600475885
+"ruido 0,3 %",1) Ajuste exacto,HT21,2.3887729246223315
+"ruido 0,3 %",2) Red sola,HT21,8.112418401405792
+"ruido 0,3 %",3) Red → ajuste exacto,HT21,2.279109585909945
+"ruido 0,3 %",1) Ajuste exacto,HT22,3.0115798759448893
+"ruido 0,3 %",2) Red sola,HT22,2.7658150927038925
+"ruido 0,3 %",3) Red → ajuste exacto,HT22,2.139835598147412
+"ruido 0,3 %",1) Ajuste exacto,HT23,3.3920908825594576
+"ruido 0,3 %",2) Red sola,HT23,9.793182000075344
+"ruido 0,3 %",3) Red → ajuste exacto,HT23,3.3334090392898026
+"ruido 0,3 %",1) Ajuste exacto,HT24,1.49964306311274
+"ruido 0,3 %",2) Red sola,HT24,7.484220268962465
+"ruido 0,3 %",3) Red → ajuste exacto,HT24,1.498940845658772
+"ruido 0,3 %",1) Ajuste exacto,HT25,14.12207508774661
+"ruido 0,3 %",2) Red sola,HT25,2.6540312588858677
+"ruido 0,3 %",3) Red → ajuste exacto,HT25,2.8184487969707885
+10 presiones,1) Ajuste exacto,NT01,1.049905075317963
+10 presiones,2) Red sola,NT01,2.7973669308005196
+10 presiones,3) Red → ajuste exacto,NT01,1.0499043896374758
+10 presiones,1) Ajuste exacto,NT02,0.7869014504940925
+10 presiones,2) Red sola,NT02,6.258903079323519
+10 presiones,3) Red → ajuste exacto,NT02,0.7869013384286554
+10 presiones,1) Ajuste exacto,NT03,463.12860682585625
+10 presiones,2) Red sola,NT03,21.73364906337283
+10 presiones,3) Red → ajuste exacto,NT03,0.8161142730405755
+10 presiones,1) Ajuste exacto,NT04,1.399535913593356
+10 presiones,2) Red sola,NT04,29.361120663572464
+10 presiones,3) Red → ajuste exacto,NT04,1.514565033055144
+10 presiones,1) Ajuste exacto,NT05,0.8185309204567698
+10 presiones,2) Red sola,NT05,1.297172387848569
+10 presiones,3) Red → ajuste exacto,NT05,0.8185313217977465
+10 presiones,1) Ajuste exacto,NT06,1.1553574430048603
+10 presiones,2) Red sola,NT06,1.1507200399086388
+10 presiones,3) Red → ajuste exacto,NT06,1.2195743094213414
+10 presiones,1) Ajuste exacto,NT07,0.6722737000515474
+10 presiones,2) Red sola,NT07,2.504550504451188
+10 presiones,3) Red → ajuste exacto,NT07,0.8148763334269729
+10 presiones,1) Ajuste exacto,NT08,3.454403215204031
+10 presiones,2) Red sola,NT08,5.114308126809862
+10 presiones,3) Red → ajuste exacto,NT08,1.7556318063481442
+10 presiones,1) Ajuste exacto,NT09,1.1474756139245508
+10 presiones,2) Red sola,NT09,1.9859601229926365
+10 presiones,3) Red → ajuste exacto,NT09,1.1475337075192575
+10 presiones,1) Ajuste exacto,NT10,0.9844828711835746
+10 presiones,2) Red sola,NT10,4.176677521310408
+10 presiones,3) Red → ajuste exacto,NT10,0.9844827801802065
+10 presiones,1) Ajuste exacto,NT11,0.8585831649013975
+10 presiones,2) Red sola,NT11,1.3866073233762422
+10 presiones,3) Red → ajuste exacto,NT11,0.9145796309666491
+10 presiones,1) Ajuste exacto,NT12,0.6687697232344425
+10 presiones,2) Red sola,NT12,3.3391398724528694
+10 presiones,3) Red → ajuste exacto,NT12,0.7591277491853564
+10 presiones,1) Ajuste exacto,NT13,1.1438611143058062
+10 presiones,2) Red sola,NT13,2.023749210568369
+10 presiones,3) Red → ajuste exacto,NT13,1.1438624642672406
+10 presiones,1) Ajuste exacto,NT14,1.4001269219927883
+10 presiones,2) Red sola,NT14,2.917717694922349
+10 presiones,3) Red → ajuste exacto,NT14,1.427907601735561
+10 presiones,1) Ajuste exacto,NT15,1.1188834904663947
+10 presiones,2) Red sola,NT15,3.0038201090320973
+10 presiones,3) Red → ajuste exacto,NT15,0.6496344812966505
+10 presiones,1) Ajuste exacto,NT16,0.26676102374270627
+10 presiones,2) Red sola,NT16,1.6897445778583806
+10 presiones,3) Red → ajuste exacto,NT16,0.2667609315313514
+10 presiones,1) Ajuste exacto,HT01,0.978208956274575
+10 presiones,2) Red sola,HT01,3.377057987383902
+10 presiones,3) Red → ajuste exacto,HT01,1.013559674548677
+10 presiones,1) Ajuste exacto,HT02,0.8014236075607392
+10 presiones,2) Red sola,HT02,3.583549685826273
+10 presiones,3) Red → ajuste exacto,HT02,0.7985507821080122
+10 presiones,1) Ajuste exacto,HT03,0.8836590568434379
+10 presiones,2) Red sola,HT03,6.4396450509313246
+10 presiones,3) Red → ajuste exacto,HT03,0.8822223803150634
+10 presiones,1) Ajuste exacto,HT04,468.6634313830181
+10 presiones,2) Red sola,HT04,12.121187100637494
+10 presiones,3) Red → ajuste exacto,HT04,0.809717332475173
+10 presiones,1) Ajuste exacto,HT05,0.824287452260153
+10 presiones,2) Red sola,HT05,90.53256605525796
+10 presiones,3) Red → ajuste exacto,HT05,0.846025553947294
+10 presiones,1) Ajuste exacto,HT06,0.8621884159504747
+10 presiones,2) Red sola,HT06,4.311940137762931
+10 presiones,3) Red → ajuste exacto,HT06,0.8621886191345612
+10 presiones,1) Ajuste exacto,HT07,0.8032933869274348
+10 presiones,2) Red sola,HT07,7.446734217194467
+10 presiones,3) Red → ajuste exacto,HT07,0.8388242707467789
+10 presiones,1) Ajuste exacto,HT08,0.6927606135942013
+10 presiones,2) Red sola,HT08,1.3146292308705592
+10 presiones,3) Red → ajuste exacto,HT08,0.6927609026578925
+10 presiones,1) Ajuste exacto,HT09,0.701631698566146
+10 presiones,2) Red sola,HT09,1.0944314065503158
+10 presiones,3) Red → ajuste exacto,HT09,0.7016302912308727
+10 presiones,1) Ajuste exacto,HT10,0.6385983626640926
+10 presiones,2) Red sola,HT10,3.334110096626231
+10 presiones,3) Red → ajuste exacto,HT10,0.6365382856460444
+10 presiones,1) Ajuste exacto,HT11,0.5850240823784689
+10 presiones,2) Red sola,HT11,0.7760146744795157
+10 presiones,3) Red → ajuste exacto,HT11,0.5242804863502991
+10 presiones,1) Ajuste exacto,HT12,0.7352329059187742
+10 presiones,2) Red sola,HT12,6.613646941790461
+10 presiones,3) Red → ajuste exacto,HT12,0.3537112126747836
+10 presiones,1) Ajuste exacto,HT13,0.9058340420761759
+10 presiones,2) Red sola,HT13,3.4166521551900684
+10 presiones,3) Red → ajuste exacto,HT13,0.9038036170965741
+10 presiones,1) Ajuste exacto,HT14,1.2366453964942647
+10 presiones,2) Red sola,HT14,1.9424330492629385
+10 presiones,3) Red → ajuste exacto,HT14,1.275334226662497
+10 presiones,1) Ajuste exacto,HT15,0.8473082166698376
+10 presiones,2) Red sola,HT15,3.790242470561076
+10 presiones,3) Red → ajuste exacto,HT15,0.8528589963694929
+10 presiones,1) Ajuste exacto,HT16,0.6832479204489147
+10 presiones,2) Red sola,HT16,2.38540271315135
+10 presiones,3) Red → ajuste exacto,HT16,0.6742462060663477
+10 presiones,1) Ajuste exacto,HT17,0.8746911771971575
+10 presiones,2) Red sola,HT17,4.102985367991541
+10 presiones,3) Red → ajuste exacto,HT17,0.8773539947167898
+10 presiones,1) Ajuste exacto,HT18,1.0302386152683083
+10 presiones,2) Red sola,HT18,11.75030956683084
+10 presiones,3) Red → ajuste exacto,HT18,0.5470736461095685
+10 presiones,1) Ajuste exacto,HT19,0.9459115176283854
+10 presiones,2) Red sola,HT19,1.0510633087600971
+10 presiones,3) Red → ajuste exacto,HT19,0.9512858098919886
+10 presiones,1) Ajuste exacto,HT20,0.6241630477146421
+10 presiones,2) Red sola,HT20,3.5799303403770564
+10 presiones,3) Red → ajuste exacto,HT20,0.6241628976810536
+10 presiones,1) Ajuste exacto,HT21,0.7842428102690725
+10 presiones,2) Red sola,HT21,2.136615539252348
+10 presiones,3) Red → ajuste exacto,HT21,0.7842935149042446
+10 presiones,1) Ajuste exacto,HT22,0.6901814791535331
+10 presiones,2) Red sola,HT22,3.496803873685562
+10 presiones,3) Red → ajuste exacto,HT22,0.6876959139495608
+10 presiones,1) Ajuste exacto,HT23,0.9464677356350096
+10 presiones,2) Red sola,HT23,2.1830000285502513
+10 presiones,3) Red → ajuste exacto,HT23,0.9383516045223116
+10 presiones,1) Ajuste exacto,HT24,0.8850546711240961
+10 presiones,2) Red sola,HT24,2.986964591408717
+10 presiones,3) Red → ajuste exacto,HT24,0.8842681272731074
+10 presiones,1) Ajuste exacto,HT25,0.5668819667075693
+10 presiones,2) Red sola,HT25,3.929202610125332
+10 presiones,3) Red → ajuste exacto,HT25,0.5512480970808514
+10 presiones,1) Ajuste exacto,NT01,1.049905075317963
+10 presiones,2) Red sola,NT01,2.7973669308005196
+10 presiones,3) Red → ajuste exacto,NT01,1.0499043896374758
+10 presiones,1) Ajuste exacto,NT02,0.7869014504940925
+10 presiones,2) Red sola,NT02,6.258903079323519
+10 presiones,3) Red → ajuste exacto,NT02,0.7869013384286554
+10 presiones,1) Ajuste exacto,NT03,463.12860682585625
+10 presiones,2) Red sola,NT03,21.73364906337283
+10 presiones,3) Red → ajuste exacto,NT03,0.8161142730405755
+10 presiones,1) Ajuste exacto,NT04,1.399535913593356
+10 presiones,2) Red sola,NT04,29.361120663572464
+10 presiones,3) Red → ajuste exacto,NT04,1.514565033055144
+10 presiones,1) Ajuste exacto,NT05,0.8185309204567698
+10 presiones,2) Red sola,NT05,1.297172387848569
+10 presiones,3) Red → ajuste exacto,NT05,0.8185313217977465
+10 presiones,1) Ajuste exacto,NT06,1.1553574430048603
+10 presiones,2) Red sola,NT06,1.1507200399086388
+10 presiones,3) Red → ajuste exacto,NT06,1.2195743094213414
+10 presiones,1) Ajuste exacto,NT07,0.6722737000515474
+10 presiones,2) Red sola,NT07,2.504550504451188
+10 presiones,3) Red → ajuste exacto,NT07,0.8148763334269729
+10 presiones,1) Ajuste exacto,NT08,3.454403215204031
+10 presiones,2) Red sola,NT08,5.114308126809862
+10 presiones,3) Red → ajuste exacto,NT08,1.7556318063481442
+10 presiones,1) Ajuste exacto,NT09,1.1474756139245508
+10 presiones,2) Red sola,NT09,1.9859601229926365
+10 presiones,3) Red → ajuste exacto,NT09,1.1475337075192575
+10 presiones,1) Ajuste exacto,NT10,0.9844828711835746
+10 presiones,2) Red sola,NT10,4.176677521310408
+10 presiones,3) Red → ajuste exacto,NT10,0.9844827801802065
+10 presiones,1) Ajuste exacto,NT11,0.8585831649013975
+10 presiones,2) Red sola,NT11,1.3866073233762422
+10 presiones,3) Red → ajuste exacto,NT11,0.9145796309666491
+10 presiones,1) Ajuste exacto,NT12,0.6687697232344425
+10 presiones,2) Red sola,NT12,3.3391398724528694
+10 presiones,3) Red → ajuste exacto,NT12,0.7591277491853564
+10 presiones,1) Ajuste exacto,NT13,1.1438611143058062
+10 presiones,2) Red sola,NT13,2.023749210568369
+10 presiones,3) Red → ajuste exacto,NT13,1.1438624642672406
+10 presiones,1) Ajuste exacto,NT14,1.4001269219927883
+10 presiones,2) Red sola,NT14,2.917717694922349
+10 presiones,3) Red → ajuste exacto,NT14,1.427907601735561
+10 presiones,1) Ajuste exacto,NT15,1.1188834904663947
+10 presiones,2) Red sola,NT15,3.0038201090320973
+10 presiones,3) Red → ajuste exacto,NT15,0.6496344812966505
+10 presiones,1) Ajuste exacto,NT16,0.26676102374270627
+10 presiones,2) Red sola,NT16,1.6897445778583806
+10 presiones,3) Red → ajuste exacto,NT16,0.2667609315313514
+10 presiones,1) Ajuste exacto,HT01,0.978208956274575
+10 presiones,2) Red sola,HT01,3.377057987383902
+10 presiones,3) Red → ajuste exacto,HT01,1.013559674548677
+10 presiones,1) Ajuste exacto,HT02,0.8014236075607392
+10 presiones,2) Red sola,HT02,3.583549685826273
+10 presiones,3) Red → ajuste exacto,HT02,0.7985507821080122
+10 presiones,1) Ajuste exacto,HT03,0.8836590568434379
+10 presiones,2) Red sola,HT03,6.4396450509313246
+10 presiones,3) Red → ajuste exacto,HT03,0.8822223803150634
+10 presiones,1) Ajuste exacto,HT04,468.6634313830181
+10 presiones,2) Red sola,HT04,12.121187100637494
+10 presiones,3) Red → ajuste exacto,HT04,0.809717332475173
+10 presiones,1) Ajuste exacto,HT05,0.824287452260153
+10 presiones,2) Red sola,HT05,90.53256605525796
+10 presiones,3) Red → ajuste exacto,HT05,0.846025553947294
+10 presiones,1) Ajuste exacto,HT06,0.8621884159504747
+10 presiones,2) Red sola,HT06,4.311940137762931
+10 presiones,3) Red → ajuste exacto,HT06,0.8621886191345612
+10 presiones,1) Ajuste exacto,HT07,0.8032933869274348
+10 presiones,2) Red sola,HT07,7.446734217194467
+10 presiones,3) Red → ajuste exacto,HT07,0.8388242707467789
+10 presiones,1) Ajuste exacto,HT08,0.6927606135942013
+10 presiones,2) Red sola,HT08,1.3146292308705592
+10 presiones,3) Red → ajuste exacto,HT08,0.6927609026578925
+10 presiones,1) Ajuste exacto,HT09,0.701631698566146
+10 presiones,2) Red sola,HT09,1.0944314065503158
+10 presiones,3) Red → ajuste exacto,HT09,0.7016302912308727
+10 presiones,1) Ajuste exacto,HT10,0.6385983626640926
+10 presiones,2) Red sola,HT10,3.334110096626231
+10 presiones,3) Red → ajuste exacto,HT10,0.6365382856460444
+10 presiones,1) Ajuste exacto,HT11,0.5850240823784689
+10 presiones,2) Red sola,HT11,0.7760146744795157
+10 presiones,3) Red → ajuste exacto,HT11,0.5242804863502991
+10 presiones,1) Ajuste exacto,HT12,0.7352329059187742
+10 presiones,2) Red sola,HT12,6.613646941790461
+10 presiones,3) Red → ajuste exacto,HT12,0.3537112126747836
+10 presiones,1) Ajuste exacto,HT13,0.9058340420761759
+10 presiones,2) Red sola,HT13,3.4166521551900684
+10 presiones,3) Red → ajuste exacto,HT13,0.9038036170965741
+10 presiones,1) Ajuste exacto,HT14,1.2366453964942647
+10 presiones,2) Red sola,HT14,1.9424330492629385
+10 presiones,3) Red → ajuste exacto,HT14,1.275334226662497
+10 presiones,1) Ajuste exacto,HT15,0.8473082166698376
+10 presiones,2) Red sola,HT15,3.790242470561076
+10 presiones,3) Red → ajuste exacto,HT15,0.8528589963694929
+10 presiones,1) Ajuste exacto,HT16,0.6832479204489147
+10 presiones,2) Red sola,HT16,2.38540271315135
+10 presiones,3) Red → ajuste exacto,HT16,0.6742462060663477
+10 presiones,1) Ajuste exacto,HT17,0.8746911771971575
+10 presiones,2) Red sola,HT17,4.102985367991541
+10 presiones,3) Red → ajuste exacto,HT17,0.8773539947167898
+10 presiones,1) Ajuste exacto,HT18,1.0302386152683083
+10 presiones,2) Red sola,HT18,11.75030956683084
+10 presiones,3) Red → ajuste exacto,HT18,0.5470736461095685
+10 presiones,1) Ajuste exacto,HT19,0.9459115176283854
+10 presiones,2) Red sola,HT19,1.0510633087600971
+10 presiones,3) Red → ajuste exacto,HT19,0.9512858098919886
+10 presiones,1) Ajuste exacto,HT20,0.6241630477146421
+10 presiones,2) Red sola,HT20,3.5799303403770564
+10 presiones,3) Red → ajuste exacto,HT20,0.6241628976810536
+10 presiones,1) Ajuste exacto,HT21,0.7842428102690725
+10 presiones,2) Red sola,HT21,2.136615539252348
+10 presiones,3) Red → ajuste exacto,HT21,0.7842935149042446
+10 presiones,1) Ajuste exacto,HT22,0.6901814791535331
+10 presiones,2) Red sola,HT22,3.496803873685562
+10 presiones,3) Red → ajuste exacto,HT22,0.6876959139495608
+10 presiones,1) Ajuste exacto,HT23,0.9464677356350096
+10 presiones,2) Red sola,HT23,2.1830000285502513
+10 presiones,3) Red → ajuste exacto,HT23,0.9383516045223116
+10 presiones,1) Ajuste exacto,HT24,0.8850546711240961
+10 presiones,2) Red sola,HT24,2.986964591408717
+10 presiones,3) Red → ajuste exacto,HT24,0.8842681272731074
+10 presiones,1) Ajuste exacto,HT25,0.5668819667075693
+10 presiones,2) Red sola,HT25,3.929202610125332
+10 presiones,3) Red → ajuste exacto,HT25,0.5512480970808514
+10 presiones,1) Ajuste exacto,NT01,1.049905075317963
+10 presiones,2) Red sola,NT01,2.7973669308005196
+10 presiones,3) Red → ajuste exacto,NT01,1.0499043896374758
+10 presiones,1) Ajuste exacto,NT02,0.7869014504940925
+10 presiones,2) Red sola,NT02,6.258903079323519
+10 presiones,3) Red → ajuste exacto,NT02,0.7869013384286554
+10 presiones,1) Ajuste exacto,NT03,463.12860682585625
+10 presiones,2) Red sola,NT03,21.73364906337283
+10 presiones,3) Red → ajuste exacto,NT03,0.8161142730405755
+10 presiones,1) Ajuste exacto,NT04,1.399535913593356
+10 presiones,2) Red sola,NT04,29.361120663572464
+10 presiones,3) Red → ajuste exacto,NT04,1.514565033055144
+10 presiones,1) Ajuste exacto,NT05,0.8185309204567698
+10 presiones,2) Red sola,NT05,1.297172387848569
+10 presiones,3) Red → ajuste exacto,NT05,0.8185313217977465
+10 presiones,1) Ajuste exacto,NT06,1.1553574430048603
+10 presiones,2) Red sola,NT06,1.1507200399086388
+10 presiones,3) Red → ajuste exacto,NT06,1.2195743094213414
+10 presiones,1) Ajuste exacto,NT07,0.6722737000515474
+10 presiones,2) Red sola,NT07,2.504550504451188
+10 presiones,3) Red → ajuste exacto,NT07,0.8148763334269729
+10 presiones,1) Ajuste exacto,NT08,3.454403215204031
+10 presiones,2) Red sola,NT08,5.114308126809862
+10 presiones,3) Red → ajuste exacto,NT08,1.7556318063481442
+10 presiones,1) Ajuste exacto,NT09,1.1474756139245508
+10 presiones,2) Red sola,NT09,1.9859601229926365
+10 presiones,3) Red → ajuste exacto,NT09,1.1475337075192575
+10 presiones,1) Ajuste exacto,NT10,0.9844828711835746
+10 presiones,2) Red sola,NT10,4.176677521310408
+10 presiones,3) Red → ajuste exacto,NT10,0.9844827801802065
+10 presiones,1) Ajuste exacto,NT11,0.8585831649013975
+10 presiones,2) Red sola,NT11,1.3866073233762422
+10 presiones,3) Red → ajuste exacto,NT11,0.9145796309666491
+10 presiones,1) Ajuste exacto,NT12,0.6687697232344425
+10 presiones,2) Red sola,NT12,3.3391398724528694
+10 presiones,3) Red → ajuste exacto,NT12,0.7591277491853564
+10 presiones,1) Ajuste exacto,NT13,1.1438611143058062
+10 presiones,2) Red sola,NT13,2.023749210568369
+10 presiones,3) Red → ajuste exacto,NT13,1.1438624642672406
+10 presiones,1) Ajuste exacto,NT14,1.4001269219927883
+10 presiones,2) Red sola,NT14,2.917717694922349
+10 presiones,3) Red → ajuste exacto,NT14,1.427907601735561
+10 presiones,1) Ajuste exacto,NT15,1.1188834904663947
+10 presiones,2) Red sola,NT15,3.0038201090320973
+10 presiones,3) Red → ajuste exacto,NT15,0.6496344812966505
+10 presiones,1) Ajuste exacto,NT16,0.26676102374270627
+10 presiones,2) Red sola,NT16,1.6897445778583806
+10 presiones,3) Red → ajuste exacto,NT16,0.2667609315313514
+10 presiones,1) Ajuste exacto,HT01,0.978208956274575
+10 presiones,2) Red sola,HT01,3.377057987383902
+10 presiones,3) Red → ajuste exacto,HT01,1.013559674548677
+10 presiones,1) Ajuste exacto,HT02,0.8014236075607392
+10 presiones,2) Red sola,HT02,3.583549685826273
+10 presiones,3) Red → ajuste exacto,HT02,0.7985507821080122
+10 presiones,1) Ajuste exacto,HT03,0.8836590568434379
+10 presiones,2) Red sola,HT03,6.4396450509313246
+10 presiones,3) Red → ajuste exacto,HT03,0.8822223803150634
+10 presiones,1) Ajuste exacto,HT04,468.6634313830181
+10 presiones,2) Red sola,HT04,12.121187100637494
+10 presiones,3) Red → ajuste exacto,HT04,0.809717332475173
+10 presiones,1) Ajuste exacto,HT05,0.824287452260153
+10 presiones,2) Red sola,HT05,90.53256605525796
+10 presiones,3) Red → ajuste exacto,HT05,0.846025553947294
+10 presiones,1) Ajuste exacto,HT06,0.8621884159504747
+10 presiones,2) Red sola,HT06,4.311940137762931
+10 presiones,3) Red → ajuste exacto,HT06,0.8621886191345612
+10 presiones,1) Ajuste exacto,HT07,0.8032933869274348
+10 presiones,2) Red sola,HT07,7.446734217194467
+10 presiones,3) Red → ajuste exacto,HT07,0.8388242707467789
+10 presiones,1) Ajuste exacto,HT08,0.6927606135942013
+10 presiones,2) Red sola,HT08,1.3146292308705592
+10 presiones,3) Red → ajuste exacto,HT08,0.6927609026578925
+10 presiones,1) Ajuste exacto,HT09,0.701631698566146
+10 presiones,2) Red sola,HT09,1.0944314065503158
+10 presiones,3) Red → ajuste exacto,HT09,0.7016302912308727
+10 presiones,1) Ajuste exacto,HT10,0.6385983626640926
+10 presiones,2) Red sola,HT10,3.334110096626231
+10 presiones,3) Red → ajuste exacto,HT10,0.6365382856460444
+10 presiones,1) Ajuste exacto,HT11,0.5850240823784689
+10 presiones,2) Red sola,HT11,0.7760146744795157
+10 presiones,3) Red → ajuste exacto,HT11,0.5242804863502991
+10 presiones,1) Ajuste exacto,HT12,0.7352329059187742
+10 presiones,2) Red sola,HT12,6.613646941790461
+10 presiones,3) Red → ajuste exacto,HT12,0.3537112126747836
+10 presiones,1) Ajuste exacto,HT13,0.9058340420761759
+10 presiones,2) Red sola,HT13,3.4166521551900684
+10 presiones,3) Red → ajuste exacto,HT13,0.9038036170965741
+10 presiones,1) Ajuste exacto,HT14,1.2366453964942647
+10 presiones,2) Red sola,HT14,1.9424330492629385
+10 presiones,3) Red → ajuste exacto,HT14,1.275334226662497
+10 presiones,1) Ajuste exacto,HT15,0.8473082166698376
+10 presiones,2) Red sola,HT15,3.790242470561076
+10 presiones,3) Red → ajuste exacto,HT15,0.8528589963694929
+10 presiones,1) Ajuste exacto,HT16,0.6832479204489147
+10 presiones,2) Red sola,HT16,2.38540271315135
+10 presiones,3) Red → ajuste exacto,HT16,0.6742462060663477
+10 presiones,1) Ajuste exacto,HT17,0.8746911771971575
+10 presiones,2) Red sola,HT17,4.102985367991541
+10 presiones,3) Red → ajuste exacto,HT17,0.8773539947167898
+10 presiones,1) Ajuste exacto,HT18,1.0302386152683083
+10 presiones,2) Red sola,HT18,11.75030956683084
+10 presiones,3) Red → ajuste exacto,HT18,0.5470736461095685
+10 presiones,1) Ajuste exacto,HT19,0.9459115176283854
+10 presiones,2) Red sola,HT19,1.0510633087600971
+10 presiones,3) Red → ajuste exacto,HT19,0.9512858098919886
+10 presiones,1) Ajuste exacto,HT20,0.6241630477146421
+10 presiones,2) Red sola,HT20,3.5799303403770564
+10 presiones,3) Red → ajuste exacto,HT20,0.6241628976810536
+10 presiones,1) Ajuste exacto,HT21,0.7842428102690725
+10 presiones,2) Red sola,HT21,2.136615539252348
+10 presiones,3) Red → ajuste exacto,HT21,0.7842935149042446
+10 presiones,1) Ajuste exacto,HT22,0.6901814791535331
+10 presiones,2) Red sola,HT22,3.496803873685562
+10 presiones,3) Red → ajuste exacto,HT22,0.6876959139495608
+10 presiones,1) Ajuste exacto,HT23,0.9464677356350096
+10 presiones,2) Red sola,HT23,2.1830000285502513
+10 presiones,3) Red → ajuste exacto,HT23,0.9383516045223116
+10 presiones,1) Ajuste exacto,HT24,0.8850546711240961
+10 presiones,2) Red sola,HT24,2.986964591408717
+10 presiones,3) Red → ajuste exacto,HT24,0.8842681272731074
+10 presiones,1) Ajuste exacto,HT25,0.5668819667075693
+10 presiones,2) Red sola,HT25,3.929202610125332
+10 presiones,3) Red → ajuste exacto,HT25,0.5512480970808514
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT01,4.793504947557892
+"10 presiones + ruido 0,2 %",2) Red sola,NT01,11.801989876836082
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT01,5.7580385824677
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT02,6.185452075027159
+"10 presiones + ruido 0,2 %",2) Red sola,NT02,13.35343853001172
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT02,6.269244408353459
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT03,3.727332300003272
+"10 presiones + ruido 0,2 %",2) Red sola,NT03,21.561116568749338
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT03,4.61103610130971
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT04,2.8270036739251236
+"10 presiones + ruido 0,2 %",2) Red sola,NT04,11.332418081178815
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT04,5.367266798173163
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT05,3.68889899166569
+"10 presiones + ruido 0,2 %",2) Red sola,NT05,13.481819523735068
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT05,3.671539100274869
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT06,3.183713989746696
+"10 presiones + ruido 0,2 %",2) Red sola,NT06,20.675209621581093
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT06,2.858448038152047
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT07,2.6872241962141596
+"10 presiones + ruido 0,2 %",2) Red sola,NT07,11.320541168890847
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT07,2.5615084592315056
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT08,4.851054548986679
+"10 presiones + ruido 0,2 %",2) Red sola,NT08,12.60308961064576
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT08,5.224487935001409
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT09,3.896338838266398
+"10 presiones + ruido 0,2 %",2) Red sola,NT09,3.433243738119134
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT09,3.7129659067845995
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT10,3.7167752759242627
+"10 presiones + ruido 0,2 %",2) Red sola,NT10,14.46164434356615
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT10,2.7638316796174043
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT11,4.62828553579921
+"10 presiones + ruido 0,2 %",2) Red sola,NT11,6.472254495926907
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT11,4.614260060916221
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT12,6.040956062167411
+"10 presiones + ruido 0,2 %",2) Red sola,NT12,5.038793940339976
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT12,5.729142708063152
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT13,4.647490272097827
+"10 presiones + ruido 0,2 %",2) Red sola,NT13,13.769995301774287
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT13,4.566412834193498
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT14,4.184477518174833
+"10 presiones + ruido 0,2 %",2) Red sola,NT14,82.0387541486516
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT14,4.239124629781973
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT15,3.7739057211284917
+"10 presiones + ruido 0,2 %",2) Red sola,NT15,25.924097632350946
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT15,3.897208750134984
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT16,3.7668884820919493
+"10 presiones + ruido 0,2 %",2) Red sola,NT16,10.39784641452809
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT16,4.367844286217314
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT01,3.8454591951528236
+"10 presiones + ruido 0,2 %",2) Red sola,HT01,7.763713277770258
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT01,3.7141263401800044
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT02,2.910138655064286
+"10 presiones + ruido 0,2 %",2) Red sola,HT02,1.883721609427144
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT02,2.8753897223676868
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT03,3.8301209851156552
+"10 presiones + ruido 0,2 %",2) Red sola,HT03,16.11541505928404
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT03,5.194058794913627
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT04,5.653275139671649
+"10 presiones + ruido 0,2 %",2) Red sola,HT04,9.169582567403776
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT04,4.930333243441975
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT05,2.7781914292551972
+"10 presiones + ruido 0,2 %",2) Red sola,HT05,23.956516841979628
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT05,3.5804440062977747
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT06,2.4382935825529777
+"10 presiones + ruido 0,2 %",2) Red sola,HT06,19.686313747460183
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT06,2.437483324522632
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT07,4.089081783671413
+"10 presiones + ruido 0,2 %",2) Red sola,HT07,14.746884607599181
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT07,4.089081829681948
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT08,6.952279952995233
+"10 presiones + ruido 0,2 %",2) Red sola,HT08,10.78289192001363
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT08,4.156084724641343
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT09,4.086169739927717
+"10 presiones + ruido 0,2 %",2) Red sola,HT09,5.317961590339326
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT09,4.086169599681565
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT10,4.589835981773413
+"10 presiones + ruido 0,2 %",2) Red sola,HT10,5.476693988051227
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT10,3.491961172213375
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT11,2.9614087000245717
+"10 presiones + ruido 0,2 %",2) Red sola,HT11,19.451512783704143
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT11,2.593903261224399
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT12,2.2076246502344037
+"10 presiones + ruido 0,2 %",2) Red sola,HT12,12.035743598911496
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT12,1.9480472350699627
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT13,3.382425247885387
+"10 presiones + ruido 0,2 %",2) Red sola,HT13,9.822408147295821
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT13,3.366665450905186
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT14,6.303803110560977
+"10 presiones + ruido 0,2 %",2) Red sola,HT14,7.86118494708133
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT14,6.029994365880525
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT15,5.106405691940487
+"10 presiones + ruido 0,2 %",2) Red sola,HT15,53.00620440196741
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT15,4.225392356304852
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT16,5.647108031711517
+"10 presiones + ruido 0,2 %",2) Red sola,HT16,12.006074515574683
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT16,7.275084617120721
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT17,4.548775093833207
+"10 presiones + ruido 0,2 %",2) Red sola,HT17,30.3704839010012
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT17,4.74067054387536
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT18,5.741850648615316
+"10 presiones + ruido 0,2 %",2) Red sola,HT18,20.928277024334786
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT18,5.29238393326701
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT19,3.1479848598258067
+"10 presiones + ruido 0,2 %",2) Red sola,HT19,9.723667251750495
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT19,3.1479852920050937
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT20,3.9184000776352557
+"10 presiones + ruido 0,2 %",2) Red sola,HT20,7.097491085746713
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT20,5.116308681919908
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT21,5.37196147346142
+"10 presiones + ruido 0,2 %",2) Red sola,HT21,29.731718508552824
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT21,3.8649890086794714
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT22,5.681744311463303
+"10 presiones + ruido 0,2 %",2) Red sola,HT22,15.856234770976613
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT22,3.614233428862005
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT23,3.9108393639239196
+"10 presiones + ruido 0,2 %",2) Red sola,HT23,22.147896832314835
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT23,3.4565840283833675
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT24,3.7504019840418485
+"10 presiones + ruido 0,2 %",2) Red sola,HT24,10.897278001350228
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT24,4.100857562468083
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT25,3.5397075410991157
+"10 presiones + ruido 0,2 %",2) Red sola,HT25,18.421623967627553
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT25,2.4589165265373913
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT01,3.654298559585089
+"10 presiones + ruido 0,2 %",2) Red sola,NT01,10.484469808546958
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT01,3.603781848533581
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT02,3.7296018341317514
+"10 presiones + ruido 0,2 %",2) Red sola,NT02,13.043950956188503
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT02,3.7155764628627472
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT03,2.6696766370552347
+"10 presiones + ruido 0,2 %",2) Red sola,NT03,26.183654383702102
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT03,2.1971434200910105
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT04,6.464211800346116
+"10 presiones + ruido 0,2 %",2) Red sola,NT04,14.019991843339952
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT04,6.45595586498191
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT05,3.5639984227371513
+"10 presiones + ruido 0,2 %",2) Red sola,NT05,9.921464895159602
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT05,3.500683685376348
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT06,2.892499826527308
+"10 presiones + ruido 0,2 %",2) Red sola,NT06,10.908435348115603
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT06,2.6294670751271116
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT07,3.254204001483761
+"10 presiones + ruido 0,2 %",2) Red sola,NT07,5.517071484280416
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT07,3.2593293911372094
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT08,5.995009864316593
+"10 presiones + ruido 0,2 %",2) Red sola,NT08,7.129022413153
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT08,4.160340740931809
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT09,4.087692054675445
+"10 presiones + ruido 0,2 %",2) Red sola,NT09,28.512044775117023
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT09,3.4125710609898423
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT10,2.447958554875476
+"10 presiones + ruido 0,2 %",2) Red sola,NT10,5.056332883317816
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT10,2.3675091801729655
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT11,450.8583745979524
+"10 presiones + ruido 0,2 %",2) Red sola,NT11,79.23811645629115
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT11,6.96345009737147
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT12,4.239705432172933
+"10 presiones + ruido 0,2 %",2) Red sola,NT12,19.411242242846352
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT12,5.99721088438434
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT13,2.9579821134841797
+"10 presiones + ruido 0,2 %",2) Red sola,NT13,16.73295074432759
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT13,2.6182808223800595
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT14,3.9385001482890996
+"10 presiones + ruido 0,2 %",2) Red sola,NT14,8.40030502246064
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT14,3.932525329750374
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT15,2.539408153123689
+"10 presiones + ruido 0,2 %",2) Red sola,NT15,18.063269682261502
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT15,1.959290683475061
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT16,5.2780311675839835
+"10 presiones + ruido 0,2 %",2) Red sola,NT16,23.88086711165918
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT16,4.895972556733121
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT01,3.6180168906003525
+"10 presiones + ruido 0,2 %",2) Red sola,HT01,4.999852197707393
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT01,3.3551807270581766
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT02,4.258409675673205
+"10 presiones + ruido 0,2 %",2) Red sola,HT02,3.0248115993373696
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT02,4.249889041171382
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT03,4.307375012180205
+"10 presiones + ruido 0,2 %",2) Red sola,HT03,6.92814765155278
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT03,4.301799058761241
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT04,3.4305245387044523
+"10 presiones + ruido 0,2 %",2) Red sola,HT04,31.87570909611925
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT04,3.4334795823071413
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT05,3.481750642470158
+"10 presiones + ruido 0,2 %",2) Red sola,HT05,6.668046728001513
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT05,3.4680410485683946
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT06,2.1589239866939027
+"10 presiones + ruido 0,2 %",2) Red sola,HT06,2.8888983754519932
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT06,2.1589407190386924
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT07,2.8563715171374278
+"10 presiones + ruido 0,2 %",2) Red sola,HT07,6.361752584812912
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT07,2.653254379081397
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT08,4.3489553968691474
+"10 presiones + ruido 0,2 %",2) Red sola,HT08,19.646558500332418
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT08,4.3490010996956325
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT09,312.5077696240775
+"10 presiones + ruido 0,2 %",2) Red sola,HT09,8.894415570652804
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT09,3.199824865901247
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT10,2.365945774404196
+"10 presiones + ruido 0,2 %",2) Red sola,HT10,13.854803038630962
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT10,2.3135067227249
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT11,11.891513878385133
+"10 presiones + ruido 0,2 %",2) Red sola,HT11,19.105055306986372
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT11,11.311003760438876
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT12,3.206276695342302
+"10 presiones + ruido 0,2 %",2) Red sola,HT12,29.532886300517973
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT12,3.1942728909870732
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT13,2.7227665016316287
+"10 presiones + ruido 0,2 %",2) Red sola,HT13,6.3297532753843075
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT13,2.7227676757668604
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT14,4.262779652804483
+"10 presiones + ruido 0,2 %",2) Red sola,HT14,11.679936856399612
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT14,4.349822781281714
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT15,3.764213300428627
+"10 presiones + ruido 0,2 %",2) Red sola,HT15,21.925293293389693
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT15,3.760256321992656
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT16,1.3852748825563104
+"10 presiones + ruido 0,2 %",2) Red sola,HT16,14.600940518911036
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT16,1.3417547947839288
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT17,2.9470609848292875
+"10 presiones + ruido 0,2 %",2) Red sola,HT17,5.275499857471971
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT17,2.9363611397426124
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT18,3.7616656964467565
+"10 presiones + ruido 0,2 %",2) Red sola,HT18,9.496799460490767
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT18,3.382470092961002
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT19,5.825486250663914
+"10 presiones + ruido 0,2 %",2) Red sola,HT19,11.606297931101368
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT19,5.768353565778004
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT20,9.842366768230782
+"10 presiones + ruido 0,2 %",2) Red sola,HT20,10.792265734457475
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT20,9.927666433478374
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT21,3.8329323590053077
+"10 presiones + ruido 0,2 %",2) Red sola,HT21,6.9765121990676455
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT21,3.7561053073852384
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT22,4.061430548663309
+"10 presiones + ruido 0,2 %",2) Red sola,HT22,24.23134614481145
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT22,4.058371969542896
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT23,12.950216307754623
+"10 presiones + ruido 0,2 %",2) Red sola,HT23,15.320354314923756
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT23,8.758892516032377
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT24,2.643039041898783
+"10 presiones + ruido 0,2 %",2) Red sola,HT24,7.438602138208655
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT24,2.624555911955426
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT25,3.827456006675407
+"10 presiones + ruido 0,2 %",2) Red sola,HT25,6.6802607972895975
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT25,3.5752260693338505
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT01,4.071291013767374
+"10 presiones + ruido 0,2 %",2) Red sola,NT01,5.873494082331497
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT01,4.390471752531458
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT02,1.9696217599708836
+"10 presiones + ruido 0,2 %",2) Red sola,NT02,16.1165030629731
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT02,2.120322512966122
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT03,4.3115247186235655
+"10 presiones + ruido 0,2 %",2) Red sola,NT03,17.873938921526154
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT03,4.653793157493945
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT04,10.323209629446717
+"10 presiones + ruido 0,2 %",2) Red sola,NT04,22.515051297959094
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT04,2.4935350751216014
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT05,6.4068409724542175
+"10 presiones + ruido 0,2 %",2) Red sola,NT05,11.899851435160357
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT05,4.371410769461682
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT06,6.032321405066476
+"10 presiones + ruido 0,2 %",2) Red sola,NT06,20.062974146096717
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT06,6.024588192438382
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT07,2.2082988883527284
+"10 presiones + ruido 0,2 %",2) Red sola,NT07,9.575454033405059
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT07,2.307518628073517
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT08,6.974747433464442
+"10 presiones + ruido 0,2 %",2) Red sola,NT08,18.819014244446894
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT08,7.126908589128875
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT09,3.894444005973198
+"10 presiones + ruido 0,2 %",2) Red sola,NT09,5.677654301347769
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT09,4.465161112308882
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT10,2.5374657108183096
+"10 presiones + ruido 0,2 %",2) Red sola,NT10,26.734239168829372
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT10,2.217712963414402
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT11,3.8753964541664767
+"10 presiones + ruido 0,2 %",2) Red sola,NT11,22.29254242780109
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT11,4.375470154502263
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT12,3.073865321841454
+"10 presiones + ruido 0,2 %",2) Red sola,NT12,52.99978454709155
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT12,3.227257231742208
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT13,1.8330007214185133
+"10 presiones + ruido 0,2 %",2) Red sola,NT13,9.798118665740182
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT13,1.866936515075848
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT14,4.37215616023618
+"10 presiones + ruido 0,2 %",2) Red sola,NT14,18.91427859236303
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT14,3.4138441182541324
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT15,2.8769043735020743
+"10 presiones + ruido 0,2 %",2) Red sola,NT15,11.932384608670183
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT15,2.8773511083566463
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,NT16,9.286541790871496
+"10 presiones + ruido 0,2 %",2) Red sola,NT16,17.454853012442165
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,NT16,8.007279271602805
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT01,4.436157625190193
+"10 presiones + ruido 0,2 %",2) Red sola,HT01,15.085599026651957
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT01,4.034516377229205
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT02,3.7532523575831975
+"10 presiones + ruido 0,2 %",2) Red sola,HT02,2.6625579773020163
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT02,3.708979383001894
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT03,6.290867397349955
+"10 presiones + ruido 0,2 %",2) Red sola,HT03,20.61114216962256
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT03,6.2905870186368285
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT04,2.438536959188541
+"10 presiones + ruido 0,2 %",2) Red sola,HT04,17.209498356063552
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT04,2.458055437484433
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT05,5.10689712109998
+"10 presiones + ruido 0,2 %",2) Red sola,HT05,8.085075351363898
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT05,5.028390931759454
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT06,2.7024435856044726
+"10 presiones + ruido 0,2 %",2) Red sola,HT06,19.9632735986282
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT06,2.769501549512269
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT07,3.2450029860293848
+"10 presiones + ruido 0,2 %",2) Red sola,HT07,6.185237535527537
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT07,3.2458311023339887
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT08,4.377658926515009
+"10 presiones + ruido 0,2 %",2) Red sola,HT08,6.742394360893859
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT08,4.498152130993711
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT09,2.106974083179336
+"10 presiones + ruido 0,2 %",2) Red sola,HT09,2.7115878044550468
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT09,2.106323799842632
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT10,3.8213411409530766
+"10 presiones + ruido 0,2 %",2) Red sola,HT10,16.080716481826677
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT10,6.390702842402432
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT11,4.251626723517391
+"10 presiones + ruido 0,2 %",2) Red sola,HT11,6.028281914954261
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT11,4.510122381701482
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT12,5.585244872511765
+"10 presiones + ruido 0,2 %",2) Red sola,HT12,26.98878098412086
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT12,5.648150183772071
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT13,3.4462920732544022
+"10 presiones + ruido 0,2 %",2) Red sola,HT13,6.208633228583997
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT13,3.4070280072716312
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT14,5.482851231379623
+"10 presiones + ruido 0,2 %",2) Red sola,HT14,20.388577519079018
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT14,5.388583631490129
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT15,6.325910084742414
+"10 presiones + ruido 0,2 %",2) Red sola,HT15,17.409400762218333
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT15,5.972363847168101
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT16,2.981327967954322
+"10 presiones + ruido 0,2 %",2) Red sola,HT16,3.030939945771348
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT16,4.665092452465167
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT17,3.277616376293788
+"10 presiones + ruido 0,2 %",2) Red sola,HT17,14.017799229339259
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT17,2.7686545099910083
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT18,4.3819567700640745
+"10 presiones + ruido 0,2 %",2) Red sola,HT18,28.655704583202265
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT18,4.116144183519979
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT19,2.465937941115193
+"10 presiones + ruido 0,2 %",2) Red sola,HT19,23.676920026650052
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT19,2.451831788983787
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT20,5.048818354753363
+"10 presiones + ruido 0,2 %",2) Red sola,HT20,17.89138800199108
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT20,5.049338440983606
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT21,3.0018863753600926
+"10 presiones + ruido 0,2 %",2) Red sola,HT21,11.867721370573127
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT21,3.190572960226272
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT22,3.716295442952839
+"10 presiones + ruido 0,2 %",2) Red sola,HT22,6.397247432054383
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT22,3.7162968174608313
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT23,7.617225392731163
+"10 presiones + ruido 0,2 %",2) Red sola,HT23,17.560428211890482
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT23,7.567662056848518
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT24,3.215333564182521
+"10 presiones + ruido 0,2 %",2) Red sola,HT24,10.21330846387512
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT24,3.4497090380576028
+"10 presiones + ruido 0,2 %",1) Ajuste exacto,HT25,3.3497936220601305
+"10 presiones + ruido 0,2 %",2) Red sola,HT25,20.23015013720187
+"10 presiones + ruido 0,2 %",3) Red → ajuste exacto,HT25,2.9281751887922343
