@@ -1,4 +1,0 @@
-camino,mediana,peor,dentro_3,tiempo_s,láminas,pared_mm
-1) Minimax directo,0.849,2.466,41/41,1.361,41.0,1.025
-2) MCO no lineal,0.913,2.39,41/41,0.499,46.0,1.15
-3) Red + minimax,0.848,1.638,41/41,1.466,45.0,1.125
