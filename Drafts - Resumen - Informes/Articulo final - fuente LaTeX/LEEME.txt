@@ -1,0 +1,13 @@
+Fuente LaTeX del Artículo final - Injertos vasculares multicapa
+
+Archivos:
+  articulo_final.tex  texto del artículo (es el que se compila)
+  pre.tex             preámbulo (paquetes y formato), lo incluye articulo_final.tex
+  tab_masson.tex      tabla del Anexo A (parámetros de los 41 sujetos)
+  *.png               figuras, con los mismos nombres que usa el .tex
+
+Para generar el PDF (dos pasadas, para que salgan bien índice y referencias):
+  pdflatex articulo_final.tex
+  pdflatex articulo_final.tex
+
+En Overleaf: subir todos los archivos de esta carpeta y compilar articulo_final.tex con pdfLaTeX.

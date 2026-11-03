@@ -1,0 +1,483 @@
+\input{pre.tex}
+\title{\textbf{Diseño de injertos vasculares multicapa que reproducen la curva tensión--estiramiento de cada arteria:\\ bases de materiales, láminas enteras, pared gruesa y una red neuronal}}
+\author{Pablo Silvoni}
+\date{3 de noviembre de 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent Un injerto vascular que se distiende distinto que la arteria que reemplaza favorece la trombosis y la hiperplasia de la íntima. Los métodos de diseño publicados ajustan un único número ---la compliancia de una arteria promedio---. Aquí se presenta un método para diseñar, paciente por paciente, un injerto multicapa que reproduzca la \emph{curva completa} de la arteria, con su forma de J. Cada material del injerto se idealiza como una fibra que no tira hasta un estiramiento propio (recta truncada), y la arteria se aproxima por una suma de esos materiales, elegidos una vez para toda la población. El método se valida primero sobre la curva tensión circunferencial--estiramiento circunferencial, $\sigma_{\theta\theta}(\lambda_\theta)$, que no depende de la presión ni de la geometría de la pared: con 41 carótidas humanas (Masson et al.) y 22\,500 curvas sintéticas, el ajuste por mínimos cuadrados y el redondeo minimax a láminas enteras cumplen la meta (peor error $\le3$\,\% del rango) en los 41 sujetos con 6 materiales; una red neuronal entrenada sobre 50\,000 curvas reproduce ese ajuste en una evaluación y generaliza a una ley constitutiva que nunca vio (exceso de error de 2,8 a 4,6\,\%). Sin ningún cambio, la misma base reproduce 327 curvas de otros cuatro estudios ---carótidas común, externa e interna, capas aisladas, conejo, pacientes con placa, mediciones in vivo---: con tensiones fisiológicas, todas cumplen la meta con láminas enteras. Luego el método se aplica a la curva presión--diámetro, para la que el injerto es un tubo de pared gruesa: diseñado con la ley de Laplace ningún sujeto cumple al fabricarse, mientras que con pared gruesa cumplen 40--41 de 41. El diseño se vuelve un problema no lineal entero, que se resuelve en tres pasos: arranque, mínimos cuadrados no lineales y búsqueda entera minimax contra la curva ajustada. En el caso lineal la red no mejora la solución exacta; en el no lineal, usada como punto de partida, evita los mínimos locales que con curvas medidas producen diseños inservibles (peor error de 468,7\,\% a 2,3\,\%).
+\end{abstract}
+\tableofcontents
+
+%=====================================================================
+\section{Introducción}
+La falla de los injertos vasculares de diámetro pequeño (trombosis, hiperplasia de la íntima) se debe en buena parte a factores mecánicos: flujo perturbado, resistencia insuficiente y desajuste de compliancia entre el injerto y la arteria~\cite{ding}. En la aorta de cerdo, un injerto con una capa que iguala la compliancia mantuvo la presión de pulso, la velocidad de onda y la distensibilidad, que se deterioraron al quitar la capa~\cite{rovas25}; en ratas, un injerto con composición optimizada para la compliancia del vaso receptor siguió ajustado a las cuatro semanas, con menos inflamación y más músculo liso contráctil~\cite{furdella}. Igualar la mecánica de la arteria mejora el resultado.
+
+Varios trabajos optimizan el diseño con ese fin: tiempo de entrecruzado y espesor de un biopolímero~\cite{harrison}, proporción y espesor de las capas de un injerto multicapa~\cite{tamimi}, un refuerzo de nitinol~\cite{rovas23} o una espiral de refuerzo~\cite{jiang}, y andamios degradables que se transforman en neovaso~\cite{szafron,hsu}. Todos ajustan \emph{un número} (compliancia o distensibilidad) de una arteria \emph{promedio}. La respuesta de una arteria, en cambio, tiene forma de J: blanda a bajo estiramiento, cuando trabajan la elastina y el músculo, y rígida a alto estiramiento, cuando se reclutan las fibras de colágeno~\cite{holzapfel,humphrey}. Un número no describe esa forma, y la forma cambia de un paciente a otro y de una arteria a otra.
+
+Este trabajo diseña el injerto para que copie la \emph{curva completa} de \emph{cada} arteria. El método tiene dos niveles, que se presentan en ese orden:
+\begin{enumerate}
+\item \textbf{Nivel del material (validación).} La curva objetivo es la tensión circunferencial en función del estiramiento circunferencial, $\sigma_{\theta\theta}(\lambda_\theta)$. Es una propiedad del tejido: no depende de la presión, del radio ni del espesor de la pared, y por eso es común a cualquier arteria cuya pared tenga respuesta en J. En este nivel el injerto es una suma de materiales, el diseño es lineal y cada paso del método puede compararse con una solución exacta.
+\item \textbf{Nivel del tubo (aplicación).} La curva objetivo es la presión que soporta la pared en función del diámetro. Aquí entran la geometría y el modelo de pared gruesa, el diseño deja de ser lineal y se usan las conclusiones del primer nivel.
+\end{enumerate}
+Las contribuciones son: (i) una base de materiales tipo fibra elegida una vez para toda la población; (ii) el paso exacto de cantidades reales a láminas enteras por programación lineal entera (minimax); (iii) una red neuronal que da el diseño en una evaluación y generaliza a leyes no vistas; (iv) la demostración de que, a nivel del tubo, el diseño debe hacerse en pared gruesa, lo que lo vuelve no lineal entero; y (v) un procedimiento de tres pasos en el que la red cumple el papel de punto de partida.
+
+%=====================================================================
+\section{Datos}\label{sec:datos}
+\subsection{Ley constitutiva y sujetos}
+Masson et al.~\cite{masson} midieron en forma no invasiva, a lo largo del ciclo cardíaco, el diámetro y la presión de la carótida común de 16 sujetos normotensos (NT) y 25 hipertensos tratados (HT), y ajustaron a cada uno un modelo de la pared íntima--media con tres aportes: elastina neo-Hookeana, cuatro familias de fibras de colágeno de respuesta exponencial (axial, circunferencial y dos diagonales a $\pm\alpha$)~\cite{holzapfel} y tono del músculo liso~\cite{rachev}. Con estiramiento axial $\lambda_z$ fijo e incompresibilidad,
+\begin{equation}\label{eq:masson}
+\sigma_{\theta\theta}-\sigma_{rr}=c\,(\lambda_\theta^2-\lambda_r^2)+\lambda_\theta^2\sum_{k=1}^{4}c_{1,k}E_k\,e^{c_{2,k}E_k^2}\sin^2\varphi_k+T_m\lambda_\theta\Bigl[1-\Bigl(\frac{\lambda_m-\lambda_\theta}{\lambda_m-\lambda_0}\Bigr)^2\Bigr],
+\end{equation}
+con $E_k=\lambda_k^2-1$, $\lambda_r=1/(\lambda_\theta\lambda_z)$ y $\lambda_k$ el estiramiento de cada familia ($\lambda_z$, $\lambda_\theta$ y $\sqrt{\lambda_\theta^2\sin^2\alpha+\lambda_z^2\cos^2\alpha}$). Los 14 parámetros de cada sujeto están en sus Tablas 2 y 4 (Anexo~\ref{sec:anexo}). Diez sujetos (4 NT y 6 HT) se reservan para prueba y no intervienen en ninguna elección del método.
+
+\subsection{Curvas de tensión}\label{sec:sigma}
+La curva objetivo del primer nivel es $\sigma_{\theta\theta}(\lambda_\theta)$ en el borde media--adventicia, en 999 valores de $\lambda_\theta$ entre 1,02 y 1,16, calculada con \eqref{eq:masson}; en ese borde la tensión radial es la presión perivascular del modelo de Masson. Recalculada así, reproduce las curvas medias publicadas (Figs.~5a y 7a de~\cite{masson}) con un error cuadrático medio de 1,2 a 1,7\,\% de su valor medio, del orden del error de digitalización. Las 41 curvas tienen forma de J (monótonas y convexas) y van de 4,7 a 49\,kPa en $\lambda_\theta=1{,}02$ y de 54 a 290\,kPa en 1,16 (Fig.~\ref{fig:sigma}). En la figura se superponen las curvas medias publicadas por Masson et al.\ (Fig.~5a: jóvenes y mayores; Fig.~7a: normotensos e hipertensos), que caen sobre las curvas recalculadas. Como la presión se expresa también en forma relativa a 13,332\,kPa (100\,mmHg), la tensión se muestra además relativa a una tensión de referencia de 150\,kPa. En forma adimensional, $(\sigma-\sigma_{\min})/\Delta\sigma$, normotensos e hipertensos tienen casi la misma forma; la diferencia está en el nivel de tensión.
+
+Dos curvas límite encierran a los 41 sujetos: $y_1$, una curva de la ley de Masson con parámetros dentro del rango de los sujetos, que parte de la menor tensión medida y queda debajo de todos, e $y_2$, el sujeto más rígido extendido hasta 300\,kPa. El \emph{espacio de trabajo} son 22\,500 curvas sintéticas de la ley de Masson dentro de esa franja, con parámetros de 2 a 4 sujetos de entrenamiento mezclados y perturbados, o sorteados entre el mínimo y el máximo de los sujetos.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{fig1_sujetos_sigma_v49.png}
+\caption{Los 41 sujetos: tensión circunferencial en el borde media--adventicia; eje izquierdo en kPa, eje derecho relativo a 150\,kPa. Franja gris: curvas límite $y_1$--$y_2$. Azul: normotensos; rojo: hipertensos; trazo grueso: medias recalculadas de cada grupo. Marcadores: curvas medias digitalizadas de Masson et al.~\cite{masson}, Fig.~5a (jóvenes, mayores) y Fig.~7a (normotensos de 39 años o más, hipertensos); cubren el tramo de $\lambda_\theta$ que muestra el trabajo original.}\label{fig:sigma}\end{figure}
+
+%=====================================================================
+\section{Validación del método sobre la curva tensión--estiramiento}\label{sec:validacion}
+\subsection{Materiales: rectas truncadas}
+Una lámina del material $j$ aporta
+\begin{equation}\label{eq:base}
+A_j(\lambda)=S_j\,\max(0,\ \lambda-k_j):
+\end{equation}
+nada hasta su \emph{nudo} $k_j$, y luego una recta de pendiente $S_j$. Es la idealización de una fibra rizada que no tira hasta estirarse. El injerto es la suma $\sigma_{\mathrm{inj}}=\sum_j c_jA_j=A\,c$, con $c_j$ la cantidad de láminas de cada material y $A\in\mathbb R^{999\times N}$ la \emph{base}. Para nudos fijos, el problema es lineal.
+
+\paragraph{Elección de los nudos.} Los nudos se eligen una sola vez, para toda la población, minimizando una función $J(k)$ que reúne tres exigencias sobre el espacio de trabajo y los sujetos de entrenamiento:
+\begin{itemize}
+\item \textbf{Precisión: CVaR 99\,\%.} Para cada curva se calcula el error máximo punto a punto del ajuste por mínimos cuadrados, $e_{\max}$ (ec.~\ref{eq:emax}). El CVaR 99\,\% (\emph{conditional value at risk}, valor en riesgo condicional~\cite{rockafellar}) es el promedio de $e_{\max}$ sobre el 1\,\% de las curvas con mayor error. A ese término se suma uno menor, 0,25 veces el NRMSE medio, para que el ajuste típico también mejore. Minimizar el promedio de todas las curvas dejaría sin control a las peores; minimizar solo la peor haría depender la elección de una única curva. El CVaR está entre ambos: atiende la cola de las peores curvas sin depender de una sola.
+\item \textbf{Estabilidad: número de condición.} Con las columnas de $A$ escaladas a máximo 1, el número de condición es $\kappa(A)=s_{\max}/s_{\min}$, el cociente entre el mayor y el menor valor singular~\cite{trefethen}. Mide cuánto puede amplificarse, en las cantidades $c$, un error relativo de la curva: un error de 1\,\% en $y$ puede producir hasta $\kappa(A)$\,\% de error en $c$. Si dos nudos están muy juntos, sus columnas se parecen, $s_{\min}\to0$ y el diseño se vuelve inestable (cantidades grandes y de signo opuesto que se compensan). Se exige $\kappa(A)<30$; las bases adoptadas tienen 28,0 (6 materiales) y 19,0 (5).
+\item \textbf{Signo.} Las cantidades del ajuste libre, $c=A^+y$, deben ser no negativas (con tolerancia de 0,01 lámina) en las 22\,500 curvas del espacio de trabajo, en los sujetos de entrenamiento y en las curvas límite, porque una cantidad negativa de material no se fabrica. La función $J$ suma una penalización proporcional a las cantidades negativas. Como el signo de $c_j$ no depende de la pendiente $S_j$ (que solo escala la columna), esta condición queda fijada por los nudos.
+\end{itemize}
+La búsqueda es global por \emph{evolución diferencial}~\cite{storn}: una población de juegos de nudos candidatos se mejora generación a generación; cada candidato se perturba sumándole la diferencia entre otros dos, escalada, y el resultado reemplaza al candidato si da un $J$ menor. No usa derivadas, que $J$ no tiene (el $\max$, la ordenación del CVaR y las penalizaciones la hacen no diferenciable), y explora todo el dominio, por lo que no se queda en el primer mínimo local. El mejor candidato se refina con el método simplex de \emph{Nelder--Mead}~\cite{nelder}, que tampoco usa derivadas: mueve un poliedro de $N+1$ vértices por reflexiones, expansiones y contracciones hasta cerrarlo sobre el mínimo.
+
+\paragraph{Restricciones de los nudos.} Los nudos 2 a $N$ quedan dentro del dominio, separados al menos 0,008 (si se juntan, $\kappa(A)$ crece) y el último a más de 0,012 del extremo 1,16 (si no, su material actúa en muy pocos puntos y no se distingue del resto). El primero, $k_1$, se busca entre 0,6 y 0,98, \emph{antes} del dominio, por una razón física: en $\lambda_\theta=1{,}02$ todas las arterias ya tienen tensión (de 4,7 a 49\,kPa), y en ese punto el único material que puede aportarla es uno que ya esté trabajando. Ese material hace el papel de la elastina, que sostiene carga con la arteria descargada. Un nudo $k_1<1$ significa que la lámina se monta preestirada: con $k_1=0{,}82$, en $\lambda=1$ ya está estirada $1/0{,}82=1{,}22$. El límite superior 0,98 asegura que esté activa en todo el dominio con margen. El inferior, 0,6 (preestiramiento de 1,67), acota la búsqueda a valores fabricables. Ninguno de los dos límites está activo en el óptimo ($k_1=0{,}82$ con 5 y con 6 materiales): la elección no depende de ellos.
+
+\paragraph{Pendientes.} $S_j=\mathrm{PEND}_{\max,j}/20$, donde $\mathrm{PEND}_{\max,j}$ es la mayor pendiente que el material $j$ debe aportar en el espacio de trabajo: así ninguna curva necesita más de 20 láminas de un material. La escala no cambia la curva (lo que cuenta es $c_jS_j$), pero fija el tamaño de una lámina.
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{bases_funcionales_v39_6.png}
+\caption{La base de 6 materiales: una lámina de cada uno. El primer nudo (0,82) está antes del dominio, como la elastina, que ya trabaja con la arteria descargada; los demás se agrupan donde la curva arterial se curva más.}\label{fig:bases}\end{figure}
+
+\begin{table}[H]\centering\small
+\caption{Bases adoptadas: nudos $k_j$ y pendiente de una lámina $S_j$ [kPa].}\label{tab:bases}
+\begin{tabular}{lcccccc}\toprule
+ & 1 & 2 & 3 & 4 & 5 & 6\\\midrule
+6 materiales, $k_j$ & 0,8193 & 1,0227 & 1,0774 & 1,1099 & 1,1318 & 1,1478\\
+\phantom{6 materiales, }$S_j$ & 12,32 & 41,39 & 34,73 & 57,79 & 83,23 & 111,13\\\addlinespace
+5 materiales, $k_j$ & 0,8228 & 1,0243 & 1,0881 & 1,1226 & 1,1447 & ---\\
+\phantom{5 materiales, }$S_j$ & 12,56 & 43,57 & 51,92 & 88,74 & 129,08 & ---\\\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Métrica}
+Para una curva objetivo $y$ con rango $\Delta=\max y-\min y$,
+\begin{equation}\label{eq:emax}
+e_{\max}=\frac{100}{\Delta}\max_i\,|y_i-\hat y_i|\quad[\%],\qquad E_{\mathrm{rms}}=\frac{100}{\Delta}\sqrt{\frac1n\sum_i(y_i-\hat y_i)^2},
+\end{equation}
+con $\hat y$ la curva del injerto. $e_{\max}$ es el peor punto; $E_{\mathrm{rms}}$ (o NRMSE), el apartamiento típico. Dividir por el rango hace el criterio igual de exigente con una arteria blanda que con una rígida. Meta: $e_{\max}\le3$\,\%. Todo diseño se evalúa contra la curva original.
+
+\subsection{Cantidades reales: mínimos cuadrados}
+Con la base fija, el mejor ajuste cuadrático es $c=A^+y$, con $A^+$ la seudoinversa de Moore--Penrose~\cite{penrose}, calculada por descomposición en valores singulares~\cite{golub}: exacta, única e instantánea. Con los nudos adoptados el número de condición es 19,0 (5 materiales) y 28,0 (6 materiales), debajo del umbral de 30, y ninguna curva del espacio de trabajo ni ningún sujeto necesita una cantidad negativa. El ajuste cumple la meta en los 41 sujetos, con peor error de 0,88\,\% (6 materiales; mediana 0,67\,\%) y 1,41\,\% (5 materiales; mediana 1,07\,\%), y en todas las curvas del espacio de trabajo.
+
+\subsection{Láminas enteras: tres redondeos}
+Un injerto se fabrica con un número entero de láminas, $z\in\mathbb Z^N_{\ge0}$. Se compararon tres maneras de pasar de $c$ a $z$:
+\begin{itemize}
+\item \textbf{Simple:} cada cantidad al entero más cercano.
+\item \textbf{Conjunto (menor $E_{\mathrm{rms}}$):} como el residuo de mínimos cuadrados es ortogonal a las columnas de $A$, $E_{\mathrm{rms}}(z)^2=E_{\mathrm{rms}}(c)^2+(z-c)^\top\tilde M(z-c)$, con $\tilde M\propto A^\top A$ de $N\times N$. Buscar el mejor entero es buscar el punto más cercano de un retículo, que se resuelve en forma exacta por búsqueda en árbol con poda de Schnorr--Euchner~\cite{agrell}. El óptimo puede quedar fuera del piso y el techo de cada cantidad.
+\item \textbf{Minimax (menor $e_{\max}$):} se busca el túnel más angosto alrededor de la curva que contiene al injerto,
+\[
+\min_{z,\tau}\ \tau\quad\text{s.a.}\quad -\tau\le\frac{100}{\Delta}\bigl(y_i-(Az)_i\bigr)\le\tau,\qquad z\in\mathbb Z^N_{\ge0},
+\]
+un programa lineal entero mixto (aproximación de Chebyshev~\cite{cheney} con enteros) resuelto por ramificación y acotación con HiGHS~\cite{highs}, en unos 70\,ms por curva.
+\end{itemize}
+
+\begin{table}[H]\centering\small
+\caption{41 sujetos, láminas enteras: $e_{\max}$ mediano / peor [\%] y sujetos que cumplen la meta. El espacio de trabajo se evalúa en 2000 curvas al azar con meta de 4\,\%.}\label{tab:redondeo}
+\begin{tabular}{lcccc}\toprule
+& \multicolumn{2}{c}{6 materiales} & \multicolumn{2}{c}{5 materiales}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Método & 41 sujetos & 2000 curvas & 41 sujetos & 2000 curvas\\\midrule
+Reales (mínimos cuadrados) & 0,67 / 0,88 · 41/41 & --- & 1,07 / 1,41 · 41/41 & ---\\
+Redondeo simple & 2,34 / 7,45 · 25/41 & 1706 & 2,23 / 7,48 · 26/41 & 1616\\
+Conjunto (Schnorr--Euchner) & 1,18 / 2,46 · 41/41 & 1998 & 1,70 / 3,56 · 40/41 & 1997\\
+Minimax (MILP) & 1,02 / 2,35 · 41/41 & 2000 & 1,47 / 3,50 · 40/41 & 2000\\\bottomrule
+\end{tabular}
+\end{table}
+
+Cada redondeo es el mejor en su propia medida: el conjunto en $E_{\mathrm{rms}}$, el minimax en $e_{\max}$, que es la medida del criterio de diseño (Tabla~\ref{tab:redondeo}, Fig.~\ref{fig:redondeo}). El redondeo simple no es recomendable. Con 6 materiales los 41 sujetos cumplen con láminas enteras; con 5, un sujeto queda en 3,5\,\%: el límite lo pone tener solo 5 materiales, no el método. \textbf{Se adopta el minimax.}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{redondeo_y2_meanHT_y1_v39_6.png}
+\caption{6 materiales: la curva más rígida de la franja ($y_2$), la media de los hipertensos y la más blanda ($y_1$). Arriba: tensión; al medio: forma adimensional; abajo: diseño $-$ original en \% del rango. El minimax (verde) reparte el error para que el peor punto sea lo más chico posible.}\label{fig:redondeo}\end{figure}
+
+\subsection{La red neuronal}
+Una red neuronal recibe la curva y devuelve las cantidades de cada material en una sola evaluación: aprende la función $y\mapsto A^+y$ para la clase de curvas en J.
+
+\paragraph{Datos.} 50\,000 curvas en siete familias: de bases (sumas de una o varias láminas de la propia base, 40\,\%), que enseñan qué hace cada material por separado, y fisiológicas (60\,\%): ley de Masson mezclada, perturbada o sorteada (las tres familias del espacio de trabajo), otra ley exponencial de cuatro parámetros ajustada a los sujetos, y los sujetos de entrenamiento. La entrada lleva ruido gaussiano de 1\,\%; la etiqueta es el ajuste de la curva limpia. Partición estratificada: 35\,000 de entrenamiento, 5000 de validación y 10\,000 de prueba.
+
+\paragraph{Arquitectura y entrenamiento.} Perceptrón multicapa~\cite{goodfellow} $999\to256\to128\to64\to N$, con entrada $\log(y+22)$ estandarizada, ReLU~\cite{relu}, normalización por capa~\cite{layernorm} y regularización L2 ($10^{-5}$); unos 298\,000 parámetros. Pérdida: error cuadrático de las cantidades, más 5 veces el error de la curva reconstruida, más 5 veces la cantidad asignada a materiales ausentes en las curvas de bases (\emph{crosstalk}). Adam~\cite{adam} con recorte del gradiente, lotes de 256, reducción de la tasa en meseta y parada temprana~\cite{prechelt}; TensorFlow/Keras~\cite{tf}.
+
+\paragraph{Control de clase.} Antes de usar la red se verifica que la curva admita una aproximación no negativa con 40 rectas truncadas (NRMSE $\le2$\,\%), por mínimos cuadrados no negativos~\cite{lawson}. Una curva que no la admite no tiene forma de J y no puede reproducirse con capas.
+
+\paragraph{Resultados.} En los 41 sujetos, la red cumple la meta en todos, con un NRMSE apenas mayor que el óptimo (exceso medio de +3,1\,\% con 6 materiales y +1,6\,\% con 5; peor $e_{\max}$ 1,11 y 1,38\,\%). En las 10\,000 curvas de prueba, las familias fisiológicas quedan entre +1,0 y +3,1\,\% del óptimo, y la red cumple la meta en el 99,9 al 100\,\% de cada familia (Tabla~\ref{tab:familias}). Un paso de mínimos cuadrados sobre la salida de la red (pulido) lleva al óptimo exacto. La red tarda 0,06\,ms por curva en lote, lo mismo que el ajuste lineal.
+
+\begin{table}[H]\centering\small
+\caption{Red frente al ajuste exacto en las 10\,000 curvas de prueba (con ruido de 1\,\% en la entrada), por familia. $n$: curvas de la familia. Exceso: $\overline{\mathrm{NRMSE}}_{\mathrm{red}}/\overline{\mathrm{NRMSE}}_{\mathrm{MCO}}-1$, con los NRMSE promediados sobre las curvas de la familia (0\,\% sería igualar al ajuste exacto). Cumple: porcentaje de curvas en que el diseño de la red tiene $e_{\max}\le3$\,\%. El ajuste exacto cumple en todas.}\label{tab:familias}
+\begin{tabular}{lrcccc}\toprule
+ & & \multicolumn{2}{c}{6 materiales} & \multicolumn{2}{c}{5 materiales}\\\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Familia & $n$ & exceso & cumple & exceso & cumple\\\midrule
+Masson, mezcla y perturbación chica & 2000 & +1,2\,\% & 100\,\% & +0,6\,\% & 100\,\%\\
+Masson, mezcla amplia y extrapolación & 1500 & +1,7\,\% & 100\,\% & +1,1\,\% & 100\,\%\\
+Masson, parámetros uniformes & 1000 & +1,7\,\% & 100\,\% & +0,7\,\% & 100\,\%\\
+Otra ley exponencial & 1000 & +3,1\,\% & 99,9\,\% & +1,7\,\% & 99,8\,\%\\
+Sujetos de entrenamiento & 500 & +1,0\,\% & 100\,\% & +0,3\,\% & 100\,\%\\
+De bases, un material & 2000 & +30,6\,\% & 99,95\,\% & +17,4\,\% & 100\,\%\\
+De bases, combinada & 2000 & +54,6\,\% & 98,5\,\% & +33,1\,\% & 99,6\,\%\\\bottomrule
+\end{tabular}
+\end{table}
+Las filas son las siete familias del conjunto de datos. Las tres primeras son curvas de la ley de Masson: con parámetros de 2 a 4 sujetos de entrenamiento mezclados y perturbados poco; mezclados con pesos que permiten salir algo del rango de los sujetos (extrapolación); o sorteados uniformemente entre el mínimo y el máximo de cada parámetro. ``Otra ley exponencial'' es una ley de cuatro parámetros distinta de la de Masson, ajustada a los sujetos. ``Sujetos de entrenamiento'' son los 31 sujetos con ruido. Las dos últimas son sumas de láminas de la propia base: de un solo material o de varios. En ellas el exceso relativo es alto porque el óptimo es casi cero (la curva \emph{es} una combinación exacta de la base): son poligonales de muy poca tensión, que no representan arterias, y sirven para que la red aprenda qué hace cada material por separado.
+
+\paragraph{Una ley nunca vista.} Se generaron 300 curvas de una ley exponencial de tipo Fung~\cite{fung}, $\sigma=C+a\bigl(e^{b(\lambda-\lambda_{\min})}-1\bigr)$, con parámetros mezclados de los ajustes a los sujetos de entrenamiento y ruido de 1\,\%; esta ley no está en el entrenamiento. La red las reproduce con un exceso de +4,6\,\% (6 materiales) y +2,8\,\% (5) sobre el óptimo, con $R^2\ge0{,}996$, y todas admiten un diseño sin cantidades negativas. El control de clase acepta el 100\,\% de las curvas de Fung y de los sujetos, y rechaza el 98\,\% de las curvas que dejan de tener forma de J al modularlas con una oscilación.
+
+\paragraph{¿Mejora la red al método exacto?} Se probaron tres variantes. (a) Entrenada directamente sobre la curva reconstruida, sin etiquetas, la red llega al mismo ajuste ($E_{\mathrm{rms}}$ mediano 0,284 contra 0,280\,\% con 6 materiales). (b) Entrenada con láminas enteras como etiqueta, sigue dando números con decimales y sus peores casos empeoran. (c) Como suavizador de curvas medidas, antes del minimax, queda prácticamente igual que el ajuste lineal (6 materiales, ruido de 3\,\%: peor error 2,90 contra 3,84\,\%; con 5 materiales, 5,31 contra 4,59\,\%). Lo que sí importa con ruido es no aplicar el minimax a la curva medida, que la copia ruido incluido (mediana 3,86\,\% con ruido de 3\,\%), sino a la curva ajustada (1,38\,\%).
+
+\subsection{Validación externa: mediciones de otros autores}\label{sec:externa}
+Para comprobar que el método no depende de la arteria con que se construyó, se aplicó a curvas $\sigma_{\theta\theta}(\lambda_\theta)$ de cuatro estudios independientes, con otras leyes constitutivas, otras arterias, capas aisladas, otra especie y mediciones in vivo. \textbf{No se cambió nada}: los mismos nudos y pendientes (Tabla~\ref{tab:bases}), la misma red, el mismo control de clase y el mismo minimax.
+
+\paragraph{Curvas.} Cada curva se recalcula con los parámetros publicados:
+\begin{itemize}
+\item \textbf{Sommer y Holzapfel}~\cite{sommer} (Tablas 1 y 2): 39 especímenes humanos de carótida común (CCA) e interna (ICA), ensayados por extensión--inflado: pared intacta (21), adventicia (13, dominio de 33\,kPa) y media--íntima (7). Ley de Holzapfel con dispersión de fibras, $\Psi=\tfrac{\mu}{2}(I_1-3)+\tfrac{k_1}{k_2}\bigl(e^{Q}-1\bigr)$, $Q=k_2\bigl[(1-\rho)(I_1-3)^2+\rho(I_4-1)^2\bigr]$; se usa $\sigma_{\theta\theta}-\sigma_{rr}$ con $\lambda_z=1{,}10$, el valor in vivo que adoptan los autores.
+\item \textbf{Holzapfel et al.}~\cite{holzapfel}: carótida de conejo, media y adventicia, ley HGO con dos familias de fibras a $\pm\beta$, $\lambda_z=1{,}10$.
+\item \textbf{Liu et al.}~\cite{liu} (Tabla 1): 12 carótidas humanas con placa, caracterizadas in vivo por resonancia; Mooney--Rivlin modificado en tracción uniaxial, $\sigma=2\lambda(\lambda-\lambda^{-2})\bigl(c_1+D_1D_2e^{D_2(\lambda^2+2/\lambda-3)}\bigr)$.
+\item \textbf{Kamenskiy et al.}~\cite{kamenskiy}: 16 pacientes, carótidas común, externa (ECA) e interna medidas in vivo durante el ciclo cardíaco (48 curvas). Por cada arteria publican la tensión y el módulo tangente en diástole y en sístole y los diámetros; con esos cuatro números se arma $\sigma(\varepsilon)=\sigma_d+\alpha\bigl(e^{\beta\varepsilon}-1\bigr)$ en $\varepsilon\in[0,\varepsilon_s]$, con $\sigma(\varepsilon_s)=\sigma_s$ exacta y $\beta$ que reproduce las dos pendientes. En las 48, la pendiente sistólica supera a la diastólica: todas son J.
+\end{itemize}
+
+\paragraph{Traslado al dominio de diseño.} Cada curva vive en su propio rango de $\lambda$. Se la lleva a $[1{,}02;\,1{,}16]$ con un cambio afín de $\lambda$, sin tocar la tensión. Ese cambio equivale a lo que el injerto real permite: un preestiramiento (corrimiento de los nudos, el $\delta$ de la Sección~\ref{sec:aplicacion}) y la elección del radio de referencia (escala). Dos protocolos:
+\begin{itemize}
+\item \textbf{T (ventana por tensión):} la ventana de $\lambda$ en que la ley recorre las tensiones de la población de Masson en los extremos del dominio; se usan la mediana y las cuatro combinaciones de cuartiles (5 ventanas por curva). Para las leyes completas (Sommer, Holzapfel, Liu).
+\item \textbf{M (ventana medida):} el tramo diástole--sístole medido in vivo, con sus tensiones reales (Liu, Kamenskiy).
+\end{itemize}
+En total, 327 curvas (Fig.~\ref{fig:ext}).
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v49_curvas_externas_6.png}
+\caption{Las 327 curvas externas en el dominio de diseño, con las escalas de la Fig.~\ref{fig:sigma}: eje izquierdo en kPa, eje derecho relativo a 150\,kPa (aquí hasta 400\,kPa, porque una curva de Liu et al.\ llega a 389\,kPa). Izquierda: protocolo T; derecha: protocolo M. Franja gris: curvas límite $y_1$--$y_2$ de la población de Masson. Punteadas: rechazadas por el control de clase.}\label{fig:ext}\end{figure}
+
+\paragraph{Resultados.} La Tabla~\ref{tab:ext} resume, por estudio y tipo de espécimen, las curvas aceptadas por el control de clase.
+\begin{table}[H]\centering\small
+\caption{Validación externa (curvas aceptadas / total). Para cada número de materiales: peor $e_{\max}$ del ajuste por mínimos cuadrados [\%]; curvas que cumplen la meta de 3\,\% con láminas enteras (minimax) y su peor $e_{\max}$ [\%]; curvas en que la red cumple la meta.}\label{tab:ext}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllc|cccc|cccc}\toprule
+ & & & & \multicolumn{4}{c|}{6 materiales} & \multicolumn{4}{c}{5 materiales}\\
+Estudio & Espécimen & Prot. & Aceptadas & MCO peor & Entero $\le3$\,\% & Entero peor & Red $\le3$\,\% & MCO peor & Entero $\le3$\,\% & Entero peor & Red $\le3$\,\%\\\midrule
+Sommer y Holzapfel~\cite{sommer} & CCA adventicia & T & 27/30 & 2,83 & 27/27 & 2,03 & 24/27 & 4,16 & 27/27 & 2,89 & 24/27\\
+ & CCA media-íntima & T & 20/20 & 0,99 & 20/20 & 2,11 & 20/20 & 1,54 & 20/20 & 2,22 & 20/20\\
+ & CCA pared & T & 55/55 & 2,66 & 55/55 & 1,93 & 54/55 & 3,91 & 55/55 & 2,70 & 53/55\\
+ & ICA adventicia & T & 25/27 & 1,16 & 25/25 & 1,86 & 25/25 & 1,83 & 25/25 & 2,62 & 25/25\\
+ & ICA media-íntima & T & 15/15 & 1,13 & 15/15 & 1,65 & 15/15 & 1,76 & 15/15 & 2,54 & 15/15\\
+ & ICA pared & T & 50/50 & 1,54 & 50/50 & 1,96 & 50/50 & 2,28 & 50/50 & 2,50 & 49/50\\
+Holzapfel et al.~\cite{holzapfel} & conejo adventicia & T & 5/5 & 1,16 & 5/5 & 1,94 & 5/5 & 1,80 & 5/5 & 2,15 & 5/5\\
+ & conejo media & T & 5/5 & 1,13 & 5/5 & 1,85 & 5/5 & 1,75 & 5/5 & 2,25 & 5/5\\
+Liu et al.~\cite{liu} & carótida con placa & M & 12/12 & 1,06 & 8/12 & 8,09 & 10/12 & 1,59 & 8/12 & 8,16 & 10/12\\
+ & carótida con placa & T & 60/60 & 1,41 & 60/60 & 2,15 & 58/60 & 2,18 & 60/60 & 2,21 & 60/60\\
+Kamenskiy et al.~\cite{kamenskiy} & CCA & M & 16/16 & 1,28 & 11/16 & 4,57 & 16/16 & 1,84 & 8/16 & 5,21 & 16/16\\
+ & ECA & M & 14/16 & 1,19 & 9/14 & 8,69 & 14/14 & 1,78 & 7/14 & 9,67 & 14/14\\
+ & ICA & M & 15/16 & 1,03 & 10/15 & 6,60 & 14/15 & 1,53 & 7/15 & 6,98 & 14/15\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v49_representativas_6.png}
+\caption{Curvas representativas, 6 materiales: el caso mediano del diseño entero de cada estudio. Arriba: curva externa (negro), mínimos cuadrados (azul) y láminas enteras por minimax (verde), con el peor error entre paréntesis y las láminas de cada material en el título; eje derecho, tensión relativa a 150\,kPa. Abajo: diseño $-$ curva en \% del rango (franja: meta de $\pm3$\,\%).}\label{fig:rep}\end{figure}
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{v49_error_entero_6.png}
+\caption{Peor error del diseño entero por estudio y protocolo, 6 materiales (curvas aceptadas). Línea roja: meta de 3\,\%.}\label{fig:boxext}\end{figure}
+
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{La base alcanza.} Con 6 materiales, ninguna curva aceptada supera 2,83\,\% con mínimos cuadrados. Con 5, dos curvas (una pared y una adventicia de CCA) superan levemente la meta con cantidades reales (3,91 y 4,16\,\%), pero el minimax entero las deja en 2,70 y 2,89\,\%: el minimax controla el peor punto y los mínimos cuadrados no.
+\item \textbf{Láminas enteras.} Con tensiones fisiológicas (protocolo T) cumplen las 262 curvas, con 6 y con 5 materiales (peor 2,15 y 2,89\,\%; Figs.~\ref{fig:rep} y~\ref{fig:boxext}). En las ventanas in vivo (M) cumplen 38 de 57 (6 materiales) y 30 de 57 (5). Las que fallan son las de poco recorrido de tensión (12 a 30\,kPa, contra unos 100\,kPa en T): una lámina del primer material mueve la curva unos pocos kPa, que son muchos por ciento de ese rango. En kPa, el peor error entero en M es 2,7\,kPa. Con láminas de la mitad de espesor ---sensibilidad, sin cambiar el criterio adoptado--- cumplen 54 de 57 (6 materiales) y 52 de 57 (5). El límite lo pone el espesor de lámina, no la base ni el método.
+\item \textbf{La red.} Su peor error mediano es de 1\,\% en todos los estudios. Dentro de la franja $y_1$--$y_2$ cumple la meta en 288 de 290 curvas (6 materiales) y 286 de 290 (5), aunque ninguna de esas leyes está en su entrenamiento. Fuera de la franja empeora (22 de 29): en Liu P11, con tensiones de 88 a 389\,kPa, por encima de $y_2$, la red se equivoca en 25\,\%, mientras que los mínimos cuadrados y el minimax dan 1,1 y 0,9\,\%. Lo confirma el papel de la red: un arranque rápido dentro del espacio entrenado; el diseño final lo da el minimax, que no depende de la franja.
+\item \textbf{El control de clase.} Rechazó 8 de las 327 curvas: cinco ventanas de las adventicias VIII\,r, que con $\lambda_z=1{,}10$ ya superan en $\lambda=1$ la tensión pedida y no tienen tramo inicial blando, y tres ventanas in vivo muy cortas de Kamenskiy ($\varepsilon_s\le3$\,\%). En las 8 la red fallaba (error de 2,5 a 120\,\%) y los mínimos cuadrados daban cantidades negativas. No rechazó ninguna curva en que la red funcionara bien.
+\end{enumerate}
+Las 327 curvas, los parámetros de cada una y todos los errores están en los archivos del material suplementario (\texttt{v49\_curvas\_externas\_N.csv}), junto con el cuaderno que las genera y evalúa.
+
+\begin{caja}{Conclusión del primer nivel}
+Con materiales tipo fibra y una base elegida una vez, la curva tensión--estiramiento de las 41 carótidas y de las 22\,500 curvas del espacio de trabajo se reproduce con láminas enteras dentro de la meta (6 materiales). El método exacto es lineal: mínimos cuadrados y minimax entero. La misma base, sin mover un nudo, reproduce curvas de otros cuatro estudios (otras arterias, capas aisladas, otra especie, pacientes con placa, mediciones in vivo): con tensiones fisiológicas, todas con láminas enteras dentro de la meta. La red lo reproduce en una evaluación y generaliza a leyes que no vio, pero no puede mejorarlo: en el caso lineal la red no es necesaria. Su papel aparece cuando la relación entre la curva y el diseño deja de ser lineal.
+\end{caja}
+
+%=====================================================================
+\section{Aplicación: la curva presión--diámetro y el tubo de pared gruesa}\label{sec:aplicacion}
+\subsection{De la tensión a la presión}
+Un injerto se implanta como tubo, y lo que debe coincidir con la arteria es su diámetro a cada presión. Para pasar de la tensión a la presión hacen falta la geometría y una hipótesis sobre la pared. La configuración libre de tensiones de la arteria es un sector anular abierto de semiángulo $\Theta_0$ y radio $R_m$ en el borde media--adventicia, que representa las tensiones residuales (Fig.~\ref{fig:estados}). Un punto de radio $R$ en el sector pasa al radio $r$ en la arteria cerrada; su estiramiento y la conservación del volumen dan~\cite{masson}
+\begin{equation}\label{eq:cinem}
+\lambda_\theta=\frac{\pi r}{\Theta_0R},\qquad \Theta_0\,(R_m^2-R^2)=\pi\lambda_z\,(r_m^2-r^2).
+\end{equation}
+El equilibrio radial integrado sobre el espesor da la presión que soporta la pared íntima--media~\cite{masson,humphrey}:
+\begin{equation}\label{eq:equil}
+P=P_i-P_a=\int_{r_i}^{r_m}\frac{\sigma_{\theta\theta}-\sigma_{rr}}{r}\,dr,
+\end{equation}
+con $P_i$ la presión de la sangre y $P_a$ la que ejercen la adventicia y el tejido que rodea a la arteria. Como $P_a$ depende del sitio, el diseño se plantea sobre $P$, la presión que soporta la pared, que es la que el injerto debe soportar con la misma deformación. El espesor íntima--media $h$ se toma de la mediana de referencia por edad y sexo medida con ecotracking~\cite{engelen13} (0,43 a 0,68\,mm), porque Masson et al.\ no publican el de cada sujeto, y $r_i=r_m-h$.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d10_tres_estados.png}
+\caption{Sujeto NT01 en sus tres estados: (1) sector abierto sin tensiones, (2) arteria cerrada sin presión, (3) arteria con presión. De (2) a (3) la cara interna crece 16,5\,\% y el borde media--adventicia 10\,\%.}\label{fig:estados}\end{figure}
+
+\paragraph{Ventana de presión.} Lo que define si un estado es fisiológico es la presión, no el estiramiento: en $\lambda_\theta=1{,}16$ el sujeto más rígido soporta unos 400\,mmHg y uno blando joven, unos 70. Por eso, en este nivel, todos los sujetos se evalúan en la misma ventana, $P$ de 60 a 200\,mmHg (8,0 a 26,7\,kPa) en 141 valores, que cubre con margen las presiones medias medidas (64/116\,mmHg en NT y 73/127\,mmHg en HT~\cite{masson}). La curva objetivo es el estiramiento del borde media--adventicia, $\lambda(P_k)$, proporcional al diámetro (Fig.~\ref{fig:presion}): los sujetos rígidos llegan a 200\,mmHg con $\lambda$ entre 1,12 y 1,15, los blandos con $\lambda$ entre 1,20 y 1,23.
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{f_sujetos_relativa.png}
+\caption{Los 41 sujetos: presión que soporta la pared, en función del estiramiento del borde media--adventicia, en forma relativa: $P=(P_i-P_a)/13{,}33$\,kPa a la izquierda y $P=(P_i-P_a)/100$\,mmHg a la derecha. Como $13{,}33$\,kPa $=100$\,mmHg, las dos escalas coinciden; la ventana de 60 a 200\,mmHg va de 0,6 a 2. Trazo grueso: tramo de 60 a 200\,mmHg, que es la curva objetivo.}\label{fig:presion}\end{figure}
+
+\subsection{Pared delgada y pared gruesa}
+Si la pared es delgada frente al radio, todas sus fibras se estiran lo mismo y el equilibrio de medio tubo da la ley de Laplace, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: la presión es lineal en los espesores de las capas y el diseño hereda todo el método del primer nivel. La carótida, sin embargo, tiene $h/r\approx0{,}2$. Con pared incompresible y sin alargamiento, el área entre la cara interna y una fibra que estaba en el radio $R$ se conserva,
+\begin{equation}\label{eq:incomp}
+r^2-r_i^2=R^2-R_i^2,\qquad\lambda(r)=\frac{r}{R},
+\end{equation}
+y las fibras internas se estiran más que las externas (Fig.~\ref{fig:fibra}). La presión es la suma exacta del aporte de cada capa delgada, cada una con su propio estiramiento:
+\begin{equation}\label{eq:pgruesa}
+P=\sum_{j=1}^{N}\int_{\text{capa }j}\frac{\sigma_j\bigl(\lambda(r)\bigr)}{r}\,dr .
+\end{equation}
+Si $h\ll r$, \eqref{eq:pgruesa} se reduce a Laplace. Con rectas truncadas, la diferencia de estiramiento decide si una capa tira o no: un material de nudo 1,08 tira en la cara interna de un tubo inflado ($\lambda=1{,}10$) y no en la externa ($\lambda=1{,}07$). Además las capas interactúan: si crece una capa interna, las de afuera se corren a radios mayores, se estiran menos y aportan menos. En pared gruesa la presión deja de ser lineal en los espesores.
+
+\begin{figure}[H]\centering\includegraphics[width=0.78\textwidth]{d6_cada_fibra.png}
+\caption{Tubo de 3,0 a 3,6\,mm inflado hasta una cara interna de 3,3\,mm: cada fibra conserva el área que tiene por dentro; la cara interna se estira 10\,\% y la externa 7\,\%.}\label{fig:fibra}\end{figure}
+
+\paragraph{La pared delgada falla al fabricar.} Se diseñó cada sujeto con tres hipótesis ---Laplace (pared delgada, $P=\sigma h/r$ con el radio y el espesor sin deformar), Laplace con el radio medio deformado (como en~\cite{urquiza}) y pared gruesa (ec.~\ref{eq:pgruesa}, cada capa con su propio estiramiento)--- y cada diseño se evaluó en el tubo real, de pared gruesa (Tabla~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). En su propio modelo Laplace parece perfecto ($e_{\max}\le1{,}7$\,\%); el error aparece al fabricar y crece con el espesor de la pared. Corregir el radio no ayuda, porque el problema no es el radio sino que cada capa se estira distinto y engancha en otro momento. Con la ventana de presión y la base adoptada, el diseño lineal de pared delgada tampoco cumple en ningún sujeto (mediana 27,3\,\% con 6 materiales y 29,9\,\% con 5). \textbf{El diseño a nivel del tubo debe hacerse en pared gruesa.}
+
+\begin{table}[H]\centering\small
+\caption{Comparación de hipótesis sobre curvas de presión en $\lambda$ de 1,02 a 1,16 (etapa previa, con otro juego de nudos). Cada fila es la hipótesis con que se \emph{diseña}; todos los diseños se \emph{evalúan} en el tubo de pared gruesa, que es lo que se fabrica. En cada celda, para los 41 sujetos: cuántos cumplen $e_{\max}\le3$\,\%, la mediana de $e_{\max}$ y el peor $e_{\max}$, con 5 o 6 materiales.}\label{tab:laplace}
+\begin{tabular}{lcc}\toprule
+Hipótesis de diseño & 5 materiales & 6 materiales\\\midrule
+Laplace & 0/41 · 13,6\,\% · 22,7\,\% & 0/41 · 14,8\,\% · 32,5\,\%\\
+Laplace con radio medio & 0/41 · 13,7\,\% · 24,5\,\% & 0/41 · 15,4\,\% · 34,4\,\%\\
+Pared gruesa & 41/41 · 0,96\,\% · 2,97\,\% & 41/41 · 0,72\,\% · 2,10\,\%\\\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[H]\centering\includegraphics[width=0.82\textwidth]{f34_3c_6.png}
+\caption{Etapa de la Tabla~\ref{tab:laplace}, 6 materiales, de izquierda a derecha: curva más blanda ($y_1$), media de los hipertensos y más rígida ($y_2$). Arriba de cada par: curvas; abajo: injerto $-$ arteria en \% del rango (banda $\pm3$\,\%). El diseño de Laplace evaluado en su propio modelo (naranja) parece perfecto; fabricado (rojo), se aparta hasta 25\,\%.}\label{fig:laplace}\end{figure}
+
+\subsection{El injerto de pared gruesa}
+El injerto es un tubo cerrado, incompresible y en deformación plana, con una capa por material apilada de adentro hacia afuera por nudo creciente (el orden inverso duplica o triplica el error), centrado en $R_{\mathrm{ref}}=3{,}421$\,mm (mediana de $\Theta_0R_m/\pi$ de los 41 sujetos). Los materiales son los del primer nivel: los mismos nudos y rectas $\sigma_j=E_j\max(0,\lambda-\kappa_j)$, con módulos $E_j$ calibrados una vez para que el sujeto de entrenamiento que más necesita de cada material use 0,2\,mm de él (6 materiales: de 452 a 4966\,kPa). El diseño es
+\begin{equation}\label{eq:theta}
+\theta=(h_1,\dots,h_N,\ \delta),\qquad 0\le h_j\le3\ \text{mm},\quad|\delta|\le0{,}25.
+\end{equation}
+Aquí $h_j$ es el espesor de la capa del material $j$ y $\delta$ es el \emph{preestiramiento común}: un corrimiento de todos los nudos juntos, en unidades de estiramiento (adimensional). La capa $j$ empieza a trabajar cuando la pared media llega a $k_j+\delta$ en lugar de $k_j$:
+\begin{itemize}
+\item $\delta<0$ adelanta el enganche de todas las capas (se montan más tensas: tiran desde antes);
+\item $\delta=0$ deja los nudos de la base del primer nivel;
+\item $\delta>0$ lo atrasa (se montan más flojas: tiran desde después).
+\end{itemize}
+\textbf{Qué significa $|\delta|\le0{,}25$.} $|\delta|$ es el valor absoluto de $\delta$, de modo que la condición equivale a $-0{,}25\le\delta\le0{,}25$: los nudos pueden correrse como mucho 0,25 hacia la izquierda o hacia la derecha. Por ejemplo, con $\delta=-0{,}25$ el nudo 1,08 pasa a 0,83, y con $\delta=+0{,}25$, a 1,33. Es un límite de la búsqueda, no una propiedad del material: se eligió más ancho que todo el tramo de estiramiento que recorre un sujeto (de 1,02 a 1,23, es decir 0,21), para que ningún sujeto quede fuera por la cota. No está activa: en los 82 diseños (41 sujetos, 5 y 6 materiales) $\delta$ quedó entre $-0{,}04$ y $+0{,}09$. El Anexo~\ref{sec:ejemplo} muestra con un ejemplo que se puede verificar a mano qué hace $\delta$ en un tubo de dos capas.
+\begin{itemize}
+\item \textbf{Espesores} $h_j$, que se fabrican con $n_j$ láminas enteras de espesor $e$.
+\item \textbf{Enganche y preestiramiento.} Cada capa engancha cuando la pared media llega a $k_j+\delta$; su enganche local $\kappa_j$ es el estiramiento del centro de la capa en ese momento, por \eqref{eq:incomp}. En fabricación, $\kappa_j$ es el rizado de las fibras de esa capa. El preestiramiento común $\delta$ corre todos los nudos juntos: cada sujeto ocupa su propio tramo de estiramiento (de 1,02 a 1,23), y sin $\delta$ vería solo uno o dos nudos, con un error típico de 11\,\%.
+\end{itemize}
+La presión \eqref{eq:pgruesa} se integra en cada capa con cuadratura de Gauss--Legendre de 8 nodos~\cite{davis} en 651 valores de $\lambda$ entre 0,80 y 1,45, y se invierte por interpolación lineal para obtener $\lambda_{\mathrm{inj}}(P_k;\theta)$. La función $\theta\mapsto\lambda_{\mathrm{inj}}$ es no lineal: los espesores fijan los límites de integración y los enganches, y $\delta$ entra dentro del $\max(0,\cdot)$. Con láminas enteras, encontrar los $n_j$ es un problema \textbf{no lineal entero mixto}. La métrica es \eqref{eq:emax} sobre $\lambda(P_k)$.
+
+\subsection{Métodos de diseño}
+\begin{table}[H]\centering\small
+\caption{Bloques de cálculo a nivel del tubo. ``Lineal'' se refiere a la dependencia del modelo respecto de las incógnitas.}\label{tab:bloques}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{1.6cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{4.1cm}}\toprule
+Bloque & Variables & ¿Lineal? & Algoritmo & Implementación\\\midrule
+A1 MCO lineal (pared delgada) & reales & sí, con $\delta$ fijo & mínimos cuadrados por SVD; $\delta$ por grilla y Brent & \texttt{numpy.linalg.lstsq}~\cite{numpy}; \texttt{minimize\_scalar}~\cite{brent,scipy}\\
+A2 MCO no lineal (pared gruesa) & reales & no & región de confianza reflexiva con cotas (TRF) & \texttt{scipy.optimize.least\_squares}~\cite{branch,scipy}\\
+A3 Minimax entero (pared gruesa) & láminas enteras, $\delta$ real & no & enumeración piso/techo, $\delta$ por Brent acotado, búsqueda local & propio; \texttt{minimize\_scalar}~\cite{brent}\\
+A4 Red neuronal & reales & --- (una evaluación) & perceptrón multicapa; optimización amortizada & TensorFlow/Keras~\cite{tf}\\\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{A1 · MCO lineal de pared delgada.} Con la ley de Laplace y $\delta$ fijo, la presión es lineal en $c_j=E_jh_j/R_{\mathrm{ref}}$: $P_k\approx\sum_jc_j\max(0,y_k-k_j-\delta)$. Para cada $\delta$ de una grilla de 101 valores se resuelve por mínimos cuadrados; el residuo en presión se pasa a $\lambda$ con la pendiente local de la curva; el mejor $\delta$ se refina por Brent~\cite{brent} y $h_j=c_jR_{\mathrm{ref}}/E_j$, recortados a $[0;3]$\,mm. Es el método del primer nivel, trasladado al tubo.
+
+\paragraph{A2 · MCO no lineal de pared gruesa.} Minimiza $\sum_k\bigl((\lambda_{\mathrm{inj}}(P_k;\theta)-y_k)/\Delta\bigr)^2$ con las cotas \eqref{eq:theta}, por el método de región de confianza reflexiva (\emph{Trust Region Reflective}, TRF)~\cite{branch}. En cada iteración calcula el jacobiano de los residuos por diferencias finitas, aproxima el problema por su modelo cuadrático de Gauss--Newton y toma el paso que lo minimiza dentro de una \emph{región de confianza}, un entorno donde el modelo es creíble; agranda la región si el paso funcionó y la achica si no, y refleja hacia adentro los pasos que cruzan una cota. Tolerancias $10^{-10}$, a lo sumo 300 evaluaciones. Encuentra un mínimo \emph{local}: el resultado depende del punto de partida.
+
+\paragraph{A3 · Minimax entero.} Es el minimax del primer nivel, llevado al caso no lineal, donde ya no hay programa lineal que lo resuelva en forma exacta. A partir de un diseño real $\theta^\star$ y una curva de referencia $\tilde y$: (1) $n_j\in\{\lfloor h_j^\star/e\rfloor,\lceil h_j^\star/e\rceil\}$; se evalúan las $2^N$ combinaciones por $e_{\max}$ contra $\tilde y$; (2) para las 8 mejores se reajusta $\delta$ en $\pm0{,}03$ por Brent acotado; (3) búsqueda local~\cite{aarts}: vecinos que suman o restan una lámina a un material o pasan una lámina de uno a otro, aceptando el mejor si baja el peor error, hasta 20 veces. Es una heurística: no garantiza el óptimo entero global.
+
+\paragraph{A4 · Red neuronal.} La misma arquitectura del primer nivel, $141\to256\to128\to64\to N{+}1$: recibe la curva $\lambda(P_k)$ estandarizada y devuelve $\theta$. Datos: 6000 injertos con diseño sorteado, cuya etiqueta es exactamente su diseño, y 9000 arterias sintéticas de la ley de Masson más los 31 sujetos de entrenamiento, cuya etiqueta es el ajuste A2; ruido nuevo de 0 a 1\,\% del rango de $\lambda$ en cada época. Partición 11\,220 / 1530 / 2250; 425 épocas (6 materiales) y 629 (5). Se usa como \emph{optimización amortizada}~\cite{amos}: un modelo aprendido sobre muchos casos resueltos propone la solución de uno nuevo, y un optimizador clásico la termina.
+
+\paragraph{El procedimiento.} Los bloques se encadenan en tres pasos (Fig.~\ref{fig:proc}): (1) arranque, A1 (camino A) o la red A4 (camino B); (2) A2, que ajusta el diseño a la curva; (3) A3, que elige las láminas contra la \emph{curva ajustada} del paso 2. Es la conclusión del primer nivel sobre el ruido: el paso 2 suaviza, porque la curva de un injerto no puede tener los saltos del ruido, y el paso 3 no lo persigue.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{f_procedimiento.png}
+\caption{El procedimiento de diseño a nivel del tubo. Los dos caminos solo difieren en el paso 1.}\label{fig:proc}\end{figure}
+
+\paragraph{Curvas medidas.} En la práctica la curva del paciente se mide, con ruido y en pocas presiones. Se simulan: (a) ruido gaussiano proporcional de 0,3\,\% en $\lambda$ (el ecotracking resuelve unos 20\,µm en 7\,mm); (b) medición en 10 presiones con interpolación cúbica monótona (PCHIP)~\cite{pchip} a las 141; (c) ambas, con ruido de 0,2\,\%. Cada camino recibe la curva medida y su diseño entero se compara con la curva verdadera; una realización por sujeto y caso. Como $\lambda\approx1{,}1$ y su rango es de unos 0,07, un ruido de 0,3\,\% de $\lambda$ equivale a alrededor del 5\,\% del rango: mayor que la meta.
+
+\subsection{Resultados}
+\paragraph{Diseño real.} Desde el arranque lineal, A2 deja 40 de los 41 sujetos dentro de la meta (6 materiales: mediana 0,84\,\%, peor 3,43\,\%; 5 materiales: 40/41, peor 3,14\,\%), con paredes de 0,75 a 1,89\,mm y $\delta$ de $-0{,}04$ a $+0{,}09$. Arrancando desde la red llega a 41 de 41 con 6 materiales (peor 1,79\,\%), con la mitad de evaluaciones del modelo (16 contra 35 por sujeto). Sola, la red no alcanza: mediana 3,43\,\% y peor 89,6\,\%. En los 10 sujetos de prueba el híbrido da 0,93\,\% de mediana y 1,79\,\% el peor.
+
+\paragraph{Espesor de lámina.} Con láminas de 0,1, 0,05 y 0,025\,mm cumplieron la meta 38, 40 y 41 de los 41 sujetos (6 materiales; peor 5,44, 3,69 y 1,64\,\%; unas 10, 23 y 46 láminas). Se adoptó $e=0{,}025$\,mm.
+
+\paragraph{El procedimiento completo.} Con curvas limpias los dos arranques empatan (Tabla~\ref{tab:f2}, Fig.~\ref{fig:dis47}). La diferencia está en el peor caso con curvas medidas: con 10 presiones, el arranque lineal cae en un mínimo local en dos sujetos (NT03 y HT04, 468,7\,\%), que el arranque de la red evita; con ruido de 0,3\,\%, la red aumenta los sujetos dentro de la meta (31 contra 23 con 6 materiales; 32 contra 25 con 5). Con 10 presiones y ruido ninguno pasa de 8 de 41: ese ruido ya es comparable a la meta. El tiempo es de 0,2 a 0,5\,s por sujeto con cualquiera de los dos arranques.
+
+\begin{table}[H]\centering\small
+\caption{Procedimiento completo con láminas de 0,025\,mm: peor error contra la curva verdadera [\%], 41 sujetos.}\label{tab:f2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccc}\toprule
+ & & \multicolumn{3}{c}{6 materiales} & \multicolumn{3}{c}{5 materiales}\\\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+Curva & Arranque & mediana & peor & cumplen & mediana & peor & cumplen\\\midrule
+limpia & MCO lineal & 1,13 & 3,26 & 40/41 & 1,69 & 3,21 & 40/41\\
+ & red & 1,14 & 2,19 & 41/41 & 1,68 & 3,19 & 40/41\\\addlinespace
+10 presiones & MCO lineal & 1,26 & 468,7 & 38/41 & 1,62 & 3,13 & 40/41\\
+ & red & 1,19 & 2,27 & 41/41 & 1,61 & 2,70 & 41/41\\\addlinespace
+ruido 0,3\,\% & MCO lineal & 2,67 & 11,87 & 23/41 & 2,66 & 7,52 & 25/41\\
+ & red & 2,19 & 6,59 & 31/41 & 2,32 & 9,24 & 32/41\\\addlinespace
+10 pres. + ruido 0,2\,\% & MCO lineal & 4,36 & 8,07 & 8/41 & 4,62 & 8,77 & 6/41\\
+ & red & 3,78 & 8,54 & 8/41 & 4,75 & 10,35 & 6/41\\\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{disenos_v47_6.png}
+\caption{6 materiales, curvas limpias: el sujeto más blando, uno intermedio y el más rígido. Negra: arteria; azul: camino A (arranque MCO lineal); roja: camino B (arranque red). Ordenada: presión que soporta la pared, arriba en kPa y abajo relativa a 13,332\,kPa; a la derecha, mmHg. Entre corchetes, láminas de cada material.}\label{fig:dis47}\end{figure}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{curvas_medidas_v47_6.png}
+\caption{6 materiales, curvas medidas: peor error de cada sujeto contra la curva verdadera (escala logarítmica; azul, arranque MCO lineal; rojo, arranque red; punteada, meta).}\label{fig:med47}\end{figure}
+
+\paragraph{Contra qué curva elegir las láminas.} Si el paso 3 elige las láminas contra la curva tal como viene medida, persigue el peor punto, que con ruido es un salto del ruido (Fig.~\ref{fig:suave}). Contra la curva ajustada del paso 2, con ruido de 0,3\,\% y arranque red, cumplen 31 sujetos en lugar de 10 (6 materiales) y 32 en lugar de 5 (5 materiales); el costo con curvas limpias es de 0,2 puntos de mediana.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{suavizado_ejemplo.png}
+\caption{Sujeto NT11, 6 materiales, ruido de 0,3\,\%. Izquierda: la curva ajustada por el paso 2 (naranja) pasa por el medio de la medida (gris). Derecha: láminas elegidas contra la curva medida ($e_{\max}=4{,}28$\,\%) y contra la ajustada (2,03\,\%), ambas evaluadas contra la verdadera.}\label{fig:suave}\end{figure}
+
+%=====================================================================
+\section{Discusión}
+\paragraph{Por qué dos niveles.} La curva tensión--estiramiento es una propiedad del tejido. Trabajar primero sobre ella permite validar cada pieza del método ---la base, el ajuste, el redondeo, la red--- contra soluciones exactas, sin que intervengan la geometría ni la presión, que dependen de cada arteria y de cada sitio. El paso al tubo agrega la geometría y la hipótesis de pared gruesa, pero conserva los materiales, la métrica, el criterio minimax y la conclusión sobre el ruido.
+
+\paragraph{Generalidad.} Lo que se valida en el primer nivel no es propio de la carótida: los materiales tipo fibra, la base elegida sobre un espacio amplio de curvas en J, el redondeo minimax y una red que reproduce el ajuste en curvas de una ley que nunca vio. Para otra arteria cambian la geometría, el espesor y la ventana de presión, que entran recién en el segundo nivel; la franja de curvas y, si hiciera falta, los nudos se recalculan con el mismo procedimiento. El control de clase indica cuándo una curva queda fuera del alcance del método. La validación externa (Sección~\ref{sec:externa}) lo confirma con datos: la base elegida con las carótidas de Masson reproduce, sin cambios, curvas de carótida común, externa e interna, de adventicia y media--íntima aisladas, de conejo y de pacientes con placa, de tres leyes constitutivas distintas. Lo que limita en algunas curvas in vivo es el espesor de lámina frente a un recorrido de tensión pequeño, no la forma de la curva. La red generaliza a esas leyes dentro de la franja en que fue entrenada; fuera de ella debe usarse solo como punto de partida, y el control de clase junto con la franja $y_1$--$y_2$ alcanzan para detectarlo.
+
+\paragraph{El papel de la red neuronal.} En el caso lineal la solución exacta es inmediata y la red solo puede imitarla, aunque lo hace en una evaluación y generaliza. En pared gruesa el ajuste es iterativo, local y depende del punto de partida: el arranque clásico, heredado del caso lineal, ignora el gradiente de estiramiento en el espesor y, con curvas medidas, puede llevar a mínimos locales que dan diseños inservibles. La red, entrenada sobre miles de diseños resueltos, deja al ajuste cerca del mínimo correcto. Es la idea de la optimización amortizada~\cite{amos}: la red no reemplaza al optimizador, lo inicia. Su ventaja es de robustez, clara con 6 materiales y menor con 5.
+
+\paragraph{Por qué pared gruesa.} La diferencia entre los modelos está en una sola hipótesis: en pared delgada todas las fibras se estiran igual; en pared gruesa cada una tiene su estiramiento, fijado por la incompresibilidad. Con materiales que no tiran hasta su nudo, esa diferencia de pocos centésimos decide si una capa trabaja. El enganche de cada capa (su rizado) es tan importante como su espesor: entre un diseño de Laplace y uno de pared gruesa los espesores cambian pocos micrómetros, pero las capas externas enganchan antes.
+
+\paragraph{Limitaciones.} (1) Las curvas objetivo son las de la ley ajustada por Masson et al., no las mediciones crudas, y el espesor arterial es el de referencia para la edad y el sexo. (2) Los materiales son ideales (rectas truncadas de rigidez constante); el injerto no tiene alargamiento axial ni tensiones residuales, y no se consideran viscoelasticidad ni fatiga. (3) La búsqueda entera en pared gruesa es heurística, y se usó una sola realización de ruido por sujeto y caso. (4) El preestiramiento $\delta$ y el rizado por capa son variables de fabricación que deben validarse. (5) No hay validación experimental.
+
+%=====================================================================
+\section{Conclusiones}
+\begin{enumerate}
+\item Un injerto de capas de materiales tipo fibra (rectas truncadas), con una base elegida una vez para toda la población, reproduce la curva tensión--estiramiento de 41 carótidas humanas y de 22\,500 curvas sintéticas. Con 6 materiales y láminas enteras por minimax, los 41 sujetos cumplen la meta de 3\,\%.
+\item Sin ningún cambio, la misma base reproduce 327 curvas de otros cuatro estudios (Sommer y Holzapfel, Holzapfel et al., Liu et al., Kamenskiy et al.): peor error de 2,83\,\% con cantidades reales y, con tensiones fisiológicas, el 100\,\% dentro de la meta con láminas enteras. El método no depende de la arteria con que se construyó; en curvas in vivo de poco recorrido de tensión el límite es el espesor de lámina.
+\item En el caso lineal, el método exacto es mínimos cuadrados más minimax entero (programación lineal entera). La red neuronal lo reproduce en una evaluación y generaliza a una ley constitutiva no vista (exceso de 2,8 a 4,6\,\%), pero no lo mejora.
+\item A nivel del tubo el diseño debe hacerse en pared gruesa: diseñado con la ley de Laplace, ningún sujeto cumple al fabricarse; en pared gruesa cumplen 40--41 de 41. El problema es no lineal entero.
+\item El procedimiento de tres pasos ---arranque, mínimos cuadrados no lineales y láminas enteras por minimax contra la curva ajustada--- cumple en 40--41 de 41 sujetos con curvas limpias, en menos de medio segundo por sujeto.
+\item En pared gruesa, la red como punto de partida evita los mínimos locales que, con curvas medidas, producen diseños inservibles (peor caso de 468,7 a 2,3\,\%) y aumenta los sujetos dentro de la meta con ruido. Es el papel justificado de la red: iniciar el optimizador, no reemplazarlo.
+\end{enumerate}
+\paragraph{Próximos pasos.} Probar el método con curvas medidas de otras arterias; ensayar materiales reales para reemplazar las rectas ideales y validar el rizado como variable de fabricación; usar el espesor y la presión medidos de cada sujeto; y fabricar y ensayar un injerto.
+
+%=====================================================================
+\appendix
+\section{Parámetros de los 41 sujetos}\label{sec:anexo}
+\input{tab_masson.tex}
+
+\section{Ejemplo de diseño de pared gruesa, paso a paso}\label{sec:ejemplo}
+Este anexo muestra, con números que se pueden verificar con calculadora, las ideas que usa la Sección~\ref{sec:aplicacion}: el injerto reproduce el comportamiento de la arteria con capas de distintos materiales; cada fibra de una pared gruesa se estira distinto; la presión es la suma de los aportes de rebanadas delgadas; el lugar de cada capa cambia lo que aporta; y el preestiramiento $\delta$ corre todos los nudos. Para que las cuentas sean cortas el tubo es cerrado, sin tensiones residuales y sin alargamiento axial, y el nudo de cada material se aplica directamente al estiramiento local de cada franja (en el modelo completo el nudo se define en la pared media y se traduce a cada capa por incompresibilidad, ec.~\ref{eq:incomp}).
+
+\subsection{La arteria y el injerto}
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{d12_objetivo_v2.png}
+\caption{La carótida del paciente (izquierda) y el injerto (derecha), hecho de capas de distintos materiales, cada capa con un número entero de láminas. El objetivo es que el injerto tenga la misma curva presión--diámetro que la arteria: que los dos se ensanchen igual con la presión.}\end{figure}
+
+\subsection{Incompresibilidad: el área del anillo no cambia}
+El tejido es casi todo agua: se deforma sin cambiar de volumen. Si el tubo no se alarga, el área del anillo es la misma antes y después de inflarlo:
+\[
+\pi\,(R_o^2-R_i^2)=\pi\,(r_o^2-r_i^2)\qquad\Longrightarrow\qquad r=\sqrt{r_i^2+R^2-R_i^2}\quad\text{para cualquier radio }R\text{ de la pared.}
+\]
+Tubo de ejemplo: sin presión de $R_i=3{,}0$ a $R_o=3{,}6$\,mm; con presión la cara interna llega a $r_i=3{,}3$\,mm. Entonces $r=\sqrt{1{,}89+R^2}$ (porque $3{,}3^2-3{,}0^2=1{,}89$) y $r_o=\sqrt{14{,}85}=3{,}854$\,mm. La cara interna se estira $3{,}3/3{,}0=1{,}100$ y la externa $3{,}854/3{,}6=1{,}070$ (Fig.~\ref{fig:fibra}): \textbf{en pared gruesa no hay un solo estiramiento}.
+\begin{figure}[H]\centering\includegraphics[width=0.9\textwidth]{d5_area_constante.png}
+\caption{El área del anillo (gris sin presión, roja con presión) es la misma: $\pi(3{,}6^2-3{,}0^2)=\pi(3{,}854^2-3{,}3^2)=12{,}44$\,mm$^2$.}\end{figure}
+
+\subsection{La pared gruesa como pila de paredes delgadas}
+Se corta la pared en rebanadas finas. Cada rebanada es una pared delgada, con su propio estiramiento $\lambda=r_c/R_c$ (en su centro), y aporta $\sigma\,\Delta r/r_c$ (Laplace); la presión es la suma, que en el límite es la integral de la ec.~\eqref{eq:pgruesa}.
+\begin{figure}[H]\centering\includegraphics[width=0.9\textwidth]{d15_radios_rebanadas.png}
+\caption{El tubo de ejemplo en 3 rebanadas: bordes (negro) y centros (azul), sin presión ($R$) y con presión ($r=\sqrt{1{,}89+R^2}$).}\end{figure}
+Con un material sin nudo, $\sigma=1000\,(\lambda-1)$\,kPa:
+\begin{center}\small
+\begin{tabular}{lccc}\toprule
+ & Rebanada 1 (adentro) & Rebanada 2 & Rebanada 3 (afuera)\\\midrule
+centro sin presión $R_c$ [mm] & 3,1 & 3,3 & 3,5\\
+centro con presión $r_c=\sqrt{1{,}89+R_c^2}$ [mm] & 3,391 & 3,575 & 3,760\\
+estiramiento $\lambda=r_c/R_c$ & 1,094 & 1,083 & 1,074\\
+tensión $\sigma$ [kPa] & 93,9 & 83,3 & 74,4\\
+espesor inflado $\Delta r$ [mm] & 0,183 & 0,185 & 0,186\\
+aporte $\sigma\,\Delta r/r_c$ [kPa] & 5,06 & 4,30 & 3,68\\\bottomrule
+\end{tabular}
+\end{center}
+La presión total es $5{,}06+4{,}30+3{,}68=13{,}05$\,kPa (con miles de rebanadas, 13,07). La rebanada de adentro aporta más porque se estira más.
+\begin{figure}[H]\centering\includegraphics[width=0.55\textwidth]{d13_rebanadas.png}
+\caption{Pared gruesa = tres paredes delgadas, una encima de otra.}\end{figure}
+
+\subsection{En pared gruesa importa dónde va cada capa}
+Ahora la pared tiene dos materiales con nudo, $\sigma=E\max(0,\lambda-k)$: una capa azul ($k=1{,}02$, $E=400$\,kPa) de 3,0 a 3,3\,mm y una verde ($k=1{,}08$, $E=1500$\,kPa) de 3,3 a 3,6\,mm, cada una cortada en 3 franjas.
+\begin{figure}[H]\centering\includegraphics[width=0.9\textwidth]{d3_posicion.png}
+\caption{Un material con nudo 1,08 (en el dibujo, $E=1000$\,kPa) tira si está junto a la sangre ($\lambda=1{,}100$: $\sigma=1000\times0{,}020=20$\,kPa) y no tira en la cara externa ($\lambda=1{,}070<1{,}08$: $\sigma=0$). El mismo material y el mismo espesor aportan distinto según dónde estén.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d16_dos_capas.png}
+\caption{Dos capas de 0,3\,mm, sin presión (arriba) y con presión (abajo). La capa azul aporta $0{,}84+0{,}76+0{,}69=2{,}28$\,kPa; de la verde solo tira la primera franja ($\lambda=1{,}081$): 0,04\,kPa.}\end{figure}
+Si se cambia solo el espesor de la capa azul, la verde ---que no se tocó--- cambia lo que aporta, porque queda empujada hacia afuera y se estira menos:
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d17_tres_paredes.png}
+\caption{Tres paredes con la misma capa verde de 0,3\,mm y la misma cara interna inflada a 3,3\,mm. Sin capa azul la verde aporta 1,36\,kPa; con 0,3\,mm de azul, 0,04; con 0,6\,mm, nada. Al duplicar la azul su aporte pasa de 2,28 a 3,98\,kPa, que no es el doble: el problema es no lineal en los espesores.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{d18_verde_y_nudo.png}
+\caption{Las mismas tres paredes vistas como estiramiento de cada vuelta en función de su radio sin presión (curva negra) y nudo de la capa verde (línea roja). La capa verde solo aporta en la parte de ella que queda por encima de 1,08 (verde oscuro): en A toda su cara interna; en B, una astilla junto a $R=3{,}37$\,mm; en C, nada.}\end{figure}
+
+\subsection{El preestiramiento $\delta$}
+$\delta$ corre todos los nudos juntos: el azul pasa a $1{,}02+\delta$ y el verde a $1{,}08+\delta$. Se repite la cuenta de la pared de dos capas (azul de 3,0 a 3,3, verde de 3,3 a 3,6\,mm, cara interna inflada a 3,3\,mm) con tres valores de $\delta$. Los estiramientos de las franjas no cambian (dependen solo de la geometría); cambia desde dónde tira cada material.
+\begin{center}\small
+\begin{tabular}{lccccc}\toprule
+ & & $\lambda$ & \multicolumn{3}{c}{$\sigma$ [kPa]}\\\cmidrule(lr){4-6}
+Capa & centro $R$ [mm] & & $\delta=-0{,}03$ & $\delta=0$ & $\delta=+0{,}03$\\\midrule
+azul, $\sigma=400\max(0,\lambda-1{,}02-\delta)$ & 3,05 & 1,097 & 42,8 & 30,8 & 18,8\\
+ & 3,15 & 1,091 & 40,4 & 28,4 & 16,4\\
+ & 3,25 & 1,086 & 38,3 & 26,3 & 14,3\\
+verde, $\sigma=1500\max(0,\lambda-1{,}08-\delta)$ & 3,35 & 1,081 & 46,4 & 1,4 & 0\\
+ & 3,45 & 1,076 & 39,7 & 0 & 0\\
+ & 3,55 & 1,072 & 33,6 & 0 & 0\\\midrule
+\multicolumn{3}{l}{aporte de la capa azul [kPa]} & 3,24 & 2,28 & 1,32\\
+\multicolumn{3}{l}{aporte de la capa verde [kPa]} & 3,00 & 0,04 & 0\\
+\multicolumn{3}{l}{presión total [kPa]} & 6,25 & 2,33 & 1,32\\\bottomrule
+\end{tabular}
+\end{center}
+Ejemplo de verificación: primera franja azul con $\delta=-0{,}03$: el nudo es $1{,}02-0{,}03=0{,}99$ y $\sigma=400\times(1{,}097-0{,}99)=42{,}8$\,kPa; su aporte es $42{,}8\times0{,}091/3{,}346=1{,}16$\,kPa. Con $\delta=-0{,}03$ toda la capa verde pasa su nudo (1,05) y aporta tanto como la azul; con $\delta=+0{,}03$ el nudo verde sube a 1,11 y la capa verde no trabaja. Así, $\delta$ elige \emph{qué materiales están activos} en el tramo de estiramiento de cada sujeto: un sujeto blando, que se estira mucho, necesita nudos más a la derecha ($\delta>0$), y uno rígido, más a la izquierda ($\delta<0$). Sin $\delta$, cada sujeto vería solo uno o dos de los nudos de la base.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d19_delta.png}
+\caption{Efecto de $\delta$ en la pared de dos capas. (a) Ley de cada material para $\delta=-0{,}03$, 0 y $+0{,}03$; las franjas sombreadas son los estiramientos que siente cada capa con la cara interna en 3,3\,mm. (b) Aporte de cada capa a la presión en ese estado. (c) Curva presión--estiramiento de la cara interna (eje derecho en mmHg): $\delta$ corre el punto donde engancha cada capa y cambia la forma de la curva. Los valores son de un ejemplo de juguete (capas de 0,3\,mm y módulos bajos), no de un diseño.}\end{figure}
+
+\begin{thebibliography}{99}\small
+\bibitem{aarts} Aarts, E., Lenstra, J.\,K. (eds.) (1997). \emph{Local Search in Combinatorial Optimization}. Wiley.
+\bibitem{tf} Abadi, M., et al. (2016). TensorFlow: a system for large-scale machine learning. \emph{Proc. 12th USENIX OSDI}, 265--283.
+\bibitem{agrell} Agrell, E., Eriksson, T., Vardy, A., Zeger, K. (2002). Closest point search in lattices. \emph{IEEE Trans. Inf. Theory} 48(8), 2201--2214.
+\bibitem{amos} Amos, B. (2023). Tutorial on amortized optimization. \emph{Found. Trends Mach. Learn.} 16(5), 592--732.
+\bibitem{layernorm} Ba, J.\,L., Kiros, J.\,R., Hinton, G.\,E. (2016). Layer normalization. arXiv:1607.06450.
+\bibitem{branch} Branch, M.\,A., Coleman, T.\,F., Li, Y. (1999). A subspace, interior, and conjugate gradient method for large-scale bound-constrained minimization problems. \emph{SIAM J. Sci. Comput.} 21(1), 1--23.
+\bibitem{brent} Brent, R.\,P. (1973). \emph{Algorithms for Minimization without Derivatives}. Prentice-Hall.
+\bibitem{cheney} Cheney, E.\,W. (1966). \emph{Introduction to Approximation Theory}. McGraw-Hill.
+\bibitem{davis} Davis, P.\,J., Rabinowitz, P. (1984). \emph{Methods of Numerical Integration}, 2.ª ed. Academic Press.
+\bibitem{ding} Ding, X., Sha, D., Sun, K., Fan, Y. (2025). Biomechanical insights into the development and optimization of small-diameter vascular grafts. \emph{Acta Biomater.} doi:10.1016/j.actbio.2025.04.028.
+\bibitem{engelen13} Engelen, L., Ferreira, I., Stehouwer, C.\,D.\,A., Boutouyrie, P., Laurent, S.; Reference Values for Arterial Measurements Collaboration (2013). Reference intervals for common carotid intima-media thickness measured with echotracking: relation with risk factors. \emph{Eur. Heart J.} 34(30), 2368--2380.
+\bibitem{pchip} Fritsch, F.\,N., Carlson, R.\,E. (1980). Monotone piecewise cubic interpolation. \emph{SIAM J. Numer. Anal.} 17(2), 238--246.
+\bibitem{fung} Fung, Y.\,C. (1993). \emph{Biomechanics: Mechanical Properties of Living Tissues}, 2.ª ed. Springer.
+\bibitem{furdella} Furdella, K.\,J., Higuchi, S., Behrangzade, A., Kim, K., Wagner, W.\,R., Vande Geest, J.\,P. (2021). In-vivo assessment of a tissue engineered vascular graft computationally optimized for target vessel compliance. \emph{Acta Biomater.} 123, 298--311.
+\bibitem{golub} Golub, G.\,H., Van Loan, C.\,F. (2013). \emph{Matrix Computations}, 4.ª ed. Johns Hopkins University Press.
+\bibitem{goodfellow} Goodfellow, I., Bengio, Y., Courville, A. (2016). \emph{Deep Learning}. MIT Press.
+\bibitem{numpy} Harris, C.\,R., et al. (2020). Array programming with NumPy. \emph{Nature} 585, 357--362.
+\bibitem{harrison} Harrison, S., Tamimi, E., Uhlorn, J., Leach, T., Vande Geest, J.\,P. (2016). Computationally optimizing the compliance of a biopolymer based tissue engineered vascular graft. \emph{J. Biomech. Eng.} 138(1), 014505.
+\bibitem{holzapfel} Holzapfel, G.\,A., Gasser, T.\,C., Ogden, R.\,W. (2000). A new constitutive framework for arterial wall mechanics and a comparative study of material models. \emph{J. Elasticity} 61, 1--48.
+\bibitem{hsu} Hsu, R., Szafron, J.\,M., Carvalho, C.\,C., Humphrey, J.\,D., Marsden, A.\,L. (2025). Constrained optimization of scaffold behavior for improving tissue engineered vascular grafts. \emph{J. Biomech.} doi:10.1016/j.jbiomech.2025.112670.
+\bibitem{highs} Huangfu, Q., Hall, J.\,A.\,J. (2018). Parallelizing the dual revised simplex method. \emph{Math. Program. Comput.} 10, 119--142.
+\bibitem{humphrey} Humphrey, J.\,D. (2002). \emph{Cardiovascular Solid Mechanics: Cells, Tissues, and Organs}. Springer.
+\bibitem{jiang} Jiang, D., Robinson, A.\,J., Nkansah, A., et al. (2025). A computational framework to optimize the mechanical behavior of synthetic vascular grafts. \emph{J. Mech. Behav. Biomed. Mater.} 163, 106847.
+\bibitem{adam} Kingma, D.\,P., Ba, J. (2015). Adam: a method for stochastic optimization. \emph{Proc. ICLR}.
+\bibitem{lawson} Lawson, C.\,L., Hanson, R.\,J. (1995). \emph{Solving Least Squares Problems}. SIAM.
+\bibitem{kamenskiy} Kamenskiy, A.\,V., Dzenis, Y.\,A., MacTaggart, J.\,N., Lynch, T.\,G., Jaffar Kazmi, S.\,A., Pipinos, I.\,I. (2012). Nonlinear mechanical behavior of the human common, external, and internal carotid arteries in vivo. \emph{J. Surg. Res.}
+\bibitem{liu} Liu, H., et al. (2012). Using in vivo Cine and 3D multi-contrast MRI to determine human atherosclerotic carotid artery material properties and circumferential shrinkage rate and their impact on stress/strain predictions. \emph{J. Biomech. Eng.} 134, 011008.
+\bibitem{masson} Masson, I., Beaussier, H., Boutouyrie, P., Laurent, S., Humphrey, J.\,D., Zidi, M. (2011). Carotid artery mechanical properties and stresses quantified using in vivo data from normotensive and hypertensive humans. \emph{Biomech. Model. Mechanobiol.} 10(6), 867--882.
+\bibitem{relu} Nair, V., Hinton, G.\,E. (2010). Rectified linear units improve restricted Boltzmann machines. \emph{Proc. ICML}.
+\bibitem{nelder} Nelder, J.\,A., Mead, R. (1965). A simplex method for function minimization. \emph{Computer J.} 7(4), 308--313.
+\bibitem{penrose} Penrose, R. (1955). A generalized inverse for matrices. \emph{Math. Proc. Cambridge Philos. Soc.} 51(3), 406--413.
+\bibitem{prechelt} Prechelt, L. (1998). Early stopping --- but when? En \emph{Neural Networks: Tricks of the Trade}, LNCS 1524, 55--69.
+\bibitem{rachev} Rachev, A., Hayashi, K. (1999). Theoretical study of the effects of vascular smooth muscle contraction on strain and stress distributions in arteries. \emph{Ann. Biomed. Eng.} 27, 459--468.
+\bibitem{rockafellar} Rockafellar, R.\,T., Uryasev, S. (2000). Optimization of conditional value-at-risk. \emph{J. Risk} 2(3), 21--41.
+\bibitem{rovas23} Rovas, G., Bikia, V., Stergiopulos, N. (2023). Design and computational optimization of compliance-matching aortic grafts. \emph{Front. Bioeng. Biotechnol.} 11, 1179174.
+\bibitem{rovas25} Rovas, G., Reymond, P., van Steenberghe, M., et al., Stergiopulos, N. (2025). Evaluation of a novel compliance-matching aortic graft in a swine model. \emph{J. Biomech.} doi:10.1016/j.jbiomech.2025.112629.
+\bibitem{sommer} Sommer, G., Holzapfel, G.\,A. (2012). 3D constitutive modeling of the biaxial mechanical response of intact and layer-dissected human carotid arteries. \emph{J. Mech. Behav. Biomed. Mater.} 5, 116--128.
+\bibitem{storn} Storn, R., Price, K. (1997). Differential evolution: a simple and efficient heuristic for global optimization over continuous spaces. \emph{J. Global Optim.} 11, 341--359.
+\bibitem{szafron} Szafron, J.\,M., Ramachandra, A.\,B., Breuer, C.\,K., Marsden, A.\,L., Humphrey, J.\,D. (2019). Optimization of tissue-engineered vascular graft design using computational modeling. \emph{Tissue Eng. Part C}. doi:10.1089/ten.tec.2019.0086.
+\bibitem{tamimi} Tamimi, E.\,A., Ardila, D.\,C., Ensley, B.\,D., Kellar, R.\,S., Vande Geest, J.\,P. (2019). Computationally optimizing the compliance of multilayered biomimetic tissue engineered vascular grafts. \emph{J. Biomech. Eng.} doi:10.1115/1.4042902.
+\bibitem{trefethen} Trefethen, L.\,N., Bau, D. (1997). \emph{Numerical Linear Algebra}. SIAM.
+\bibitem{urquiza} Urquiza, S.\,A. (2012). Tesis doctoral, cap.~3: Modelos hemodinámicos unidimensionales.
+\bibitem{scipy} Virtanen, P., et al. (2020). SciPy 1.0: fundamental algorithms for scientific computing in Python. \emph{Nat. Methods} 17, 261--272.
+\end{thebibliography}
+\end{document}
