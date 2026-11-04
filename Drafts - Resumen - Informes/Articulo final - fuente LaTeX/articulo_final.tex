@@ -251,7 +251,7 @@ Estudio · espécimen · curva & Ajuste & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ 
 \item \textbf{La red.} Su peor error mediano es de 1\,\% en todos los estudios. Dentro de la franja $y_1$--$y_2$ cumple la meta en 288 de 290 curvas (6 materiales) y 286 de 290 (5), aunque ninguna de esas leyes está en su entrenamiento. Fuera de la franja empeora (22 de 29): en Liu P11, con tensiones de 88 a 389\,kPa, por encima de $y_2$, la red se equivoca en 25\,\%, mientras que los mínimos cuadrados y el minimax dan 1,1 y 0,9\,\%. Lo confirma el papel de la red: un arranque rápido dentro del espacio entrenado; el diseño final lo da el minimax, que no depende de la franja.
 \item \textbf{El control de clase.} Rechazó 8 de las 327 curvas: cinco ventanas de las adventicias VIII\,r, que con $\lambda_z=1{,}10$ ya superan en $\lambda=1$ la tensión pedida y no tienen tramo inicial blando, y tres ventanas in vivo muy cortas de Kamenskiy ($\varepsilon_s\le3$\,\%). En las 8 la red fallaba (error de 2,5 a 120\,\%) y los mínimos cuadrados daban cantidades negativas. No rechazó ninguna curva en que la red funcionara bien.
 \end{enumerate}
-Las 327 curvas, los parámetros de cada una y todos los errores están en los archivos del material suplementario (\texttt{v49\_curvas\_externas\_N.csv}), junto con el cuaderno que las genera y evalúa.
+Las 327 curvas, los parámetros de cada una y todos los errores están en el material suplementario, junto con el cuaderno que las genera y evalúa.
 
 \begin{caja}{Conclusión del primer nivel}
 Con materiales tipo fibra y una base elegida una vez, la curva tensión--estiramiento de las 41 carótidas y de las 22\,500 curvas del espacio de trabajo se reproduce con láminas enteras dentro de la meta (6 materiales). El método exacto es lineal: mínimos cuadrados y minimax entero. La misma base, sin mover un nudo, reproduce curvas de otros cuatro estudios (otras arterias, capas aisladas, otra especie, pacientes con placa, mediciones in vivo): con tensiones fisiológicas, todas con láminas enteras dentro de la meta. La red lo reproduce en una evaluación y generaliza a leyes que no vio, pero no puede mejorarlo: en el caso lineal la red no es necesaria. Su papel aparece cuando la relación entre la curva y el diseño deja de ser lineal.
@@ -295,7 +295,7 @@ Si $h\ll r$, \eqref{eq:pgruesa} se reduce a Laplace. Con rectas truncadas, la di
 \paragraph{La pared delgada falla al fabricar.} Se diseñó cada sujeto con tres hipótesis ---Laplace (pared delgada, $P=\sigma h/r$ con el radio y el espesor sin deformar), Laplace con el radio medio deformado (como en~\cite{urquiza}) y pared gruesa (ec.~\ref{eq:pgruesa}, cada capa con su propio estiramiento)--- y cada diseño se evaluó en el tubo real, de pared gruesa (Tabla~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). En su propio modelo Laplace parece perfecto ($e_{\max}\le1{,}7$\,\%); el error aparece al fabricar y crece con el espesor de la pared. Corregir el radio no ayuda, porque el problema no es el radio sino que cada capa se estira distinto y engancha en otro momento. Con la ventana de presión y la base adoptada, el diseño lineal de pared delgada tampoco cumple en ningún sujeto (mediana 27,3\,\% con 6 materiales y 29,9\,\% con 5). \textbf{El diseño a nivel del tubo debe hacerse en pared gruesa.}
 
 \begin{table}[H]\centering\small
-\caption{Comparación de hipótesis sobre curvas de presión en $\lambda$ de 1,02 a 1,16 (etapa previa, con otro juego de nudos). Cada fila es la hipótesis con que se \emph{diseña}; todos los diseños se \emph{evalúan} en el tubo de pared gruesa, que es lo que se fabrica. En cada celda, para los 41 sujetos: cuántos cumplen $e_{\max}\le3$\,\%, la mediana de $e_{\max}$ y el peor $e_{\max}$, con 5 o 6 materiales.}\label{tab:laplace}
+\caption{Comparación de hipótesis sobre curvas de presión en $\lambda$ de 1,02 a 1,16, con un juego de nudos ajustado a esas curvas de presión (distinto del de la Tabla~\ref{tab:bases}). Cada fila es la hipótesis con que se \emph{diseña}; todos los diseños se \emph{evalúan} en el tubo de pared gruesa, que es lo que se fabrica. En cada celda, para los 41 sujetos: cuántos cumplen $e_{\max}\le3$\,\%, la mediana de $e_{\max}$ y el peor $e_{\max}$, con 5 o 6 materiales.}\label{tab:laplace}
 \begin{tabular}{lcc}\toprule
 Hipótesis de diseño & 5 materiales & 6 materiales\\\midrule
 Laplace & 0/41 · 13,6\,\% · 22,7\,\% & 0/41 · 14,8\,\% · 32,5\,\%\\
@@ -304,9 +304,9 @@ Pared gruesa & 41/41 · 0,96\,\% · 2,97\,\% & 41/41 · 0,72\,\% · 2,10\,\%\\\b
 \end{tabular}
 \end{table}
 \begin{figure}[H]\centering\includegraphics[width=0.82\textwidth]{f34_3c_6.png}
-\caption{Etapa de la Tabla~\ref{tab:laplace}, 6 materiales, de izquierda a derecha: curva más blanda ($y_1$), media de los hipertensos y más rígida ($y_2$). Arriba de cada par: curvas; abajo: injerto $-$ arteria en \% del rango (banda $\pm3$\,\%). El diseño de Laplace evaluado en su propio modelo (gris, punteado) parece perfecto; fabricado (naranja, a trazos), se aparta hasta 25\,\%.}\label{fig:laplace}\end{figure}
+\caption{Condiciones de la Tabla~\ref{tab:laplace}, 6 materiales, de izquierda a derecha: curva más blanda ($y_1$), media de los hipertensos y más rígida ($y_2$). Arriba de cada par: curvas; abajo: injerto $-$ arteria en \% del rango (banda $\pm3$\,\%). El diseño de Laplace evaluado en su propio modelo (gris, punteado) parece perfecto; fabricado (naranja, a trazos), se aparta hasta 25\,\%.}\label{fig:laplace}\end{figure}
 \begin{table}[H]\centering\small
-\caption{Diseños de la Fig.~\ref{fig:laplace} (etapa previa, 6 materiales; nudos 0,8271; 1,0219; 1,0867; 1,1197; 1,1391; 1,1531 y módulos 0,18; 1,33; 4,86; 2,72; 12,94; 6,35\,MPa): espesor de la capa de cada material $h_j$ [µm] (capa 1 junto a la sangre; 0: no se usa), pared total [µm] y errores contra la curva de presión de la arteria, $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. ``Laplace, en su modelo'' y ``Laplace, injerto real'' son el mismo diseño evaluado con dos modelos.}\label{tab:laplace3}
+\caption{Diseños de la Fig.~\ref{fig:laplace} (curvas de presión en $\lambda$ de 1,02 a 1,16, 6 materiales; nudos 0,8271; 1,0219; 1,0867; 1,1197; 1,1391; 1,1531 y módulos 0,18; 1,33; 4,86; 2,72; 12,94; 6,35\,MPa): espesor de la capa de cada material $h_j$ [µm] (capa 1 junto a la sangre; 0: no se usa), pared total [µm] y errores contra la curva de presión de la arteria, $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. ``Laplace, en su modelo'' y ``Laplace, injerto real'' son el mismo diseño evaluado con dos modelos.}\label{tab:laplace3}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccccccccc}\toprule
 Curva & Diseño y evaluación & $h_1$ & $h_2$ & $h_3$ & $h_4$ & $h_5$ & $h_6$ & pared & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
@@ -400,7 +400,7 @@ ruido 0,3\,\% & MCO lineal & 2,67 & 11,87 & 23/41 & 2,66 & 7,52 & 25/41\\
 \end{tabular}}
 \end{table}
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{disenos_v47_6.png}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{disenos_6_sin_titulo.png}
 \caption{6 materiales, curvas limpias: el sujeto más blando, uno intermedio y el más rígido. Negra: arteria; azul: camino A (arranque MCO lineal); roja: camino B (arranque red). Ordenada: presión que soporta la pared, arriba en kPa y abajo relativa a 13,332\,kPa; a la derecha, mmHg. Entre corchetes, láminas de cada material.}\label{fig:dis47}\end{figure}
 \begin{table}[H]\centering\small
 \caption{Diseños enteros de la Fig.~\ref{fig:dis47} (6 materiales, láminas de 0,025\,mm, curvas limpias): número de láminas de cada material $n_j$ (material 1 junto a la sangre), total de láminas, pared [mm], preestiramiento $\delta$ y errores contra la curva $\lambda(P)$ de la arteria, $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. Camino A: arranque MCO lineal; camino B: arranque red.}\label{tab:dis47}
@@ -424,7 +424,7 @@ HT09 (el más rígido) & A & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0,725 & $-0,0394$ & 0
 
 \paragraph{Contra qué curva elegir las láminas.} Si el paso 3 elige las láminas contra la curva tal como viene medida, persigue el peor punto, que con ruido es un salto del ruido (Fig.~\ref{fig:suave}). Contra la curva ajustada del paso 2, con ruido de 0,3\,\% y arranque red, cumplen 31 sujetos en lugar de 10 (6 materiales) y 32 en lugar de 5 (5 materiales); el costo con curvas limpias es de 0,2 puntos de mediana.
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{suavizado_ejemplo.png}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{suavizado_sin_titulo.png}
 \caption{Sujeto NT11, 6 materiales, ruido de 0,3\,\%. Izquierda: la curva ajustada por el paso 2 (naranja) pasa por el medio de la medida (gris). Derecha: láminas elegidas contra la curva medida ($e_{\max}=4{,}28$\,\%) y contra la ajustada (2,03\,\%), ambas evaluadas contra la verdadera.}\label{fig:suave}\end{figure}
 
 %=====================================================================
