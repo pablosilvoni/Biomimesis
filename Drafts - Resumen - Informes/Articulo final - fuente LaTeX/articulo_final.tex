@@ -102,7 +102,7 @@ un programa lineal entero mixto (aproximación de Chebyshev~\cite{cheney} con en
 & \multicolumn{2}{c}{6 materiales} & \multicolumn{2}{c}{5 materiales}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
 Método & 41 sujetos & 2000 curvas & 41 sujetos & 2000 curvas\\\midrule
 Reales (mínimos cuadrados) & 0,67 / 0,88 · 41/41 & --- & 1,07 / 1,41 · 41/41 & ---\\
-Simple (desde la red) & 2,34 / 7,45 · 25/41 & 1706 & 2,23 / 7,48 · 26/41 & 1616\\
+Redondeo simple (desde la red) & 2,34 / 7,45 · 25/41 & 1706 & 2,23 / 7,48 · 26/41 & 1616\\
 Conjunto desde la red & 1,17 / 2,46 · 41/41 & 1998 & 1,70 / 3,56 · 40/41 & 1997\\
 Conjunto desde el MCO (Schnorr--Euchner) & 1,18 / 2,46 · 41/41 & 1998 & 1,70 / 3,56 · 40/41 & 1997\\
 Minimax entero (MILP, contra la curva) & 1,02 / 2,35 · 41/41 & 2000 & 1,47 / 3,50 · 40/41 & 2000\\\bottomrule
@@ -115,27 +115,27 @@ El conjunto desde la red da el mismo diseño que desde el MCO en 32 de los 41 su
 \caption{6 materiales: la curva más rígida de la franja ($y_2$), la media de los hipertensos y la más blanda ($y_1$). Arriba: tensión; al medio: forma adimensional; abajo: diseño $-$ original en \% del rango. El minimax (verde) reparte el error para que el peor punto sea lo más chico posible.}\label{fig:redondeo}\end{figure}
 \begin{table}[H]\centering\small
 \caption{Diseños de la Fig.~\ref{fig:redondeo} (6 materiales): láminas de cada material $c_j$ (reales en las dos primeras filas de cada curva, enteras en las demás) y errores contra la curva original, $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango].}\label{tab:redondeo3}
-\begin{tabular}{llcccccccc}\toprule
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccccccc}\toprule
 Curva & Método & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$ & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
 $y_2$ & Mínimos cuadrados (reales) & 19,86 & 10,33 & 12,85 & 20,00 & 17,78 & 14,58 & 0,32 & 0,94\\
  & Red neuronal (reales) & 20,06 & 10,35 & 12,83 & 20,07 & 17,85 & 14,73 & 0,46 & 0,88\\
- & Redondeo simple (de la red) & 20 & 10 & 13 & 20 & 18 & 15 & 0,36 & 1,21\\
+ & Redondeo simple (desde la red) & 20 & 10 & 13 & 20 & 18 & 15 & 0,36 & 1,21\\
  & Conjunto (Schnorr--Euchner) & 20 & 10 & 14 & 19 & 18 & 15 & 0,34 & 0,96\\
  & Minimax (MILP) & 20 & 11 & 11 & 20 & 19 & 14 & 0,56 & 0,91\\
 \addlinespace
 Media HT & Mínimos cuadrados (reales) & 9,43 & 8,86 & 8,54 & 8,17 & 7,96 & 7,59 & 0,30 & 0,71\\
  & Red neuronal (reales) & 9,41 & 8,87 & 8,55 & 8,18 & 7,96 & 7,58 & 0,30 & 0,73\\
- & Redondeo simple (de la red) & 9 & 9 & 9 & 8 & 8 & 8 & 0,64 & 1,44\\
+ & Redondeo simple (desde la red) & 9 & 9 & 9 & 8 & 8 & 8 & 0,64 & 1,44\\
  & Conjunto (Schnorr--Euchner) & 9 & 10 & 6 & 9 & 8 & 8 & 0,49 & 1,25\\
  & Minimax (MILP) & 10 & 8 & 10 & 8 & 7 & 8 & 0,54 & 1,00\\
 \addlinespace
 $y_1$ & Mínimos cuadrados (reales) & 2,08 & 5,72 & 1,41 & 1,32 & 1,18 & 1,07 & 0,16 & 0,90\\
  & Red neuronal (reales) & 2,07 & 5,78 & 1,26 & 1,32 & 1,08 & 0,87 & 0,37 & 1,65\\
- & Redondeo simple (de la red) & 2 & 6 & 1 & 1 & 1 & 1 & 0,91 & 3,14\\
+ & Redondeo simple (desde la red) & 2 & 6 & 1 & 1 & 1 & 1 & 0,91 & 3,14\\
  & Conjunto (Schnorr--Euchner) & 2 & 6 & 1 & 1 & 2 & 0 & 0,49 & 1,10\\
  & Minimax (MILP) & 2 & 6 & 1 & 1 & 2 & 0 & 0,49 & 1,10\\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \clearpage

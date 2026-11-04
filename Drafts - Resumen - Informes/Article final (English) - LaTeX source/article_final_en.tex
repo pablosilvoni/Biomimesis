@@ -102,7 +102,7 @@ a mixed-integer linear program (Chebyshev approximation~\cite{cheney} with integ
 & \multicolumn{2}{c}{6 materials} & \multicolumn{2}{c}{5 materials}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
 Method & 41 subjects & 2000 curves & 41 subjects & 2000 curves\\\midrule
 Real-valued (least squares) & 0.67 / 0.88 · 41/41 & --- & 1.07 / 1.41 · 41/41 & ---\\
-Simple (from the network) & 2.34 / 7.45 · 25/41 & 1706 & 2.23 / 7.48 · 26/41 & 1616\\
+Simple rounding (from the network) & 2.34 / 7.45 · 25/41 & 1706 & 2.23 / 7.48 · 26/41 & 1616\\
 Joint from the network & 1.17 / 2.46 · 41/41 & 1998 & 1.70 / 3.56 · 40/41 & 1997\\
 Joint from LS (Schnorr--Euchner) & 1.18 / 2.46 · 41/41 & 1998 & 1.70 / 3.56 · 40/41 & 1997\\
 Integer minimax (MILP, against the curve) & 1.02 / 2.35 · 41/41 & 2000 & 1.47 / 3.50 · 40/41 & 2000\\\bottomrule
@@ -115,27 +115,27 @@ The joint method from the network yields the same design as from least squares i
 \caption{6 materials: the stiffest curve of the band ($y_2$), the hypertensive mean and the softest curve ($y_1$). Top: stress; middle: dimensionless form; bottom: design $-$ original in \% of the range. The minimax (green) distributes the error so that the worst point is as small as possible.}\label{fig:redondeo}\end{figure}
 \begin{table}[H]\centering\small
 \caption{Designs of Fig.~\ref{fig:redondeo} (6 materials): laminae of each material $c_j$ (real-valued in the first two rows of each curve, integer in the others) and errors against the original curve, $E_{\mathrm{rms}}$ and $e_{\max}$ [\% of the range].}\label{tab:redondeo3}
-\begin{tabular}{llcccccccc}\toprule
+\resizebox{\textwidth}{!}{\begin{tabular}{llcccccccc}\toprule
 Curve & Method & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$ & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
 $y_2$ & Least squares (real-valued) & 19.86 & 10.33 & 12.85 & 20.00 & 17.78 & 14.58 & 0.32 & 0.94\\
  & Neural network (real-valued) & 20.06 & 10.35 & 12.83 & 20.07 & 17.85 & 14.73 & 0.46 & 0.88\\
- & Simple rounding (of the network) & 20 & 10 & 13 & 20 & 18 & 15 & 0.36 & 1.21\\
+ & Simple rounding (from the network) & 20 & 10 & 13 & 20 & 18 & 15 & 0.36 & 1.21\\
  & Joint (Schnorr--Euchner) & 20 & 10 & 14 & 19 & 18 & 15 & 0.34 & 0.96\\
  & Minimax (MILP) & 20 & 11 & 11 & 20 & 19 & 14 & 0.56 & 0.91\\
 \addlinespace
 HT mean & Least squares (real-valued) & 9.43 & 8.86 & 8.54 & 8.17 & 7.96 & 7.59 & 0.30 & 0.71\\
  & Neural network (real-valued) & 9.41 & 8.87 & 8.55 & 8.18 & 7.96 & 7.58 & 0.30 & 0.73\\
- & Simple rounding (of the network) & 9 & 9 & 9 & 8 & 8 & 8 & 0.64 & 1.44\\
+ & Simple rounding (from the network) & 9 & 9 & 9 & 8 & 8 & 8 & 0.64 & 1.44\\
  & Joint (Schnorr--Euchner) & 9 & 10 & 6 & 9 & 8 & 8 & 0.49 & 1.25\\
  & Minimax (MILP) & 10 & 8 & 10 & 8 & 7 & 8 & 0.54 & 1.00\\
 \addlinespace
 $y_1$ & Least squares (real-valued) & 2.08 & 5.72 & 1.41 & 1.32 & 1.18 & 1.07 & 0.16 & 0.90\\
  & Neural network (real-valued) & 2.07 & 5.78 & 1.26 & 1.32 & 1.08 & 0.87 & 0.37 & 1.65\\
- & Simple rounding (of the network) & 2 & 6 & 1 & 1 & 1 & 1 & 0.91 & 3.14\\
+ & Simple rounding (from the network) & 2 & 6 & 1 & 1 & 1 & 1 & 0.91 & 3.14\\
  & Joint (Schnorr--Euchner) & 2 & 6 & 1 & 1 & 2 & 0 & 0.49 & 1.10\\
  & Minimax (MILP) & 2 & 6 & 1 & 1 & 2 & 0 & 0.49 & 1.10\\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \clearpage
