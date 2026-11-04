@@ -279,7 +279,11 @@ con $P_i$ la presión de la sangre y $P_a$ la que ejercen la adventicia y el tej
 \caption{Los 41 sujetos: presión que soporta la pared, en función del estiramiento del borde media--adventicia, en forma relativa: $P=(P_i-P_a)/13{,}33$\,kPa a la izquierda y $P=(P_i-P_a)/100$\,mmHg a la derecha. Como $13{,}33$\,kPa $=100$\,mmHg, las dos escalas coinciden; la ventana de 60 a 200\,mmHg va de 0,6 a 2. Trazo grueso: tramo de 60 a 200\,mmHg, que es la curva objetivo.}\label{fig:presion}\end{figure}
 
 \subsection{Pared delgada y pared gruesa}
-Si la pared es delgada frente al radio, todas sus fibras se estiran lo mismo y el equilibrio de medio tubo da la ley de Laplace, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: la presión es lineal en los espesores de las capas y el diseño hereda todo el método del primer nivel. La carótida, sin embargo, tiene $h/r\approx0{,}2$. Con pared incompresible y sin alargamiento, el área entre la cara interna y una fibra que estaba en el radio $R$ se conserva,
+Si la pared es delgada frente al radio, todas sus fibras se estiran lo mismo y el equilibrio de medio tubo da la ley de Laplace, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: la presión es lineal en los espesores de las capas y el diseño hereda todo el método del primer nivel. Urquiza~\cite{urquiza} (ec.~3.13 de su tesis) escribe el mismo equilibrio de pared delgada con el radio y el espesor \emph{instantáneos}, $(P_i-P_a)\,R=\sigma\,h$. Tomando como $R$ el radio medio deformado, $\bar r=r_i+h/2$, y llamando $u=1+h/r_i$,
+\begin{equation}\label{eq:urquiza}
+P=\frac{\sigma\,h}{r_i+h/2}=\sigma\,\frac{2\,(u-1)}{u+1}.
+\end{equation}
+Para una pared homogénea con tensión uniforme, \eqref{eq:equil} da exactamente $P=\sigma\ln u$, y $2(u-1)/(u+1)$ es la aproximación de Padé [1/1] de $\ln u$: con $h/r_i\le0{,}2$ el error es menor que 0,3\,\%, mientras que Laplace con el radio interno, $P=\sigma\,(u-1)$, sobreestima la presión hasta en un 10\,\%. Llamamos \emph{ley de Urquiza} a \eqref{eq:urquiza} aplicada al injerto multicapa con un único estiramiento, el del radio medio: $P=\sum_j\sigma_j(\bar\lambda)\,h_j/\bar r$, con $\bar\lambda=\bar r/\bar R$. Sigue siendo lineal en los espesores. La carótida, sin embargo, tiene $h/r\approx0{,}2$. Con pared incompresible y sin alargamiento, el área entre la cara interna y una fibra que estaba en el radio $R$ se conserva,
 \begin{equation}\label{eq:incomp}
 r^2-r_i^2=R^2-R_i^2,\qquad\lambda(r)=\frac{r}{R},
 \end{equation}
@@ -292,14 +296,14 @@ Si $h\ll r$, \eqref{eq:pgruesa} se reduce a Laplace. Con rectas truncadas, la di
 \begin{figure}[H]\centering\includegraphics[width=0.78\textwidth]{d6_cada_fibra.png}
 \caption{Tubo de 3,0 a 3,6\,mm inflado hasta una cara interna de 3,3\,mm: cada fibra conserva el área que tiene por dentro; la cara interna se estira 10\,\% y la externa 7\,\%.}\label{fig:fibra}\end{figure}
 
-\paragraph{La pared delgada falla al fabricar.} Se diseñó cada sujeto con tres hipótesis ---Laplace (pared delgada, $P=\sigma h/r$ con el radio y el espesor sin deformar), Laplace con el radio medio deformado (como en~\cite{urquiza}) y pared gruesa (ec.~\ref{eq:pgruesa}, cada capa con su propio estiramiento)--- y cada diseño se evaluó en el tubo real, de pared gruesa (Tabla~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). En su propio modelo Laplace parece perfecto ($e_{\max}\le1{,}7$\,\%); el error aparece al fabricar y crece con el espesor de la pared. Corregir el radio no ayuda, porque el problema no es el radio sino que cada capa se estira distinto y engancha en otro momento. Con la ventana de presión y la base adoptada, el diseño lineal de pared delgada tampoco cumple en ningún sujeto (mediana 27,3\,\% con 6 materiales y 29,9\,\% con 5). \textbf{El diseño a nivel del tubo debe hacerse en pared gruesa.}
+\paragraph{La pared delgada falla al fabricar.} Se diseñó cada sujeto con tres hipótesis ---Laplace (pared delgada, $P=\sigma h/r$ con el radio y el espesor sin deformar), la ley de Urquiza \eqref{eq:urquiza}, con el radio medio deformado, y pared gruesa (ec.~\ref{eq:pgruesa}, cada capa con su propio estiramiento)--- y cada diseño se evaluó en el tubo real, de pared gruesa (Tabla~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). En su propio modelo Laplace parece perfecto ($e_{\max}\le1{,}7$\,\%); el error aparece al fabricar y crece con el espesor de la pared. Corregir el radio no ayuda, porque el problema no es el radio sino que cada capa se estira distinto y engancha en otro momento. Con la ventana de presión y la base adoptada, el diseño lineal de pared delgada tampoco cumple en ningún sujeto (mediana 27,3\,\% con 6 materiales y 29,9\,\% con 5). \textbf{El diseño a nivel del tubo debe hacerse en pared gruesa.}
 
 \begin{table}[H]\centering\small
 \caption{Comparación de hipótesis sobre curvas de presión en $\lambda$ de 1,02 a 1,16, con un juego de nudos ajustado a esas curvas de presión (distinto del de la Tabla~\ref{tab:bases}). Cada fila es la hipótesis con que se \emph{diseña}; todos los diseños se \emph{evalúan} en el tubo de pared gruesa, que es lo que se fabrica. En cada celda, para los 41 sujetos: cuántos cumplen $e_{\max}\le3$\,\%, la mediana de $e_{\max}$ y el peor $e_{\max}$, con 5 o 6 materiales.}\label{tab:laplace}
 \begin{tabular}{lcc}\toprule
 Hipótesis de diseño & 5 materiales & 6 materiales\\\midrule
 Laplace & 0/41 · 13,6\,\% · 22,7\,\% & 0/41 · 14,8\,\% · 32,5\,\%\\
-Laplace con radio medio & 0/41 · 13,7\,\% · 24,5\,\% & 0/41 · 15,4\,\% · 34,4\,\%\\
+Urquiza (radio medio deformado) & 0/41 · 13,7\,\% · 24,5\,\% & 0/41 · 15,4\,\% · 34,4\,\%\\
 Pared gruesa & 41/41 · 0,96\,\% · 2,97\,\% & 41/41 · 0,72\,\% · 2,10\,\%\\\bottomrule
 \end{tabular}
 \end{table}
@@ -567,7 +571,7 @@ Ejemplo de verificación: primera franja azul con $\delta=-0{,}03$: el nudo es $
 \bibitem{szafron} Szafron, J.\,M., Ramachandra, A.\,B., Breuer, C.\,K., Marsden, A.\,L., Humphrey, J.\,D. (2019). Optimization of tissue-engineered vascular graft design using computational modeling. \emph{Tissue Eng. Part C}. doi:10.1089/ten.tec.2019.0086.
 \bibitem{tamimi} Tamimi, E.\,A., Ardila, D.\,C., Ensley, B.\,D., Kellar, R.\,S., Vande Geest, J.\,P. (2019). Computationally optimizing the compliance of multilayered biomimetic tissue engineered vascular grafts. \emph{J. Biomech. Eng.} doi:10.1115/1.4042902.
 \bibitem{trefethen} Trefethen, L.\,N., Bau, D. (1997). \emph{Numerical Linear Algebra}. SIAM.
-\bibitem{urquiza} Urquiza, S.\,A. (2012). Tesis doctoral, cap.~3: Modelos hemodinámicos unidimensionales.
+\bibitem{urquiza} Urquiza, S.\,A. (2009). \emph{Hemodinámica computacional del sistema arterial humano}. Tesis doctoral en Ciencias de la Ingeniería, Instituto Balseiro, Universidad Nacional de Cuyo, San Carlos de Bariloche. Cap.~3: Modelos hemodinámicos unidimensionales, ec.~(3.13).
 \bibitem{scipy} Virtanen, P., et al. (2020). SciPy 1.0: fundamental algorithms for scientific computing in Python. \emph{Nat. Methods} 17, 261--272.
 \end{thebibliography}
 \end{document}

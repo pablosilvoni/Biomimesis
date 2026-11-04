@@ -279,7 +279,11 @@ where $P_i$ is the blood pressure and $P_a$ the pressure exerted by the adventit
 \caption{The 41 subjects: pressure borne by the wall as a function of the stretch of the media--adventitia boundary, in relative form: $P=(P_i-P_a)/13.33$\,kPa on the left and $P=(P_i-P_a)/100$\,mmHg on the right. Since $13.33$\,kPa $=100$\,mmHg, both scales coincide; the 60 to 200\,mmHg window spans 0.6 to 2. Thick lines: the 60 to 200\,mmHg segment, which is the target curve.}\label{fig:presion}\end{figure}
 
 \subsection{Thin wall and thick wall}
-If the wall is thin compared with the radius, all its fibers stretch equally and the equilibrium of half a tube gives Laplace's law, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: pressure is linear in the layer thicknesses and the design inherits the whole method of the first level. The carotid artery, however, has $h/r\approx0.2$. With an incompressible wall and no axial extension, the area between the inner surface and a fiber initially at radius $R$ is conserved,
+If the wall is thin compared with the radius, all its fibers stretch equally and the equilibrium of half a tube gives Laplace's law, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: pressure is linear in the layer thicknesses and the design inherits the whole method of the first level. Urquiza~\cite{urquiza} (Eq.~3.13 of his thesis) writes the same thin-wall equilibrium with the \emph{instantaneous} radius and thickness, $(P_i-P_a)\,R=\sigma\,h$. Taking $R$ as the deformed mean radius, $\bar r=r_i+h/2$, and letting $u=1+h/r_i$,
+\begin{equation}\label{eq:urquiza}
+P=\frac{\sigma\,h}{r_i+h/2}=\sigma\,\frac{2\,(u-1)}{u+1}.
+\end{equation}
+For a homogeneous wall with uniform stress, \eqref{eq:equil} gives exactly $P=\sigma\ln u$, and $2(u-1)/(u+1)$ is the Padé [1/1] approximant of $\ln u$: for $h/r_i\le0.2$ the error is below 0.3\,\%, whereas Laplace's law with the inner radius, $P=\sigma\,(u-1)$, overestimates the pressure by up to 10\,\%. We call \emph{Urquiza's law} Eq.~\eqref{eq:urquiza} applied to the multilayer graft with a single stretch, that of the mean radius: $P=\sum_j\sigma_j(\bar\lambda)\,h_j/\bar r$, with $\bar\lambda=\bar r/\bar R$. It is still linear in the thicknesses. The carotid artery, however, has $h/r\approx0.2$. With an incompressible wall and no axial extension, the area between the inner surface and a fiber initially at radius $R$ is conserved,
 \begin{equation}\label{eq:incomp}
 r^2-r_i^2=R^2-R_i^2,\qquad\lambda(r)=\frac{r}{R},
 \end{equation}
@@ -292,14 +296,14 @@ If $h\ll r$, \eqref{eq:pgruesa} reduces to Laplace's law. With truncated lines, 
 \begin{figure}[H]\centering\includegraphics[width=0.78\textwidth]{d6_cada_fibra.png}
 \caption{Tube from 3.0 to 3.6\,mm inflated to an inner radius of 3.3\,mm: each fiber conserves the area enclosed inside it; the inner surface stretches 10\,\% and the outer surface 7\,\%.}\label{fig:fibra}\end{figure}
 
-\paragraph{The thin wall fails when manufactured.} Each subject was designed with three assumptions ---Laplace (thin wall, $P=\sigma h/r$ with the undeformed radius and thickness), Laplace with the deformed mean radius (as in~\cite{urquiza}) and thick wall (Eq.~\ref{eq:pgruesa}, each layer with its own stretch)--- and each design was evaluated in the real, thick-walled tube (Table~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). In its own model, Laplace appears perfect ($e_{\max}\le1.7$\,\%); the error appears upon manufacturing and grows with wall thickness. Correcting the radius does not help, because the problem is not the radius but the fact that each layer stretches differently and engages at a different moment. With the pressure window and the adopted basis, the linear thin-wall design does not meet the target in any subject either (median 27.3\,\% with 6 materials and 29.9\,\% with 5). \textbf{The tube-level design must be carried out with the thick-walled model.}
+\paragraph{The thin wall fails when manufactured.} Each subject was designed with three assumptions ---Laplace (thin wall, $P=\sigma h/r$ with the undeformed radius and thickness), Urquiza's law \eqref{eq:urquiza}, with the deformed mean radius, and thick wall (Eq.~\ref{eq:pgruesa}, each layer with its own stretch)--- and each design was evaluated in the real, thick-walled tube (Table~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). In its own model, Laplace appears perfect ($e_{\max}\le1.7$\,\%); the error appears upon manufacturing and grows with wall thickness. Correcting the radius does not help, because the problem is not the radius but the fact that each layer stretches differently and engages at a different moment. With the pressure window and the adopted basis, the linear thin-wall design does not meet the target in any subject either (median 27.3\,\% with 6 materials and 29.9\,\% with 5). \textbf{The tube-level design must be carried out with the thick-walled model.}
 
 \begin{table}[H]\centering\small
 \caption{Comparison of assumptions on pressure curves for $\lambda$ from 1.02 to 1.16, with a set of knots fitted to those pressure curves (different from that of Table~\ref{tab:bases}). Each row is the assumption used to \emph{design}; all designs are \emph{evaluated} in the thick-walled tube, which is what is manufactured. In each cell, for the 41 subjects: how many meet $e_{\max}\le3$\,\%, the median $e_{\max}$ and the worst $e_{\max}$, with 5 or 6 materials.}\label{tab:laplace}
 \begin{tabular}{lcc}\toprule
 Design assumption & 5 materials & 6 materials\\\midrule
 Laplace & 0/41 · 13.6\,\% · 22.7\,\% & 0/41 · 14.8\,\% · 32.5\,\%\\
-Laplace with mean radius & 0/41 · 13.7\,\% · 24.5\,\% & 0/41 · 15.4\,\% · 34.4\,\%\\
+Urquiza (deformed mean radius) & 0/41 · 13.7\,\% · 24.5\,\% & 0/41 · 15.4\,\% · 34.4\,\%\\
 Thick wall & 41/41 · 0.96\,\% · 2.97\,\% & 41/41 · 0.72\,\% · 2.10\,\%\\\bottomrule
 \end{tabular}
 \end{table}
@@ -567,7 +571,7 @@ Verification example: first blue slice with $\delta=-0.03$: the knot is $1.02-0.
 \bibitem{szafron} Szafron, J.\,M., Ramachandra, A.\,B., Breuer, C.\,K., Marsden, A.\,L., Humphrey, J.\,D. (2019). Optimization of tissue-engineered vascular graft design using computational modeling. \emph{Tissue Eng. Part C}. doi:10.1089/ten.tec.2019.0086.
 \bibitem{tamimi} Tamimi, E.\,A., Ardila, D.\,C., Ensley, B.\,D., Kellar, R.\,S., Vande Geest, J.\,P. (2019). Computationally optimizing the compliance of multilayered biomimetic tissue engineered vascular grafts. \emph{J. Biomech. Eng.} doi:10.1115/1.4042902.
 \bibitem{trefethen} Trefethen, L.\,N., Bau, D. (1997). \emph{Numerical Linear Algebra}. SIAM.
-\bibitem{urquiza} Urquiza, S.\,A. (2012). Doctoral thesis, Ch.~3: One-dimensional hemodynamic models (in Spanish).
+\bibitem{urquiza} Urquiza, S.\,A. (2009). \emph{Hemodinámica computacional del sistema arterial humano} [Computational hemodynamics of the human arterial system]. Doctoral thesis in Engineering Sciences, Instituto Balseiro, Universidad Nacional de Cuyo, San Carlos de Bariloche, Argentina (in Spanish). Ch.~3, Eq.~(3.13).
 \bibitem{scipy} Virtanen, P., et al. (2020). SciPy 1.0: fundamental algorithms for scientific computing in Python. \emph{Nat. Methods} 17, 261--272.
 \end{thebibliography}
 \end{document}
