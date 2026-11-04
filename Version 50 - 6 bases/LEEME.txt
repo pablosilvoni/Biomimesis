@@ -1,0 +1,12 @@
+Versión 50 (6 materiales): dos controles pedidos por la pregunta sobre el redondeo.
+
+1) Distancia al óptimo entero del paso 3 (A3) en pared gruesa
+   gap.py   — usa run.py (el de V47) y las tablas de Masson de esta carpeta. Se corre con:  python gap.py
+              Para cada sujeto: paso 2 (MCO no lineal) -> paso 3 (A3) y búsqueda exhaustiva de láminas a ±2 de las del paso 2,
+              con δ en grilla de 13 valores y Brent en las 200 mejores. Mismo objetivo que el A3 (peor punto contra la curva ajustada).
+   v50_gap_6.csv — una fila por sujeto: errores del A3 y de la exhaustiva (contra la ajustada y contra la original), láminas y δ.
+
+2) Redondeo conjunto (Schnorr–Euchner) desde la red, nivel σ (V39)
+   se_red.py — se corre dentro de la carpeta "Version 49 - 6 bases" (usa su notebook/red). Compara el entero más cercano a la
+               salida de la red con el más cercano a c_MCO, en los 41 sujetos, 2000 curvas del espacio de trabajo, y y2/Mean HT/y1.
+   se_desde_red_6.csv — resultados por curva.
