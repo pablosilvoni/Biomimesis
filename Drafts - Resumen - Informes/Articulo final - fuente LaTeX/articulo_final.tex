@@ -98,7 +98,7 @@ un programa lineal entero mixto (aproximación de Chebyshev~\cite{cheney} con en
 
 \begin{table}[H]\centering\small
 \caption{41 sujetos, láminas enteras: $e_{\max}$ mediano / peor [\%] y sujetos que cumplen la meta. El espacio de trabajo se evalúa en 2000 curvas al azar con meta de 4\,\%. Todos los errores se miden contra la curva original de la arteria.}\label{tab:redondeo}
-\begin{tabular}{lcccc}\toprule
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}\toprule
 & \multicolumn{2}{c}{6 materiales} & \multicolumn{2}{c}{5 materiales}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
 Método & 41 sujetos & 2000 curvas & 41 sujetos & 2000 curvas\\\midrule
 Reales (mínimos cuadrados) & 0,67 / 0,88 · 41/41 & --- & 1,07 / 1,41 · 41/41 & ---\\
@@ -106,7 +106,7 @@ Simple (desde la red) & 2,34 / 7,45 · 25/41 & 1706 & 2,23 / 7,48 · 26/41 & 161
 Conjunto desde la red & 1,17 / 2,46 · 41/41 & 1998 & 1,70 / 3,56 · 40/41 & 1997\\
 Conjunto desde el MCO (Schnorr--Euchner) & 1,18 / 2,46 · 41/41 & 1998 & 1,70 / 3,56 · 40/41 & 1997\\
 Minimax entero (MILP, contra la curva) & 1,02 / 2,35 · 41/41 & 2000 & 1,47 / 3,50 · 40/41 & 2000\\\bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 El conjunto desde la red da el mismo diseño que desde el MCO en 32 de los 41 sujetos (6 materiales) y en 35 (5 materiales), y en las 2000 curvas en el 69 y el 79\,\%; donde difiere lo hace en una o dos láminas, con los mismos peores casos, porque en este nivel la red queda muy cerca de $c_{\mathrm{MCO}}$. Pero ninguno de los dos garantiza el menor $e_{\max}$: en $y_1$, con 6 materiales, el conjunto desde la red llega a 2,03\,\% y el minimax a 1,10\,\% (Tabla~\ref{tab:redondeo3}). Cada método es el mejor en su propia medida: el conjunto en $E_{\mathrm{rms}}$, el minimax en $e_{\max}$, que es la medida del criterio de diseño (Tabla~\ref{tab:redondeo}, Fig.~\ref{fig:redondeo}). El redondeo simple no es recomendable. Con 6 materiales los 41 sujetos cumplen con láminas enteras; con 5, un sujeto queda en 3,5\,\%: el límite lo pone tener solo 5 materiales, no el método. \textbf{Se adopta el minimax.}
@@ -138,6 +138,7 @@ $y_1$ & Mínimos cuadrados (reales) & 2,08 & 5,72 & 1,41 & 1,32 & 1,18 & 1,07 & 
 \end{tabular}
 \end{table}
 
+\clearpage
 \subsection{La red neuronal}
 Una red neuronal recibe la curva y devuelve las cantidades de cada material en una sola evaluación: aprende la función $y\mapsto A^+y$ para la clase de curvas en J.
 
@@ -533,6 +534,7 @@ Ejemplo de verificación: primera franja azul con $\delta=-0{,}03$: el nudo es $
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{d19_delta.png}
 \caption{Efecto de $\delta$ en la pared de dos capas. (a) Ley de cada material para $\delta=-0{,}03$, 0 y $+0{,}03$; las franjas sombreadas son los estiramientos que siente cada capa con la cara interna en 3,3\,mm. (b) Aporte de cada capa a la presión en ese estado. (c) Curva presión--estiramiento de la cara interna (eje derecho en mmHg): $\delta$ corre el punto donde engancha cada capa y cambia la forma de la curva. Los valores son de un ejemplo de juguete (capas de 0,3\,mm y módulos bajos), no de un diseño.}\end{figure}
 
+\clearpage
 \section{Entrenamiento de las redes neuronales}\label{sec:entrenamiento}
 Se entrenaron cuatro redes: la del primer nivel, que va de la curva $\sigma_{\theta\theta}(\lambda_\theta)$ a las cantidades de cada material (Sección~\ref{sec:validacion}), y la de pared gruesa (bloque A4), cada una con 6 y con 5 materiales. La Fig.~\ref{fig:aprendizaje} muestra la pérdida en entrenamiento y en validación época por época, y la Tabla~\ref{tab:entrenamiento} resume el entrenamiento y la pérdida final en los tres conjuntos de datos. La pérdida de prueba se calcula sobre curvas que la red nunca vio, ni para ajustar los pesos ni para decidir cuándo parar.
 

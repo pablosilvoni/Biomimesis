@@ -98,7 +98,7 @@ a mixed-integer linear program (Chebyshev approximation~\cite{cheney} with integ
 
 \begin{table}[H]\centering\small
 \caption{41 subjects, integer laminae: median / worst $e_{\max}$ [\%] and subjects meeting the target. The working space is evaluated on 2000 random curves with a target of 4\,\%. All errors are measured against the original curve of the artery.}\label{tab:redondeo}
-\begin{tabular}{lcccc}\toprule
+\resizebox{\textwidth}{!}{\begin{tabular}{lcccc}\toprule
 & \multicolumn{2}{c}{6 materials} & \multicolumn{2}{c}{5 materials}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
 Method & 41 subjects & 2000 curves & 41 subjects & 2000 curves\\\midrule
 Real-valued (least squares) & 0.67 / 0.88 · 41/41 & --- & 1.07 / 1.41 · 41/41 & ---\\
@@ -106,7 +106,7 @@ Simple (from the network) & 2.34 / 7.45 · 25/41 & 1706 & 2.23 / 7.48 · 26/41 &
 Joint from the network & 1.17 / 2.46 · 41/41 & 1998 & 1.70 / 3.56 · 40/41 & 1997\\
 Joint from LS (Schnorr--Euchner) & 1.18 / 2.46 · 41/41 & 1998 & 1.70 / 3.56 · 40/41 & 1997\\
 Integer minimax (MILP, against the curve) & 1.02 / 2.35 · 41/41 & 2000 & 1.47 / 3.50 · 40/41 & 2000\\\bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 The joint method from the network yields the same design as from least squares in 32 of the 41 subjects (6 materials) and in 35 (5 materials), and in 69 and 79\,\% of the 2000 curves; where it differs, it does so by one or two laminae, with the same worst cases, because at this level the network is very close to $c_{\mathrm{LS}}$. Neither of them, however, guarantees the lowest $e_{\max}$: for $y_1$ with 6 materials, the joint method from the network reaches 2.03\,\% and the minimax 1.10\,\% (Table~\ref{tab:redondeo3}). Each method is the best in its own measure: the joint method in $E_{\mathrm{rms}}$, the minimax in $e_{\max}$, which is the measure of the design criterion (Table~\ref{tab:redondeo}, Fig.~\ref{fig:redondeo}). Simple rounding is not advisable. With 6 materials all 41 subjects meet the target with integer laminae; with 5, one subject remains at 3.5\,\%: the limit is set by having only 5 materials, not by the method. \textbf{The minimax is adopted.}
@@ -138,6 +138,7 @@ $y_1$ & Least squares (real-valued) & 2.08 & 5.72 & 1.41 & 1.32 & 1.18 & 1.07 & 
 \end{tabular}
 \end{table}
 
+\clearpage
 \subsection{The neural network}
 A neural network receives the curve and returns the amount of each material in a single evaluation: it learns the map $y\mapsto A^+y$ for the class of J-shaped curves.
 
@@ -533,6 +534,7 @@ Verification example: first blue slice with $\delta=-0.03$: the knot is $1.02-0.
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{d19_delta.png}
 \caption{Effect of $\delta$ on the two-layer wall. (a) Law of each material for $\delta=-0.03$, 0 and $+0.03$; the shaded bands are the stretches experienced by each layer with the inner surface at 3.3\,mm. (b) Contribution of each layer to the pressure in that state. (c) Pressure--stretch curve of the inner surface (right axis in mmHg): $\delta$ shifts the point at which each layer engages and changes the shape of the curve. The values belong to a toy example (0.3\,mm layers and low moduli), not to a design.}\end{figure}
 
+\clearpage
 \section{Training of the neural networks}\label{sec:entrenamiento}
 Four networks were trained: the first-level network, which maps the curve $\sigma_{\theta\theta}(\lambda_\theta)$ to the amount of each material (Section~\ref{sec:validacion}), and the thick-wall network (block A4), each with 6 and with 5 materials. Fig.~\ref{fig:aprendizaje} shows the training and validation loss epoch by epoch, and Table~\ref{tab:entrenamiento} summarizes the training and the final loss on the three data sets. The test loss is computed on curves the network never saw, neither to fit the weights nor to decide when to stop.
 
