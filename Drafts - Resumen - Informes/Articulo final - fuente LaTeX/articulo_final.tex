@@ -112,6 +112,30 @@ Cada redondeo es el mejor en su propia medida: el conjunto en $E_{\mathrm{rms}}$
 
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{redondeo_y2_meanHT_y1_v39_6.png}
 \caption{6 materiales: la curva más rígida de la franja ($y_2$), la media de los hipertensos y la más blanda ($y_1$). Arriba: tensión; al medio: forma adimensional; abajo: diseño $-$ original en \% del rango. El minimax (verde) reparte el error para que el peor punto sea lo más chico posible.}\label{fig:redondeo}\end{figure}
+\begin{table}[H]\centering\small
+\caption{Diseños de la Fig.~\ref{fig:redondeo} (6 materiales): láminas de cada material $c_j$ (reales en las dos primeras filas de cada curva, enteras en las demás) y errores contra la curva original, $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango].}\label{tab:redondeo3}
+\begin{tabular}{llcccccccc}\toprule
+Curva & Método & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$ & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
+$y_2$ & Mínimos cuadrados (reales) & 19,86 & 10,33 & 12,85 & 20,00 & 17,78 & 14,58 & 0,32 & 0,94\\
+ & Red neuronal (reales) & 20,06 & 10,35 & 12,83 & 20,07 & 17,85 & 14,73 & 0,46 & 0,88\\
+ & Redondeo simple (de la red) & 20 & 10 & 13 & 20 & 18 & 15 & 0,36 & 1,21\\
+ & Conjunto (Schnorr--Euchner) & 20 & 10 & 14 & 19 & 18 & 15 & 0,34 & 0,96\\
+ & Minimax (MILP) & 20 & 11 & 11 & 20 & 19 & 14 & 0,56 & 0,91\\
+\addlinespace
+Media HT & Mínimos cuadrados (reales) & 9,43 & 8,86 & 8,54 & 8,17 & 7,96 & 7,59 & 0,30 & 0,71\\
+ & Red neuronal (reales) & 9,41 & 8,87 & 8,55 & 8,18 & 7,96 & 7,58 & 0,30 & 0,73\\
+ & Redondeo simple (de la red) & 9 & 9 & 9 & 8 & 8 & 8 & 0,64 & 1,44\\
+ & Conjunto (Schnorr--Euchner) & 9 & 10 & 6 & 9 & 8 & 8 & 0,49 & 1,25\\
+ & Minimax (MILP) & 10 & 8 & 10 & 8 & 7 & 8 & 0,54 & 1,00\\
+\addlinespace
+$y_1$ & Mínimos cuadrados (reales) & 2,08 & 5,72 & 1,41 & 1,32 & 1,18 & 1,07 & 0,16 & 0,90\\
+ & Red neuronal (reales) & 2,07 & 5,78 & 1,26 & 1,32 & 1,08 & 0,87 & 0,37 & 1,65\\
+ & Redondeo simple (de la red) & 2 & 6 & 1 & 1 & 1 & 1 & 0,91 & 3,14\\
+ & Conjunto (Schnorr--Euchner) & 2 & 6 & 1 & 1 & 2 & 0 & 0,49 & 1,10\\
+ & Minimax (MILP) & 2 & 6 & 1 & 1 & 2 & 0 & 0,49 & 1,10\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{La red neuronal}
 Una red neuronal recibe la curva y devuelve las cantidades de cada material en una sola evaluación: aprende la función $y\mapsto A^+y$ para la clase de curvas en J.
@@ -191,6 +215,31 @@ Kamenskiy et al.~\cite{kamenskiy} & CCA & M & 16/16 & 1,28 & 11/16 & 4,57 & 16/1
 
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{v49_representativas_6.png}
 \caption{Curvas representativas, 6 materiales: el caso mediano del diseño entero de cada estudio. Arriba: curva externa (negro), mínimos cuadrados (azul) y láminas enteras por minimax (verde), con el peor error entre paréntesis y las láminas de cada material en el título; eje derecho, tensión relativa a 150\,kPa. Abajo: diseño $-$ curva en \% del rango (franja: meta de $\pm3$\,\%).}\label{fig:rep}\end{figure}
+\begin{table}[H]\centering\small
+\caption{Curvas representativas de las Figs.~\ref{fig:ext} y~\ref{fig:rep} (6 materiales): láminas de cada material por mínimos cuadrados (reales) y por minimax (enteras), con $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. Las 327 curvas, con sus láminas y errores, están en el material suplementario.}\label{tab:rep}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccccc}\toprule
+Estudio · espécimen · curva & Ajuste & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$ & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
+\multirow{2}{*}{Sommer--Holzapfel · CCA pared · IV l} & Mín. cuadrados & 11,06 & 3,95 & 6,70 & 3,86 & 2,81 & 1,99 & 0,41 & 1,09\\
+ & Minimax entero & 11 & 4 & 7 & 3 & 4 & 1 & 0,47 & 1,19\\
+\addlinespace
+\multirow{2}{*}{Sommer--Holzapfel · ICA adventicia · IX l} & Mín. cuadrados & 11,11 & 4,95 & 6,09 & 3,17 & 2,22 & 1,49 & 0,38 & 1,00\\
+ & Minimax entero & 11 & 5 & 7 & 2 & 2 & 2 & 0,65 & 1,30\\
+\addlinespace
+\multirow{2}{*}{Sommer--Holzapfel · CCA media--íntima · VI r} & Mín. cuadrados & 8,96 & 10,93 & 1,61 & 0,89 & 0,57 & 0,38 & 0,12 & 0,98\\
+ & Minimax entero & 9 & 11 & 1 & 1 & 1 & 0 & 0,32 & 1,10\\
+\addlinespace
+\multirow{2}{*}{Holzapfel et al. · conejo, media} & Mín. cuadrados & 11,10 & 4,67 & 6,24 & 3,37 & 2,40 & 1,65 & 0,38 & 1,02\\
+ & Minimax entero & 11 & 5 & 5 & 4 & 3 & 1 & 0,55 & 1,26\\
+\addlinespace
+\multirow{2}{*}{Liu et al. · carótida con placa · P11} & Mín. cuadrados & 6,54 & 11,26 & 15,37 & 12,52 & 10,74 & 9,02 & 0,38 & 0,98\\
+ & Minimax entero & 7 & 11 & 15 & 13 & 11 & 8 & 0,55 & 1,02\\
+\addlinespace
+\multirow{2}{*}{Kamenskiy et al. · CCA (in vivo, M) · pac. 7} & Mín. cuadrados & 8,75 & 0,19 & 2,42 & 1,21 & 0,84 & 0,55 & 0,43 & 1,27\\
+ & Minimax entero & 9 & 0 & 2 & 2 & 0 & 1 & 1,33 & 2,43\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{v49_error_entero_6.png}
 \caption{Peor error del diseño entero por estudio y protocolo, 6 materiales (curvas aceptadas). Línea roja: meta de 3\,\%.}\label{fig:boxext}\end{figure}
@@ -255,6 +304,28 @@ Pared gruesa & 41/41 · 0,96\,\% · 2,97\,\% & 41/41 · 0,72\,\% · 2,10\,\%\\\b
 \end{table}
 \begin{figure}[H]\centering\includegraphics[width=0.82\textwidth]{f34_3c_6.png}
 \caption{Etapa de la Tabla~\ref{tab:laplace}, 6 materiales, de izquierda a derecha: curva más blanda ($y_1$), media de los hipertensos y más rígida ($y_2$). Arriba de cada par: curvas; abajo: injerto $-$ arteria en \% del rango (banda $\pm3$\,\%). El diseño de Laplace evaluado en su propio modelo (gris, punteado) parece perfecto; fabricado (naranja, a trazos), se aparta hasta 25\,\%.}\label{fig:laplace}\end{figure}
+\begin{table}[H]\centering\small
+\caption{Diseños de la Fig.~\ref{fig:laplace} (etapa previa, 6 materiales; nudos 0,8271; 1,0219; 1,0867; 1,1197; 1,1391; 1,1531 y módulos 0,18; 1,33; 4,86; 2,72; 12,94; 6,35\,MPa): espesor de la capa de cada material $h_j$ [µm] (capa 1 junto a la sangre; 0: no se usa), pared total [µm] y errores contra la curva de presión de la arteria, $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. ``Laplace, en su modelo'' y ``Laplace, injerto real'' son el mismo diseño evaluado con dos modelos.}\label{tab:laplace3}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccccc}\toprule
+Curva & Diseño y evaluación & $h_1$ & $h_2$ & $h_3$ & $h_4$ & $h_5$ & $h_6$ & pared & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
+$y_1$ & Laplace, en su modelo & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 1,47 & 2,01\\
+ & Laplace, injerto real & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 1,98 & 3,36\\
+ & Urquiza, injerto real & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 2,01 & 3,29\\
+ & Pared gruesa, injerto real & 25 & 130 & 25 & 0 & 0 & 29 & 210 & 1,47 & 2,46\\
+\addlinespace
+Media HT & Laplace, en su modelo & 235 & 203 & 59 & 205 & 67 & 136 & 905 & 0,41 & 0,76\\
+ & Laplace, injerto real & 235 & 203 & 59 & 205 & 67 & 136 & 905 & 5,14 & 16,79\\
+ & Urquiza, injerto real & 250 & 196 & 62 & 204 & 66 & 132 & 909 & 5,40 & 16,79\\
+ & Pared gruesa, injerto real & 129 & 158 & 48 & 218 & 0 & 467 & 1020 & 0,34 & 0,60\\
+\addlinespace
+$y_2$ & Laplace, en su modelo & 449 & 229 & 139 & 461 & 193 & 30 & 1500 & 1,08 & 1,73\\
+ & Laplace, injerto real & 449 & 229 & 139 & 461 & 193 & 30 & 1500 & 7,95 & 24,69\\
+ & Urquiza, injerto real & 453 & 241 & 141 & 454 & 187 & 25 & 1500 & 8,24 & 24,30\\
+ & Pared gruesa, injerto real & 203 & 122 & 67 & 626 & 206 & 277 & 1500 & 0,61 & 0,87\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \subsection{El injerto de pared gruesa}
 El injerto es un tubo cerrado, incompresible y en deformación plana, con una capa por material apilada de adentro hacia afuera por nudo creciente (el orden inverso duplica o triplica el error), centrado en $R_{\mathrm{ref}}=3{,}421$\,mm (mediana de $\Theta_0R_m/\pi$ de los 41 sujetos). Los materiales son los del primer nivel: los mismos nudos y rectas $\sigma_j=E_j\max(0,\lambda-\kappa_j)$, con módulos $E_j$ calibrados una vez para que el sujeto de entrenamiento que más necesita de cada material use 0,2\,mm de él (6 materiales: de 452 a 4966\,kPa). El diseño es
@@ -328,6 +399,22 @@ ruido 0,3\,\% & MCO lineal & 2,67 & 11,87 & 23/41 & 2,66 & 7,52 & 25/41\\
 
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{disenos_v47_6.png}
 \caption{6 materiales, curvas limpias: el sujeto más blando, uno intermedio y el más rígido. Negra: arteria; azul: camino A (arranque MCO lineal); roja: camino B (arranque red). Ordenada: presión que soporta la pared, arriba en kPa y abajo relativa a 13,332\,kPa; a la derecha, mmHg. Entre corchetes, láminas de cada material.}\label{fig:dis47}\end{figure}
+\begin{table}[H]\centering\small
+\caption{Diseños enteros de la Fig.~\ref{fig:dis47} (6 materiales, láminas de 0,025\,mm, curvas limpias): número de láminas de cada material $n_j$ (material 1 junto a la sangre), total de láminas, pared [mm], preestiramiento $\delta$ y errores contra la curva $\lambda(P)$ de la arteria, $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. Camino A: arranque MCO lineal; camino B: arranque red.}\label{tab:dis47}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccccccc}\toprule
+Sujeto & Camino & $n_1$ & $n_2$ & $n_3$ & $n_4$ & $n_5$ & $n_6$ & láminas & pared & $\delta$ & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
+NT04 (el más blando) & A & 5 & 4 & 4 & 14 & 23 & 22 & 72 & 1,800 & $+0,0861$ & 0,59 & 1,72\\
+ & B & 5 & 4 & 5 & 11 & 26 & 24 & 75 & 1,875 & $+0,0890$ & 0,58 & 1,61\\
+\addlinespace
+HT20 (intermedio) & A & 4 & 1 & 12 & 9 & 15 & 13 & 54 & 1,350 & $+0,0103$ & 0,37 & 0,95\\
+ & B & 4 & 1 & 12 & 9 & 15 & 13 & 54 & 1,350 & $+0,0103$ & 0,37 & 0,95\\
+\addlinespace
+HT09 (el más rígido) & A & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0,725 & $-0,0394$ & 0,42 & 0,92\\
+ & B & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0,725 & $-0,0394$ & 0,42 & 0,92\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{curvas_medidas_v47_6.png}
 \caption{6 materiales, curvas medidas: peor error de cada sujeto contra la curva verdadera (escala logarítmica; azul, arranque MCO lineal; rojo, arranque red; punteada, meta).}\label{fig:med47}\end{figure}
