@@ -1,0 +1,483 @@
+\input{pre_en.tex}
+\title{\textbf{Design of multilayer vascular grafts that reproduce the stress--stretch curve of each artery:\\ material bases, integer laminae, thick-walled tubes and a neural network}}
+\author{Pablo Silvoni \textit{et al.}}
+\date{November 3, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent A vascular graft whose distensibility differs from that of the artery it replaces promotes thrombosis and intimal hyperplasia. Published design methods match a single number ---the compliance of an average artery---. Here we present a method to design, patient by patient, a multilayer graft that reproduces the \emph{complete} curve of the artery, including its J shape. Each graft material is idealized as a fiber that bears no load until it reaches its own stretch (truncated line), and the artery is approximated by a sum of such materials, chosen once for the whole population. The method is first validated on the circumferential stress--circumferential stretch curve, $\sigma_{\theta\theta}(\lambda_\theta)$, which depends neither on pressure nor on wall geometry: with 41 human carotid arteries (Masson et al.) and 22\,500 synthetic curves, least-squares fitting followed by minimax rounding to integer laminae meets the target (worst error $\le3$\,\% of the range) in all 41 subjects with 6 materials; a neural network trained on 50\,000 curves reproduces that fit in a single evaluation and generalizes to a constitutive law it never saw (excess error of 2.8 to 4.6\,\%). Without any change, the same basis reproduces 327 curves from four other studies ---common, external and internal carotid arteries, isolated layers, rabbit, patients with plaque, in vivo measurements---: at physiological stresses, all of them meet the target with integer laminae. The method is then applied to the pressure--diameter curve, for which the graft is a thick-walled tube: designed with Laplace's law, no subject meets the target once manufactured, whereas with the thick-walled model 40--41 of 41 do. Design becomes a nonlinear integer problem, solved in three steps: initialization, nonlinear least squares, and minimax integer search against the fitted curve. In the linear case the network does not improve on the exact solution; in the nonlinear case, used as a starting point, it avoids the local minima that, with measured curves, lead to unusable designs (worst error from 468.7\,\% down to 2.3\,\%).
+\end{abstract}
+\tableofcontents
+
+%=====================================================================
+\section{Introduction}
+The failure of small-diameter vascular grafts (thrombosis, intimal hyperplasia) is largely due to mechanical factors: disturbed flow, insufficient strength and compliance mismatch between graft and artery~\cite{ding}. In the porcine aorta, a graft with a compliance-matching layer preserved pulse pressure, wave velocity and distensibility, which deteriorated when the layer was removed~\cite{rovas25}; in rats, a graft whose composition was optimized for the compliance of the host vessel remained matched at four weeks, with less inflammation and more contractile smooth muscle~\cite{furdella}. Matching the mechanics of the artery improves the outcome.
+
+Several studies optimize the design to this end: crosslinking time and thickness of a biopolymer~\cite{harrison}, layer proportions and thicknesses of a multilayer graft~\cite{tamimi}, a nitinol reinforcement~\cite{rovas23} or a reinforcing coil~\cite{jiang}, and degradable scaffolds that remodel into a neovessel~\cite{szafron,hsu}. All of them match \emph{one number} (compliance or distensibility) of an \emph{average} artery. The response of an artery, however, is J-shaped: soft at low stretch, when elastin and smooth muscle carry the load, and stiff at high stretch, when collagen fibers are recruited~\cite{holzapfel,humphrey}. A single number does not describe that shape, and the shape changes from patient to patient and from artery to artery.
+
+This work designs the graft so that it reproduces the \emph{complete} curve of \emph{each} artery. The method has two levels, presented in this order:
+\begin{enumerate}
+\item \textbf{Material level (validation).} The target curve is the circumferential stress as a function of circumferential stretch, $\sigma_{\theta\theta}(\lambda_\theta)$. It is a property of the tissue: it does not depend on pressure, radius or wall thickness, and is therefore common to any artery whose wall has a J-shaped response. At this level the graft is a sum of materials, the design is linear, and every step of the method can be compared with an exact solution.
+\item \textbf{Tube level (application).} The target curve is the pressure borne by the wall as a function of diameter. Geometry and the thick-wall model come into play, the design is no longer linear, and the conclusions of the first level are used.
+\end{enumerate}
+The contributions are: (i) a basis of fiber-like materials chosen once for the whole population; (ii) the exact transition from real-valued amounts to integer laminae by integer linear programming (minimax); (iii) a neural network that yields the design in one evaluation and generalizes to unseen laws; (iv) the demonstration that, at the tube level, the design must be carried out with a thick-walled model, which makes it a nonlinear integer problem; and (v) a three-step procedure in which the network acts as a starting point.
+
+%=====================================================================
+\section{Data}\label{sec:datos}
+\subsection{Constitutive law and subjects}
+Masson et al.~\cite{masson} measured non-invasively, over the cardiac cycle, the diameter and pressure of the common carotid artery of 16 normotensive (NT) and 25 treated hypertensive (HT) subjects, and fitted to each one a model of the intima--media wall with three contributions: neo-Hookean elastin, four families of collagen fibers with exponential response (axial, circumferential and two diagonal at $\pm\alpha$)~\cite{holzapfel}, and smooth-muscle tone~\cite{rachev}. With fixed axial stretch $\lambda_z$ and incompressibility,
+\begin{equation}\label{eq:masson}
+\sigma_{\theta\theta}-\sigma_{rr}=c\,(\lambda_\theta^2-\lambda_r^2)+\lambda_\theta^2\sum_{k=1}^{4}c_{1,k}E_k\,e^{c_{2,k}E_k^2}\sin^2\varphi_k+T_m\lambda_\theta\Bigl[1-\Bigl(\frac{\lambda_m-\lambda_\theta}{\lambda_m-\lambda_0}\Bigr)^2\Bigr],
+\end{equation}
+with $E_k=\lambda_k^2-1$, $\lambda_r=1/(\lambda_\theta\lambda_z)$ and $\lambda_k$ the stretch of each family ($\lambda_z$, $\lambda_\theta$ and $\sqrt{\lambda_\theta^2\sin^2\alpha+\lambda_z^2\cos^2\alpha}$). The 14 parameters of each subject are listed in their Tables 2 and 4 (Appendix~\ref{sec:anexo}). Ten subjects (4 NT and 6 HT) are held out for testing and play no part in any choice made by the method.
+
+\subsection{Stress curves}\label{sec:sigma}
+The target curve of the first level is $\sigma_{\theta\theta}(\lambda_\theta)$ at the media--adventitia boundary, at 999 values of $\lambda_\theta$ between 1.02 and 1.16, computed with \eqref{eq:masson}; at that boundary the radial stress equals the perivascular pressure of Masson's model. Recomputed in this way, it reproduces the published mean curves (Figs.~5a and 7a of~\cite{masson}) with a root-mean-square error of 1.2 to 1.7\,\% of their mean value, of the order of the digitization error. The 41 curves are J-shaped (monotonic and convex) and range from 4.7 to 49\,kPa at $\lambda_\theta=1.02$ and from 54 to 290\,kPa at 1.16 (Fig.~\ref{fig:sigma}). The mean curves published by Masson et al.\ (Fig.~5a: young and older subjects; Fig.~7a: normotensive and hypertensive) are superimposed in the figure and fall on the recomputed curves. Since pressure is also expressed relative to 13.332\,kPa (100\,mmHg), stress is additionally shown relative to a reference stress of 150\,kPa. In dimensionless form, $(\sigma-\sigma_{\min})/\Delta\sigma$, normotensive and hypertensive subjects have almost the same shape; the difference lies in the stress level.
+
+Two bounding curves enclose the 41 subjects: $y_1$, a curve of Masson's law with parameters within the range of the subjects, which starts at the lowest measured stress and lies below all of them, and $y_2$, the stiffest subject extended up to 300\,kPa. The \emph{working space} consists of 22\,500 synthetic curves of Masson's law within that band, with parameters of 2 to 4 training subjects mixed and perturbed, or drawn between the minimum and maximum of the subjects.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{fig1_sujetos_sigma_v49.png}
+\caption{The 41 subjects: circumferential stress at the media--adventitia boundary; left axis in kPa, right axis relative to 150\,kPa. Gray band: bounding curves $y_1$--$y_2$. Blue: normotensive; red: hypertensive; thick lines: recomputed means of each group. Markers: mean curves digitized from Masson et al.~\cite{masson}, Fig.~5a (young, older) and Fig.~7a (normotensive aged 39 or more, hypertensive); they cover the $\lambda_\theta$ interval shown in the original work.}\label{fig:sigma}\end{figure}
+
+%=====================================================================
+\section{Validation of the method on the stress--stretch curve}\label{sec:validacion}
+\subsection{Materials: truncated lines}
+One lamina of material $j$ contributes
+\begin{equation}\label{eq:base}
+A_j(\lambda)=S_j\,\max(0,\ \lambda-k_j):
+\end{equation}
+nothing up to its \emph{knot} $k_j$, and then a straight line of slope $S_j$. It idealizes a crimped fiber that bears no load until it is straightened. The graft is the sum $\sigma_{\mathrm{gr}}=\sum_j c_jA_j=A\,c$, where $c_j$ is the number of laminae of each material and $A\in\mathbb R^{999\times N}$ is the \emph{basis}. For fixed knots, the problem is linear.
+
+\paragraph{Choice of the knots.} The knots are chosen once, for the whole population, by minimizing a function $J(k)$ that combines three requirements on the working space and the training subjects:
+\begin{itemize}
+\item \textbf{Accuracy: CVaR 99\,\%.} For each curve, the maximum pointwise error of the least-squares fit, $e_{\max}$ (Eq.~\ref{eq:emax}), is computed. The CVaR 99\,\% (conditional value at risk~\cite{rockafellar}) is the mean of $e_{\max}$ over the 1\,\% of curves with the largest error. A smaller term, 0.25 times the mean NRMSE, is added so that the typical fit also improves. Minimizing the mean over all curves would leave the worst ones uncontrolled; minimizing only the worst one would make the choice depend on a single curve. The CVaR lies between the two: it addresses the tail of worst curves without depending on a single one.
+\item \textbf{Stability: condition number.} With the columns of $A$ scaled to a maximum of 1, the condition number is $\kappa(A)=s_{\max}/s_{\min}$, the ratio of the largest to the smallest singular value~\cite{trefethen}. It measures how much a relative error in the curve can be amplified in the amounts $c$: a 1\,\% error in $y$ can produce up to $\kappa(A)$\,\% error in $c$. If two knots are very close, their columns become similar, $s_{\min}\to0$, and the design becomes unstable (large amounts of opposite sign that cancel each other). We require $\kappa(A)<30$; the adopted bases have 28.0 (6 materials) and 19.0 (5).
+\item \textbf{Sign.} The amounts of the unconstrained fit, $c=A^+y$, must be non-negative (with a tolerance of 0.01 lamina) for the 22\,500 curves of the working space, the training subjects and the bounding curves, because a negative amount of material cannot be manufactured. The function $J$ adds a penalty proportional to the negative amounts. Since the sign of $c_j$ does not depend on the slope $S_j$ (which only scales the column), this condition is determined by the knots.
+\end{itemize}
+The search is global, by \emph{differential evolution}~\cite{storn}: a population of candidate knot sets is improved generation after generation; each candidate is perturbed by adding the scaled difference between two others, and the result replaces the candidate if it yields a lower $J$. It requires no derivatives, which $J$ does not have (the $\max$, the sorting in the CVaR and the penalties make it non-differentiable), and it explores the whole domain, so it does not get trapped in the first local minimum. The best candidate is refined with the \emph{Nelder--Mead} simplex method~\cite{nelder}, which is also derivative-free: it moves a polytope of $N+1$ vertices through reflections, expansions and contractions until it closes in on the minimum.
+
+\paragraph{Constraints on the knots.} Knots 2 to $N$ lie within the domain, at least 0.008 apart (if they come together, $\kappa(A)$ grows), and the last one more than 0.012 from the upper end 1.16 (otherwise its material acts on very few points and cannot be distinguished from the others). The first one, $k_1$, is sought between 0.6 and 0.98, \emph{before} the domain, for a physical reason: at $\lambda_\theta=1.02$ all arteries already carry stress (4.7 to 49\,kPa), and at that point the only material that can supply it is one that is already working. That material plays the role of elastin, which bears load in the unloaded artery. A knot $k_1<1$ means that the lamina is mounted prestretched: with $k_1=0.82$, at $\lambda=1$ it is already stretched by $1/0.82=1.22$. The upper bound 0.98 ensures that it is active over the whole domain with a margin. The lower bound, 0.6 (prestretch of 1.67), restricts the search to manufacturable values. Neither bound is active at the optimum ($k_1=0.82$ with both 5 and 6 materials): the choice does not depend on them.
+
+\paragraph{Slopes.} $S_j=\mathrm{SLOPE}_{\max,j}/20$, where $\mathrm{SLOPE}_{\max,j}$ is the largest slope that material $j$ must supply in the working space: thus no curve requires more than 20 laminae of one material. The scale does not change the curve (what matters is $c_jS_j$), but it sets the size of one lamina.
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{bases_funcionales_v39_6.png}
+\caption{The 6-material basis: one lamina of each. The first knot (0.82) lies before the domain, like elastin, which already works in the unloaded artery; the others cluster where the arterial curve bends most.}\label{fig:bases}\end{figure}
+
+\begin{table}[H]\centering\small
+\caption{Adopted bases: knots $k_j$ and slope of one lamina $S_j$ [kPa].}\label{tab:bases}
+\begin{tabular}{lcccccc}\toprule
+ & 1 & 2 & 3 & 4 & 5 & 6\\\midrule
+6 materials, $k_j$ & 0.8193 & 1.0227 & 1.0774 & 1.1099 & 1.1318 & 1.1478\\
+\phantom{6 materials, }$S_j$ & 12.32 & 41.39 & 34.73 & 57.79 & 83.23 & 111.13\\\addlinespace
+5 materials, $k_j$ & 0.8228 & 1.0243 & 1.0881 & 1.1226 & 1.1447 & ---\\
+\phantom{5 materials, }$S_j$ & 12.56 & 43.57 & 51.92 & 88.74 & 129.08 & ---\\\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Metric}
+For a target curve $y$ with range $\Delta=\max y-\min y$,
+\begin{equation}\label{eq:emax}
+e_{\max}=\frac{100}{\Delta}\max_i\,|y_i-\hat y_i|\quad[\%],\qquad E_{\mathrm{rms}}=\frac{100}{\Delta}\sqrt{\frac1n\sum_i(y_i-\hat y_i)^2},
+\end{equation}
+where $\hat y$ is the graft curve. $e_{\max}$ is the worst point; $E_{\mathrm{rms}}$ (or NRMSE), the typical deviation. Dividing by the range makes the criterion equally demanding for a soft and a stiff artery. Target: $e_{\max}\le3$\,\%. Every design is evaluated against the original curve.
+
+\subsection{Real-valued amounts: least squares}
+With a fixed basis, the best quadratic fit is $c=A^+y$, where $A^+$ is the Moore--Penrose pseudoinverse~\cite{penrose}, computed by singular value decomposition~\cite{golub}: exact, unique and instantaneous. With the adopted knots the condition number is 19.0 (5 materials) and 28.0 (6 materials), below the threshold of 30, and no curve of the working space nor any subject requires a negative amount. The fit meets the target in all 41 subjects, with a worst error of 0.88\,\% (6 materials; median 0.67\,\%) and 1.41\,\% (5 materials; median 1.07\,\%), and in every curve of the working space.
+
+\subsection{Integer laminae: three rounding methods}
+A graft is manufactured with an integer number of laminae, $z\in\mathbb Z^N_{\ge0}$. Three ways of going from $c$ to $z$ were compared:
+\begin{itemize}
+\item \textbf{Simple:} each amount to the nearest integer.
+\item \textbf{Joint (lowest $E_{\mathrm{rms}}$):} since the least-squares residual is orthogonal to the columns of $A$, $E_{\mathrm{rms}}(z)^2=E_{\mathrm{rms}}(c)^2+(z-c)^\top\tilde M(z-c)$, with $\tilde M\propto A^\top A$ of size $N\times N$. Finding the best integer vector is a closest-lattice-point problem, solved exactly by tree search with Schnorr--Euchner pruning~\cite{agrell}. The optimum may lie outside the floor and ceiling of each amount.
+\item \textbf{Minimax (lowest $e_{\max}$):} the narrowest tube around the curve that contains the graft is sought,
+\[
+\min_{z,\tau}\ \tau\quad\text{s.t.}\quad -\tau\le\frac{100}{\Delta}\bigl(y_i-(Az)_i\bigr)\le\tau,\qquad z\in\mathbb Z^N_{\ge0},
+\]
+a mixed-integer linear program (Chebyshev approximation~\cite{cheney} with integers) solved by branch and bound with HiGHS~\cite{highs}, in about 70\,ms per curve.
+\end{itemize}
+
+\begin{table}[H]\centering\small
+\caption{41 subjects, integer laminae: median / worst $e_{\max}$ [\%] and subjects meeting the target. The working space is evaluated on 2000 random curves with a target of 4\,\%.}\label{tab:redondeo}
+\begin{tabular}{lcccc}\toprule
+& \multicolumn{2}{c}{6 materials} & \multicolumn{2}{c}{5 materials}\\\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Method & 41 subjects & 2000 curves & 41 subjects & 2000 curves\\\midrule
+Real-valued (least squares) & 0.67 / 0.88 · 41/41 & --- & 1.07 / 1.41 · 41/41 & ---\\
+Simple rounding & 2.34 / 7.45 · 25/41 & 1706 & 2.23 / 7.48 · 26/41 & 1616\\
+Joint (Schnorr--Euchner) & 1.18 / 2.46 · 41/41 & 1998 & 1.70 / 3.56 · 40/41 & 1997\\
+Minimax (MILP) & 1.02 / 2.35 · 41/41 & 2000 & 1.47 / 3.50 · 40/41 & 2000\\\bottomrule
+\end{tabular}
+\end{table}
+
+Each rounding method is the best in its own measure: the joint method in $E_{\mathrm{rms}}$, the minimax in $e_{\max}$, which is the measure of the design criterion (Table~\ref{tab:redondeo}, Fig.~\ref{fig:redondeo}). Simple rounding is not advisable. With 6 materials all 41 subjects meet the target with integer laminae; with 5, one subject remains at 3.5\,\%: the limit is set by having only 5 materials, not by the method. \textbf{The minimax is adopted.}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{redondeo_y2_meanHT_y1_v39_6.png}
+\caption{6 materials: the stiffest curve of the band ($y_2$), the hypertensive mean and the softest curve ($y_1$). Top: stress; middle: dimensionless form; bottom: design $-$ original in \% of the range. The minimax (green) distributes the error so that the worst point is as small as possible.}\label{fig:redondeo}\end{figure}
+
+\subsection{The neural network}
+A neural network receives the curve and returns the amount of each material in a single evaluation: it learns the map $y\mapsto A^+y$ for the class of J-shaped curves.
+
+\paragraph{Data.} 50\,000 curves in seven families: basis curves (sums of one or several laminae of the basis itself, 40\,\%), which teach what each material does on its own, and physiological curves (60\,\%): Masson's law mixed, perturbed or sampled (the three families of the working space), another four-parameter exponential law fitted to the subjects, and the training subjects. The input carries 1\,\% Gaussian noise; the label is the fit of the clean curve. Stratified split: 35\,000 for training, 5000 for validation and 10\,000 for testing.
+
+\paragraph{Architecture and training.} Multilayer perceptron~\cite{goodfellow} $999\to256\to128\to64\to N$, with standardized input $\log(y+22)$, ReLU~\cite{relu}, layer normalization~\cite{layernorm} and L2 regularization ($10^{-5}$); about 298\,000 parameters. Loss: squared error of the amounts, plus 5 times the error of the reconstructed curve, plus 5 times the amount assigned to materials absent from the basis curves (\emph{crosstalk}). Adam~\cite{adam} with gradient clipping, batches of 256, learning-rate reduction on plateau and early stopping~\cite{prechelt}; TensorFlow/Keras~\cite{tf}.
+
+\paragraph{Class check.} Before the network is used, it is verified that the curve admits a non-negative approximation with 40 truncated lines (NRMSE $\le2$\,\%), by non-negative least squares~\cite{lawson}. A curve that does not admit it is not J-shaped and cannot be reproduced with layers.
+
+\paragraph{Results.} In the 41 subjects the network meets the target in every case, with an NRMSE barely above the optimum (mean excess of +3.1\,\% with 6 materials and +1.6\,\% with 5; worst $e_{\max}$ 1.11 and 1.38\,\%). On the 10\,000 test curves, the physiological families lie between +1.0 and +3.1\,\% of the optimum, and the network meets the target in 99.9 to 100\,\% of each family (Table~\ref{tab:familias}). One least-squares step applied to the network output (polishing) yields the exact optimum. The network takes 0.06\,ms per curve in batch mode, the same as the linear fit.
+
+\begin{table}[H]\centering\small
+\caption{Network versus exact fit on the 10\,000 test curves (with 1\,\% input noise), by family. $n$: curves in the family. Excess: $\overline{\mathrm{NRMSE}}_{\mathrm{net}}/\overline{\mathrm{NRMSE}}_{\mathrm{LS}}-1$, with the NRMSE averaged over the curves of the family (0\,\% would mean matching the exact fit). Meets: percentage of curves for which the network design has $e_{\max}\le3$\,\%. The exact fit meets the target in all of them.}\label{tab:familias}
+\begin{tabular}{lrcccc}\toprule
+ & & \multicolumn{2}{c}{6 materials} & \multicolumn{2}{c}{5 materials}\\\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Family & $n$ & excess & meets & excess & meets\\\midrule
+Masson, mixing and small perturbation & 2000 & +1.2\,\% & 100\,\% & +0.6\,\% & 100\,\%\\
+Masson, wide mixing and extrapolation & 1500 & +1.7\,\% & 100\,\% & +1.1\,\% & 100\,\%\\
+Masson, uniform parameters & 1000 & +1.7\,\% & 100\,\% & +0.7\,\% & 100\,\%\\
+Another exponential law & 1000 & +3.1\,\% & 99.9\,\% & +1.7\,\% & 99.8\,\%\\
+Training subjects & 500 & +1.0\,\% & 100\,\% & +0.3\,\% & 100\,\%\\
+Basis curves, one material & 2000 & +30.6\,\% & 99.95\,\% & +17.4\,\% & 100\,\%\\
+Basis curves, combined & 2000 & +54.6\,\% & 98.5\,\% & +33.1\,\% & 99.6\,\%\\\bottomrule
+\end{tabular}
+\end{table}
+The rows are the seven families of the data set. The first three are curves of Masson's law: with parameters of 2 to 4 training subjects mixed and slightly perturbed; mixed with weights that allow some departure from the range of the subjects (extrapolation); or drawn uniformly between the minimum and maximum of each parameter. ``Another exponential law'' is a four-parameter law different from Masson's, fitted to the subjects. ``Training subjects'' are the 31 subjects with noise. The last two are sums of laminae of the basis itself: of a single material or of several. For them the relative excess is high because the optimum is nearly zero (the curve \emph{is} an exact combination of the basis): they are low-stress polygonal curves that do not represent arteries, and they serve to teach the network what each material does on its own.
+
+\paragraph{A law never seen.} We generated 300 curves of a Fung-type exponential law~\cite{fung}, $\sigma=C+a\bigl(e^{b(\lambda-\lambda_{\min})}-1\bigr)$, with parameters mixed from fits to the training subjects and 1\,\% noise; this law is not part of the training. The network reproduces them with an excess of +4.6\,\% (6 materials) and +2.8\,\% (5) over the optimum, with $R^2\ge0.996$, and all of them admit a design without negative amounts. The class check accepts 100\,\% of the Fung curves and of the subjects, and rejects 98\,\% of the curves that lose their J shape when modulated with an oscillation.
+
+\paragraph{Does the network improve on the exact method?} Three variants were tested. (a) Trained directly on the reconstructed curve, without labels, the network reaches the same fit (median $E_{\mathrm{rms}}$ 0.284 versus 0.280\,\% with 6 materials). (b) Trained with integer laminae as labels, it still outputs non-integer numbers and its worst cases become worse. (c) As a smoother of measured curves, before the minimax, it performs practically the same as the linear fit (6 materials, 3\,\% noise: worst error 2.90 versus 3.84\,\%; with 5 materials, 5.31 versus 4.59\,\%). What does matter with noise is not to apply the minimax to the measured curve, which it follows noise included (median 3.86\,\% with 3\,\% noise), but to the fitted curve (1.38\,\%).
+
+\subsection{External validation: measurements by other authors}\label{sec:externa}
+To verify that the method does not depend on the artery with which it was built, it was applied to $\sigma_{\theta\theta}(\lambda_\theta)$ curves from four independent studies, with other constitutive laws, other arteries, isolated layers, another species and in vivo measurements. \textbf{Nothing was changed}: the same knots and slopes (Table~\ref{tab:bases}), the same network, the same class check and the same minimax.
+
+\paragraph{Curves.} Each curve is recomputed with the published parameters:
+\begin{itemize}
+\item \textbf{Sommer and Holzapfel}~\cite{sommer} (Tables 1 and 2): 39 human specimens of common (CCA) and internal (ICA) carotid arteries, tested by extension--inflation: intact wall (21), adventitia (13, 33\,kPa domain) and media--intima (7). Holzapfel law with fiber dispersion, $\Psi=\tfrac{\mu}{2}(I_1-3)+\tfrac{k_1}{k_2}\bigl(e^{Q}-1\bigr)$, $Q=k_2\bigl[(1-\rho)(I_1-3)^2+\rho(I_4-1)^2\bigr]$; we use $\sigma_{\theta\theta}-\sigma_{rr}$ with $\lambda_z=1.10$, the in vivo value adopted by the authors.
+\item \textbf{Holzapfel et al.}~\cite{holzapfel}: rabbit carotid artery, media and adventitia, HGO law with two fiber families at $\pm\beta$, $\lambda_z=1.10$.
+\item \textbf{Liu et al.}~\cite{liu} (Table 1): 12 human carotid arteries with plaque, characterized in vivo by magnetic resonance; modified Mooney--Rivlin law in uniaxial tension, $\sigma=2\lambda(\lambda-\lambda^{-2})\bigl(c_1+D_1D_2e^{D_2(\lambda^2+2/\lambda-3)}\bigr)$.
+\item \textbf{Kamenskiy et al.}~\cite{kamenskiy}: 16 patients, common, external (ECA) and internal carotid arteries measured in vivo over the cardiac cycle (48 curves). For each artery they report the stress and the tangent modulus at diastole and systole, and the diameters; with these four numbers we build $\sigma(\varepsilon)=\sigma_d+\alpha\bigl(e^{\beta\varepsilon}-1\bigr)$ on $\varepsilon\in[0,\varepsilon_s]$, with $\sigma(\varepsilon_s)=\sigma_s$ exactly and $\beta$ reproducing both slopes. In all 48, the systolic slope exceeds the diastolic one: all are J-shaped.
+\end{itemize}
+
+\paragraph{Mapping to the design domain.} Each curve lives in its own range of $\lambda$. It is mapped to $[1.02,\,1.16]$ by an affine change of $\lambda$, leaving the stress unchanged. This change is equivalent to what the real graft allows: a prestretch (shift of the knots, the $\delta$ of Section~\ref{sec:aplicacion}) and the choice of the reference radius (scale). Two protocols:
+\begin{itemize}
+\item \textbf{T (stress window):} the window of $\lambda$ in which the law spans the stresses of the Masson population at the ends of the domain; the median and the four combinations of quartiles are used (5 windows per curve). For the complete laws (Sommer, Holzapfel, Liu).
+\item \textbf{M (measured window):} the diastole--systole interval measured in vivo, with its actual stresses (Liu, Kamenskiy).
+\end{itemize}
+In total, 327 curves (Fig.~\ref{fig:ext}).
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v49_curvas_externas_6.png}
+\caption{The 327 external curves in the design domain, with the scales of Fig.~\ref{fig:sigma}: left axis in kPa, right axis relative to 150\,kPa (here up to 400\,kPa, because one curve of Liu et al.\ reaches 389\,kPa). Left: protocol T; right: protocol M. Gray band: bounding curves $y_1$--$y_2$ of the Masson population. Dotted: rejected by the class check.}\label{fig:ext}\end{figure}
+
+\paragraph{Results.} Table~\ref{tab:ext} summarizes, by study and specimen type, the curves accepted by the class check.
+\begin{table}[H]\centering\small
+\caption{External validation (accepted / total curves). For each number of materials: worst $e_{\max}$ of the least-squares fit [\%]; curves meeting the 3\,\% target with integer laminae (minimax) and their worst $e_{\max}$ [\%]; curves for which the network meets the target.}\label{tab:ext}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllc|cccc|cccc}\toprule
+ & & & & \multicolumn{4}{c|}{6 materials} & \multicolumn{4}{c}{5 materials}\\
+Study & Specimen & Prot. & Accepted & LS worst & Integer $\le3$\,\% & Integer worst & Net $\le3$\,\% & LS worst & Integer $\le3$\,\% & Integer worst & Net $\le3$\,\%\\\midrule
+Sommer and Holzapfel~\cite{sommer} & CCA adventitia & T & 27/30 & 2.83 & 27/27 & 2.03 & 24/27 & 4.16 & 27/27 & 2.89 & 24/27\\
+ & CCA media-intima & T & 20/20 & 0.99 & 20/20 & 2.11 & 20/20 & 1.54 & 20/20 & 2.22 & 20/20\\
+ & CCA wall & T & 55/55 & 2.66 & 55/55 & 1.93 & 54/55 & 3.91 & 55/55 & 2.70 & 53/55\\
+ & ICA adventitia & T & 25/27 & 1.16 & 25/25 & 1.86 & 25/25 & 1.83 & 25/25 & 2.62 & 25/25\\
+ & ICA media-intima & T & 15/15 & 1.13 & 15/15 & 1.65 & 15/15 & 1.76 & 15/15 & 2.54 & 15/15\\
+ & ICA wall & T & 50/50 & 1.54 & 50/50 & 1.96 & 50/50 & 2.28 & 50/50 & 2.50 & 49/50\\
+Holzapfel et al.~\cite{holzapfel} & rabbit adventitia & T & 5/5 & 1.16 & 5/5 & 1.94 & 5/5 & 1.80 & 5/5 & 2.15 & 5/5\\
+ & rabbit media & T & 5/5 & 1.13 & 5/5 & 1.85 & 5/5 & 1.75 & 5/5 & 2.25 & 5/5\\
+Liu et al.~\cite{liu} & carotid with plaque & M & 12/12 & 1.06 & 8/12 & 8.09 & 10/12 & 1.59 & 8/12 & 8.16 & 10/12\\
+ & carotid with plaque & T & 60/60 & 1.41 & 60/60 & 2.15 & 58/60 & 2.18 & 60/60 & 2.21 & 60/60\\
+Kamenskiy et al.~\cite{kamenskiy} & CCA & M & 16/16 & 1.28 & 11/16 & 4.57 & 16/16 & 1.84 & 8/16 & 5.21 & 16/16\\
+ & ECA & M & 14/16 & 1.19 & 9/14 & 8.69 & 14/14 & 1.78 & 7/14 & 9.67 & 14/14\\
+ & ICA & M & 15/16 & 1.03 & 10/15 & 6.60 & 14/15 & 1.53 & 7/15 & 6.98 & 14/15\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v49_representativas_6.png}
+\caption{Representative curves, 6 materials: the median case of the integer design for each study. Top: external curve (black), least squares (blue) and integer laminae by minimax (green), with the worst error in parentheses and the laminae of each material in the title; right axis, stress relative to 150\,kPa. Bottom: design $-$ curve in \% of the range (band: $\pm3$\,\% target).}\label{fig:rep}\end{figure}
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{v49_error_entero_6.png}
+\caption{Worst error of the integer design by study and protocol, 6 materials (accepted curves). Red line: 3\,\% target.}\label{fig:boxext}\end{figure}
+
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{The basis suffices.} With 6 materials, no accepted curve exceeds 2.83\,\% with least squares. With 5, two curves (one CCA wall and one CCA adventitia) slightly exceed the target with real-valued amounts (3.91 and 4.16\,\%), but the integer minimax brings them to 2.70 and 2.89\,\%: the minimax controls the worst point and least squares does not.
+\item \textbf{Integer laminae.} At physiological stresses (protocol T) all 262 curves meet the target, with both 6 and 5 materials (worst 2.15 and 2.89\,\%; Figs.~\ref{fig:rep} and~\ref{fig:boxext}). In the in vivo windows (M), 38 of 57 meet it (6 materials) and 30 of 57 (5). Those that fail are the ones with a small stress excursion (12 to 30\,kPa, versus about 100\,kPa in T): one lamina of the first material shifts the curve by a few kPa, which is many percent of that range. In kPa, the worst integer error in M is 2.7\,kPa. With laminae of half the thickness ---a sensitivity analysis, without changing the adopted criterion--- 54 of 57 meet it (6 materials) and 52 of 57 (5). The limit is set by the lamina thickness, not by the basis or the method.
+\item \textbf{The network.} Its median worst error is 1\,\% in all studies. Within the $y_1$--$y_2$ band it meets the target in 288 of 290 curves (6 materials) and 286 of 290 (5), although none of these laws is part of its training. Outside the band it degrades (22 of 29): for Liu P11, with stresses from 88 to 389\,kPa, above $y_2$, the network errs by 25\,\%, whereas least squares and the minimax give 1.1 and 0.9\,\%. This confirms the role of the network: a fast start within the trained space; the final design is given by the minimax, which does not depend on the band.
+\item \textbf{The class check.} It rejected 8 of the 327 curves: five windows of the VIII\,r adventitias, which with $\lambda_z=1.10$ already exceed the requested stress at $\lambda=1$ and have no soft initial segment, and three very short in vivo windows of Kamenskiy ($\varepsilon_s\le3$\,\%). In all 8 the network failed (error of 2.5 to 120\,\%) and least squares gave negative amounts. It did not reject any curve for which the network worked well.
+\end{enumerate}
+The 327 curves, the parameters of each one and all the errors are provided in the supplementary material files (\texttt{v49\_curvas\_externas\_N.csv}), together with the notebook that generates and evaluates them.
+
+\begin{summarybox}{Conclusion of the first level}
+With fiber-like materials and a basis chosen once, the stress--stretch curve of the 41 carotid arteries and of the 22\,500 curves of the working space is reproduced with integer laminae within the target (6 materials). The exact method is linear: least squares and integer minimax. The same basis, without moving a single knot, reproduces curves from four other studies (other arteries, isolated layers, another species, patients with plaque, in vivo measurements): at physiological stresses, all of them with integer laminae within the target. The network reproduces the exact method in one evaluation and generalizes to laws it did not see, but it cannot improve on it: in the linear case the network is not necessary. Its role appears when the relationship between the curve and the design ceases to be linear.
+\end{summarybox}
+
+%=====================================================================
+\section{Application: the pressure--diameter curve and the thick-walled tube}\label{sec:aplicacion}
+\subsection{From stress to pressure}
+A graft is implanted as a tube, and what must match the artery is its diameter at each pressure. Going from stress to pressure requires the geometry and an assumption about the wall. The stress-free configuration of the artery is an open annular sector with half-angle $\Theta_0$ and radius $R_m$ at the media--adventitia boundary, which represents the residual stresses (Fig.~\ref{fig:estados}). A point at radius $R$ in the sector moves to radius $r$ in the closed artery; its stretch and volume conservation give~\cite{masson}
+\begin{equation}\label{eq:cinem}
+\lambda_\theta=\frac{\pi r}{\Theta_0R},\qquad \Theta_0\,(R_m^2-R^2)=\pi\lambda_z\,(r_m^2-r^2).
+\end{equation}
+Radial equilibrium integrated over the thickness gives the pressure borne by the intima--media wall~\cite{masson,humphrey}:
+\begin{equation}\label{eq:equil}
+P=P_i-P_a=\int_{r_i}^{r_m}\frac{\sigma_{\theta\theta}-\sigma_{rr}}{r}\,dr,
+\end{equation}
+where $P_i$ is the blood pressure and $P_a$ the pressure exerted by the adventitia and the tissue surrounding the artery. Since $P_a$ depends on the site, the design is formulated in terms of $P$, the pressure borne by the wall, which the graft must bear with the same deformation. The intima--media thickness $h$ is taken from the age- and sex-specific reference median measured with echotracking~\cite{engelen13} (0.43 to 0.68\,mm), because Masson et al.\ do not report it for each subject, and $r_i=r_m-h$.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d10_tres_estados.png}
+\caption{Subject NT01 in its three states: (1) stress-free open sector, (2) closed unpressurized artery, (3) pressurized artery. From (2) to (3) the inner surface grows by 16.5\,\% and the media--adventitia boundary by 10\,\%.}\label{fig:estados}\end{figure}
+
+\paragraph{Pressure window.} What defines whether a state is physiological is the pressure, not the stretch: at $\lambda_\theta=1.16$ the stiffest subject bears about 400\,mmHg and a soft young subject about 70. Therefore, at this level, all subjects are evaluated in the same window, $P$ from 60 to 200\,mmHg (8.0 to 26.7\,kPa) at 141 values, which covers with a margin the measured mean pressures (64/116\,mmHg in NT and 73/127\,mmHg in HT~\cite{masson}). The target curve is the stretch of the media--adventitia boundary, $\lambda(P_k)$, proportional to the diameter (Fig.~\ref{fig:presion}): stiff subjects reach 200\,mmHg with $\lambda$ between 1.12 and 1.15, soft ones with $\lambda$ between 1.20 and 1.23.
+
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{f_sujetos_relativa.png}
+\caption{The 41 subjects: pressure borne by the wall as a function of the stretch of the media--adventitia boundary, in relative form: $P=(P_i-P_a)/13.33$\,kPa on the left and $P=(P_i-P_a)/100$\,mmHg on the right. Since $13.33$\,kPa $=100$\,mmHg, both scales coincide; the 60 to 200\,mmHg window spans 0.6 to 2. Thick lines: the 60 to 200\,mmHg segment, which is the target curve.}\label{fig:presion}\end{figure}
+
+\subsection{Thin wall and thick wall}
+If the wall is thin compared with the radius, all its fibers stretch equally and the equilibrium of half a tube gives Laplace's law, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: pressure is linear in the layer thicknesses and the design inherits the whole method of the first level. The carotid artery, however, has $h/r\approx0.2$. With an incompressible wall and no axial extension, the area between the inner surface and a fiber initially at radius $R$ is conserved,
+\begin{equation}\label{eq:incomp}
+r^2-r_i^2=R^2-R_i^2,\qquad\lambda(r)=\frac{r}{R},
+\end{equation}
+and inner fibers stretch more than outer ones (Fig.~\ref{fig:fibra}). The pressure is the exact sum of the contributions of each thin layer, each with its own stretch:
+\begin{equation}\label{eq:pgruesa}
+P=\sum_{j=1}^{N}\int_{\text{layer }j}\frac{\sigma_j\bigl(\lambda(r)\bigr)}{r}\,dr .
+\end{equation}
+If $h\ll r$, \eqref{eq:pgruesa} reduces to Laplace's law. With truncated lines, the difference in stretch decides whether a layer bears load or not: a material with knot 1.08 bears load at the inner surface of an inflated tube ($\lambda=1.10$) and not at the outer surface ($\lambda=1.07$). Moreover, the layers interact: if an inner layer grows, the outer ones are pushed to larger radii, stretch less and contribute less. In a thick wall, pressure is no longer linear in the thicknesses.
+
+\begin{figure}[H]\centering\includegraphics[width=0.78\textwidth]{d6_cada_fibra.png}
+\caption{Tube from 3.0 to 3.6\,mm inflated to an inner radius of 3.3\,mm: each fiber conserves the area enclosed inside it; the inner surface stretches 10\,\% and the outer surface 7\,\%.}\label{fig:fibra}\end{figure}
+
+\paragraph{The thin wall fails when manufactured.} Each subject was designed with three assumptions ---Laplace (thin wall, $P=\sigma h/r$ with the undeformed radius and thickness), Laplace with the deformed mean radius (as in~\cite{urquiza}) and thick wall (Eq.~\ref{eq:pgruesa}, each layer with its own stretch)--- and each design was evaluated in the real, thick-walled tube (Table~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). In its own model, Laplace appears perfect ($e_{\max}\le1.7$\,\%); the error appears upon manufacturing and grows with wall thickness. Correcting the radius does not help, because the problem is not the radius but the fact that each layer stretches differently and engages at a different moment. With the pressure window and the adopted basis, the linear thin-wall design does not meet the target in any subject either (median 27.3\,\% with 6 materials and 29.9\,\% with 5). \textbf{The tube-level design must be carried out with the thick-walled model.}
+
+\begin{table}[H]\centering\small
+\caption{Comparison of assumptions on pressure curves for $\lambda$ from 1.02 to 1.16 (earlier stage, with a different set of knots). Each row is the assumption used to \emph{design}; all designs are \emph{evaluated} in the thick-walled tube, which is what is manufactured. In each cell, for the 41 subjects: how many meet $e_{\max}\le3$\,\%, the median $e_{\max}$ and the worst $e_{\max}$, with 5 or 6 materials.}\label{tab:laplace}
+\begin{tabular}{lcc}\toprule
+Design assumption & 5 materials & 6 materials\\\midrule
+Laplace & 0/41 · 13.6\,\% · 22.7\,\% & 0/41 · 14.8\,\% · 32.5\,\%\\
+Laplace with mean radius & 0/41 · 13.7\,\% · 24.5\,\% & 0/41 · 15.4\,\% · 34.4\,\%\\
+Thick wall & 41/41 · 0.96\,\% · 2.97\,\% & 41/41 · 0.72\,\% · 2.10\,\%\\\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[H]\centering\includegraphics[width=0.82\textwidth]{f34_3c_6.png}
+\caption{Stage of Table~\ref{tab:laplace}, 6 materials, from left to right: softest curve ($y_1$), hypertensive mean and stiffest curve ($y_2$). Top of each pair: curves; bottom: graft $-$ artery in \% of the range (band $\pm3$\,\%). The Laplace design evaluated in its own model (gray, dotted) appears perfect; once manufactured (orange, dashed) it departs by up to 25\,\%.}\label{fig:laplace}\end{figure}
+
+\subsection{The thick-walled graft}
+The graft is a closed, incompressible tube in plane strain, with one layer per material stacked from inside to outside in order of increasing knot (the reverse order doubles or triples the error), centered at $R_{\mathrm{ref}}=3.421$\,mm (median of $\Theta_0R_m/\pi$ over the 41 subjects). The materials are those of the first level: the same knots and lines $\sigma_j=E_j\max(0,\lambda-\kappa_j)$, with moduli $E_j$ calibrated once so that the training subject that needs the most of each material uses 0.2\,mm of it (6 materials: from 452 to 4966\,kPa). The design is
+\begin{equation}\label{eq:theta}
+\theta=(h_1,\dots,h_N,\ \delta),\qquad 0\le h_j\le3\ \text{mm},\quad|\delta|\le0.25.
+\end{equation}
+Here $h_j$ is the thickness of the layer of material $j$ and $\delta$ is the \emph{common prestretch}: a shift of all the knots together, in units of stretch (dimensionless). Layer $j$ starts working when the mid-wall reaches $k_j+\delta$ instead of $k_j$:
+\begin{itemize}
+\item $\delta<0$ advances the engagement of all layers (they are mounted tighter: they bear load earlier);
+\item $\delta=0$ keeps the knots of the first-level basis;
+\item $\delta>0$ delays it (they are mounted looser: they bear load later).
+\end{itemize}
+\textbf{Meaning of $|\delta|\le0.25$.} $|\delta|$ is the absolute value of $\delta$, so the condition is equivalent to $-0.25\le\delta\le0.25$: the knots can be shifted by at most 0.25 to the left or to the right. For example, with $\delta=-0.25$ the knot 1.08 moves to 0.83, and with $\delta=+0.25$, to 1.33. It is a bound of the search, not a material property: it was chosen wider than the whole stretch interval spanned by a subject (from 1.02 to 1.23, i.e.\ 0.21), so that no subject is excluded by the bound. It is not active: in the 82 designs (41 subjects, 5 and 6 materials) $\delta$ remained between $-0.04$ and $+0.09$. Appendix~\ref{sec:ejemplo} shows, with an example that can be checked by hand, what $\delta$ does in a two-layer tube.
+\begin{itemize}
+\item \textbf{Thicknesses} $h_j$, manufactured with $n_j$ integer laminae of thickness $e$.
+\item \textbf{Engagement and prestretch.} Each layer engages when the mid-wall reaches $k_j+\delta$; its local engagement stretch $\kappa_j$ is the stretch of the layer center at that moment, from \eqref{eq:incomp}. In manufacturing, $\kappa_j$ is the crimp of the fibers of that layer. The common prestretch $\delta$ shifts all the knots together: each subject occupies its own stretch interval (from 1.02 to 1.23), and without $\delta$ it would see only one or two knots, with a typical error of 11\,\%.
+\end{itemize}
+The pressure \eqref{eq:pgruesa} is integrated in each layer with 8-node Gauss--Legendre quadrature~\cite{davis} at 651 values of $\lambda$ between 0.80 and 1.45, and inverted by linear interpolation to obtain $\lambda_{\mathrm{gr}}(P_k;\theta)$. The map $\theta\mapsto\lambda_{\mathrm{gr}}$ is nonlinear: the thicknesses set the integration limits and the engagements, and $\delta$ enters inside the $\max(0,\cdot)$. With integer laminae, finding the $n_j$ is a \textbf{mixed-integer nonlinear} problem. The metric is \eqref{eq:emax} on $\lambda(P_k)$.
+
+\subsection{Design methods}
+\begin{table}[H]\centering\small
+\caption{Computational blocks at the tube level. ``Linear'' refers to the dependence of the model on the unknowns.}\label{tab:bloques}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{1.6cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{4.1cm}}\toprule
+Block & Variables & Linear? & Algorithm & Implementation\\\midrule
+A1 Linear LS (thin wall) & real & yes, with fixed $\delta$ & least squares by SVD; $\delta$ by grid and Brent & \texttt{numpy.linalg.lstsq}~\cite{numpy}; \texttt{minimize\_scalar}~\cite{brent,scipy}\\
+A2 Nonlinear LS (thick wall) & real & no & trust region reflective with bounds (TRF) & \texttt{scipy.optimize.least\_squares}~\cite{branch,scipy}\\
+A3 Integer minimax (thick wall) & integer laminae, real $\delta$ & no & floor/ceiling enumeration, $\delta$ by bounded Brent, local search & own code; \texttt{minimize\_scalar}~\cite{brent}\\
+A4 Neural network & real & --- (one evaluation) & multilayer perceptron; amortized optimization & TensorFlow/Keras~\cite{tf}\\\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{A1 · Linear thin-wall least squares.} With Laplace's law and fixed $\delta$, pressure is linear in $c_j=E_jh_j/R_{\mathrm{ref}}$: $P_k\approx\sum_jc_j\max(0,y_k-k_j-\delta)$. For each $\delta$ on a grid of 101 values the problem is solved by least squares; the pressure residual is converted to $\lambda$ with the local slope of the curve; the best $\delta$ is refined by Brent's method~\cite{brent} and $h_j=c_jR_{\mathrm{ref}}/E_j$, clipped to $[0,3]$\,mm. It is the first-level method transferred to the tube.
+
+\paragraph{A2 · Nonlinear thick-wall least squares.} It minimizes $\sum_k\bigl((\lambda_{\mathrm{gr}}(P_k;\theta)-y_k)/\Delta\bigr)^2$ subject to the bounds \eqref{eq:theta}, by the Trust Region Reflective (TRF) method~\cite{branch}. At each iteration it computes the Jacobian of the residuals by finite differences, approximates the problem by its Gauss--Newton quadratic model and takes the step that minimizes it within a \emph{trust region}, a neighborhood where the model is reliable; it enlarges the region if the step succeeded and shrinks it otherwise, and reflects inward the steps that cross a bound. Tolerances $10^{-10}$, at most 300 evaluations. It finds a \emph{local} minimum: the result depends on the starting point.
+
+\paragraph{A3 · Integer minimax.} It is the first-level minimax extended to the nonlinear case, where no linear program can solve it exactly. Starting from a real-valued design $\theta^\star$ and a reference curve $\tilde y$: (1) $n_j\in\{\lfloor h_j^\star/e\rfloor,\lceil h_j^\star/e\rceil\}$; the $2^N$ combinations are evaluated by $e_{\max}$ against $\tilde y$; (2) for the 8 best ones, $\delta$ is readjusted within $\pm0.03$ by bounded Brent; (3) local search~\cite{aarts}: neighbors that add or remove one lamina of a material or move one lamina from one material to another, accepting the best one if it lowers the worst error, up to 20 times. It is a heuristic: it does not guarantee the global integer optimum.
+
+\paragraph{A4 · Neural network.} The same architecture as in the first level, $141\to256\to128\to64\to N{+}1$: it receives the standardized curve $\lambda(P_k)$ and returns $\theta$. Data: 6000 grafts with randomly drawn designs, whose label is exactly their design, and 9000 synthetic arteries of Masson's law plus the 31 training subjects, whose label is the A2 fit; new noise of 0 to 1\,\% of the range of $\lambda$ at each epoch. Split 11\,220 / 1530 / 2250; 425 epochs (6 materials) and 629 (5). It is used as \emph{amortized optimization}~\cite{amos}: a model learned on many solved cases proposes the solution of a new one, and a classical optimizer finishes it.
+
+\paragraph{The procedure.} The blocks are chained in three steps (Fig.~\ref{fig:proc}): (1) initialization, A1 (path A) or the network A4 (path B); (2) A2, which fits the design to the curve; (3) A3, which chooses the laminae against the \emph{fitted curve} of step 2. This is the first-level conclusion about noise: step 2 smooths, because the curve of a graft cannot have the jumps of the noise, and step 3 does not chase it.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{f_procedimiento.png}
+\caption{The tube-level design procedure. The two paths differ only in step 1.}\label{fig:proc}\end{figure}
+
+\paragraph{Measured curves.} In practice the patient's curve is measured, with noise and at few pressures. We simulate: (a) proportional Gaussian noise of 0.3\,\% in $\lambda$ (echotracking resolves about 20\,µm in 7\,mm); (b) measurement at 10 pressures with monotone cubic interpolation (PCHIP)~\cite{pchip} to the 141; (c) both, with 0.2\,\% noise. Each path receives the measured curve and its integer design is compared with the true curve; one realization per subject and case. Since $\lambda\approx1.1$ and its range is about 0.07, a noise of 0.3\,\% of $\lambda$ corresponds to about 5\,\% of the range: larger than the target.
+
+\subsection{Results}
+\paragraph{Real-valued design.} From the linear initialization, A2 brings 40 of the 41 subjects within the target (6 materials: median 0.84\,\%, worst 3.43\,\%; 5 materials: 40/41, worst 3.14\,\%), with walls from 0.75 to 1.89\,mm and $\delta$ from $-0.04$ to $+0.09$. Starting from the network it reaches 41 of 41 with 6 materials (worst 1.79\,\%), with half the model evaluations (16 versus 35 per subject). On its own, the network falls short: median 3.43\,\% and worst 89.6\,\%. In the 10 test subjects the hybrid gives a median of 0.93\,\% and a worst case of 1.79\,\%.
+
+\paragraph{Lamina thickness.} With laminae of 0.1, 0.05 and 0.025\,mm, 38, 40 and 41 of the 41 subjects met the target (6 materials; worst 5.44, 3.69 and 1.64\,\%; about 10, 23 and 46 laminae). We adopted $e=0.025$\,mm.
+
+\paragraph{The complete procedure.} With clean curves both initializations tie (Table~\ref{tab:f2}, Fig.~\ref{fig:dis47}). The difference lies in the worst case with measured curves: with 10 pressures, the linear initialization falls into a local minimum in two subjects (NT03 and HT04, 468.7\,\%), which the network initialization avoids; with 0.3\,\% noise, the network increases the number of subjects within the target (31 versus 23 with 6 materials; 32 versus 25 with 5). With 10 pressures and noise, none exceeds 8 of 41: that noise is already comparable to the target. The time is 0.2 to 0.5\,s per subject with either initialization.
+
+\begin{table}[H]\centering\small
+\caption{Complete procedure with 0.025\,mm laminae: worst error against the true curve [\%], 41 subjects.}\label{tab:f2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llcccccc}\toprule
+ & & \multicolumn{3}{c}{6 materials} & \multicolumn{3}{c}{5 materials}\\\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+Curve & Initialization & median & worst & meet & median & worst & meet\\\midrule
+clean & linear LS & 1.13 & 3.26 & 40/41 & 1.69 & 3.21 & 40/41\\
+ & network & 1.14 & 2.19 & 41/41 & 1.68 & 3.19 & 40/41\\\addlinespace
+10 pressures & linear LS & 1.26 & 468.7 & 38/41 & 1.62 & 3.13 & 40/41\\
+ & network & 1.19 & 2.27 & 41/41 & 1.61 & 2.70 & 41/41\\\addlinespace
+noise 0.3\,\% & linear LS & 2.67 & 11.87 & 23/41 & 2.66 & 7.52 & 25/41\\
+ & network & 2.19 & 6.59 & 31/41 & 2.32 & 9.24 & 32/41\\\addlinespace
+10 pres. + noise 0.2\,\% & linear LS & 4.36 & 8.07 & 8/41 & 4.62 & 8.77 & 6/41\\
+ & network & 3.78 & 8.54 & 8/41 & 4.75 & 10.35 & 6/41\\\bottomrule
+\end{tabular}}
+\end{table}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{disenos_v47_6.png}
+\caption{6 materials, clean curves: the softest subject, an intermediate one and the stiffest one. Black: artery; blue: path A (linear LS initialization); red: path B (network initialization). Ordinate: pressure borne by the wall, in kPa at the top and relative to 13.332\,kPa at the bottom; mmHg on the right. In brackets, laminae of each material.}\label{fig:dis47}\end{figure}
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{curvas_medidas_v47_6.png}
+\caption{6 materials, measured curves: worst error of each subject against the true curve (logarithmic scale; blue, linear LS initialization; red, network initialization; dotted, target).}\label{fig:med47}\end{figure}
+
+\paragraph{Against which curve to choose the laminae.} If step 3 chooses the laminae against the curve as measured, it chases the worst point, which with noise is a noise spike (Fig.~\ref{fig:suave}). Against the fitted curve of step 2, with 0.3\,\% noise and network initialization, 31 subjects meet the target instead of 10 (6 materials) and 32 instead of 5 (5 materials); the cost with clean curves is 0.2 points of median.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{suavizado_ejemplo.png}
+\caption{Subject NT11, 6 materials, 0.3\,\% noise. Left: the curve fitted in step 2 (orange) passes through the middle of the measurement (gray). Right: laminae chosen against the measured curve ($e_{\max}=4.28$\,\%) and against the fitted one (2.03\,\%), both evaluated against the true curve.}\label{fig:suave}\end{figure}
+
+%=====================================================================
+\section{Discussion}
+\paragraph{Why two levels.} The stress--stretch curve is a property of the tissue. Working on it first makes it possible to validate each component of the method ---the basis, the fit, the rounding, the network--- against exact solutions, without the intervention of geometry or pressure, which depend on each artery and each site. The transition to the tube adds the geometry and the thick-wall assumption, but keeps the materials, the metric, the minimax criterion and the conclusion about noise.
+
+\paragraph{Generality.} What is validated at the first level is not specific to the carotid artery: the fiber-like materials, the basis chosen over a broad space of J-shaped curves, the minimax rounding and a network that reproduces the fit on curves of a law it never saw. For another artery, the geometry, thickness and pressure window change, and these only enter at the second level; the band of curves and, if necessary, the knots are recomputed with the same procedure. The class check indicates when a curve falls outside the scope of the method. The external validation (Section~\ref{sec:externa}) confirms this with data: the basis chosen with Masson's carotid arteries reproduces, unchanged, curves of common, external and internal carotid arteries, of isolated adventitia and media--intima, of rabbit and of patients with plaque, from three different constitutive laws. What limits some in vivo curves is the lamina thickness relative to a small stress excursion, not the shape of the curve. The network generalizes to those laws within the band on which it was trained; outside it, it should be used only as a starting point, and the class check together with the $y_1$--$y_2$ band suffice to detect this.
+
+\paragraph{The role of the neural network.} In the linear case the exact solution is immediate and the network can only imitate it, although it does so in one evaluation and generalizes. In the thick-wall case the fit is iterative, local and dependent on the starting point: the classical initialization, inherited from the linear case, ignores the stretch gradient across the thickness and, with measured curves, can lead to local minima that yield unusable designs. The network, trained on thousands of solved designs, leaves the fit close to the correct minimum. This is the idea of amortized optimization~\cite{amos}: the network does not replace the optimizer, it initializes it. Its advantage is one of robustness, clear with 6 materials and smaller with 5.
+
+\paragraph{Why a thick wall.} The difference between the models lies in a single assumption: in a thin wall all fibers stretch equally; in a thick wall each has its own stretch, set by incompressibility. With materials that bear no load until their knot, that difference of a few hundredths decides whether a layer works. The engagement of each layer (its crimp) is as important as its thickness: between a Laplace design and a thick-wall design the thicknesses change by a few micrometers, but the outer layers engage earlier.
+
+\paragraph{Limitations.} (1) The target curves are those of the law fitted by Masson et al., not the raw measurements, and the arterial thickness is the age- and sex-specific reference value. (2) The materials are ideal (truncated lines of constant stiffness); the graft has neither axial extension nor residual stresses, and viscoelasticity and fatigue are not considered. (3) The integer search in the thick-wall case is heuristic, and a single noise realization per subject and case was used. (4) The prestretch $\delta$ and the per-layer crimp are manufacturing variables that must be validated. (5) There is no experimental validation.
+
+%=====================================================================
+\section{Conclusions}
+\begin{enumerate}
+\item A graft made of layers of fiber-like materials (truncated lines), with a basis chosen once for the whole population, reproduces the stress--stretch curve of 41 human carotid arteries and of 22\,500 synthetic curves. With 6 materials and integer laminae by minimax, all 41 subjects meet the 3\,\% target.
+\item Without any change, the same basis reproduces 327 curves from four other studies (Sommer and Holzapfel, Holzapfel et al., Liu et al., Kamenskiy et al.): worst error of 2.83\,\% with real-valued amounts and, at physiological stresses, 100\,\% within the target with integer laminae. The method does not depend on the artery with which it was built; for in vivo curves with a small stress excursion, the limit is the lamina thickness.
+\item In the linear case, the exact method is least squares plus integer minimax (integer linear programming). The neural network reproduces it in one evaluation and generalizes to an unseen constitutive law (excess of 2.8 to 4.6\,\%), but does not improve on it.
+\item At the tube level the design must be carried out with the thick-walled model: designed with Laplace's law, no subject meets the target once manufactured; with the thick-walled model, 40--41 of 41 do. The problem is a nonlinear integer one.
+\item The three-step procedure ---initialization, nonlinear least squares and integer laminae by minimax against the fitted curve--- meets the target in 40--41 of 41 subjects with clean curves, in less than half a second per subject.
+\item In the thick-wall case, the network as a starting point avoids the local minima that, with measured curves, produce unusable designs (worst case from 468.7 to 2.3\,\%) and increases the number of subjects within the target under noise. This is the justified role of the network: to initialize the optimizer, not to replace it.
+\end{enumerate}
+\paragraph{Next steps.} Test the method with raw measured curves of other arteries; test real materials to replace the ideal lines and validate crimp as a manufacturing variable; use each subject's measured thickness and pressure; and manufacture and test a graft.
+
+%=====================================================================
+\appendix
+\section{Parameters of the 41 subjects}\label{sec:anexo}
+\input{tab_masson_en.tex}
+
+\section{Worked example of a thick-wall design}\label{sec:ejemplo}
+This appendix shows, with numbers that can be checked with a calculator, the ideas used in Section~\ref{sec:aplicacion}: the graft reproduces the behavior of the artery with layers of different materials; each fiber of a thick wall stretches differently; pressure is the sum of the contributions of thin slices; the position of each layer changes what it contributes; and the prestretch $\delta$ shifts all the knots. To keep the calculations short, the tube is closed, without residual stresses and without axial extension, and the knot of each material is applied directly to the local stretch of each slice (in the complete model the knot is defined at the mid-wall and translated to each layer by incompressibility, Eq.~\ref{eq:incomp}).
+
+\subsection{The artery and the graft}
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{d12_objetivo_v2.png}
+\caption{The patient's carotid artery (left) and the graft (right), made of layers of different materials, each layer with an integer number of laminae. The goal is for the graft to have the same pressure--diameter curve as the artery: both should widen equally with pressure.}\end{figure}
+
+\subsection{Incompressibility: the ring area does not change}
+Tissue is mostly water: it deforms without changing volume. If the tube does not extend axially, the ring area is the same before and after inflation:
+\[
+\pi\,(R_o^2-R_i^2)=\pi\,(r_o^2-r_i^2)\qquad\Longrightarrow\qquad r=\sqrt{r_i^2+R^2-R_i^2}\quad\text{for any wall radius }R.
+\]
+Example tube: unpressurized from $R_i=3.0$ to $R_o=3.6$\,mm; under pressure the inner surface reaches $r_i=3.3$\,mm. Then $r=\sqrt{1.89+R^2}$ (because $3.3^2-3.0^2=1.89$) and $r_o=\sqrt{14.85}=3.854$\,mm. The inner surface stretches $3.3/3.0=1.100$ and the outer one $3.854/3.6=1.070$ (Fig.~\ref{fig:fibra}): \textbf{in a thick wall there is no single stretch}.
+\begin{figure}[H]\centering\includegraphics[width=0.9\textwidth]{d5_area_constante.png}
+\caption{The ring area (gray unpressurized, red pressurized) is the same: $\pi(3.6^2-3.0^2)=\pi(3.854^2-3.3^2)=12.44$\,mm$^2$.}\end{figure}
+
+\subsection{The thick wall as a stack of thin walls}
+The wall is cut into thin slices. Each slice is a thin wall, with its own stretch $\lambda=r_c/R_c$ (at its center), and contributes $\sigma\,\Delta r/r_c$ (Laplace); the pressure is the sum, which in the limit is the integral of Eq.~\eqref{eq:pgruesa}.
+\begin{figure}[H]\centering\includegraphics[width=0.9\textwidth]{d15_radios_rebanadas.png}
+\caption{The example tube in 3 slices: boundaries (black) and centers (blue), unpressurized ($R$) and pressurized ($r=\sqrt{1.89+R^2}$).}\end{figure}
+With a material without knot, $\sigma=1000\,(\lambda-1)$\,kPa:
+\begin{center}\small
+\begin{tabular}{lccc}\toprule
+ & Slice 1 (inner) & Slice 2 & Slice 3 (outer)\\\midrule
+unpressurized center $R_c$ [mm] & 3.1 & 3.3 & 3.5\\
+pressurized center $r_c=\sqrt{1.89+R_c^2}$ [mm] & 3.391 & 3.575 & 3.760\\
+stretch $\lambda=r_c/R_c$ & 1.094 & 1.083 & 1.074\\
+stress $\sigma$ [kPa] & 93.9 & 83.3 & 74.4\\
+inflated thickness $\Delta r$ [mm] & 0.183 & 0.185 & 0.186\\
+contribution $\sigma\,\Delta r/r_c$ [kPa] & 5.06 & 4.30 & 3.68\\\bottomrule
+\end{tabular}
+\end{center}
+The total pressure is $5.06+4.30+3.68=13.05$\,kPa (with thousands of slices, 13.07). The inner slice contributes more because it stretches more.
+\begin{figure}[H]\centering\includegraphics[width=0.55\textwidth]{d13_rebanadas.png}
+\caption{Thick wall = three thin walls, one on top of the other.}\end{figure}
+
+\subsection{In a thick wall, the position of each layer matters}
+The wall now has two materials with knots, $\sigma=E\max(0,\lambda-k)$: a blue layer ($k=1.02$, $E=400$\,kPa) from 3.0 to 3.3\,mm and a green one ($k=1.08$, $E=1500$\,kPa) from 3.3 to 3.6\,mm, each cut into 3 slices.
+\begin{figure}[H]\centering\includegraphics[width=0.9\textwidth]{d3_posicion.png}
+\caption{A material with knot 1.08 (in the drawing, $E=1000$\,kPa) bears load next to the blood ($\lambda=1.100$: $\sigma=1000\times0.020=20$\,kPa) and bears no load at the outer surface ($\lambda=1.070<1.08$: $\sigma=0$). The same material and the same thickness contribute differently depending on where they are.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d16_dos_capas.png}
+\caption{Two 0.3\,mm layers, unpressurized (top) and pressurized (bottom). The blue layer contributes $0.84+0.76+0.69=2.28$\,kPa; of the green one, only the first slice bears load ($\lambda=1.081$): 0.04\,kPa.}\end{figure}
+If only the thickness of the blue layer is changed, the green one ---untouched--- changes its contribution, because it is pushed outward and stretches less:
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d17_tres_paredes.png}
+\caption{Three walls with the same 0.3\,mm green layer and the same inner surface inflated to 3.3\,mm. Without a blue layer the green one contributes 1.36\,kPa; with 0.3\,mm of blue, 0.04; with 0.6\,mm, nothing. Doubling the blue layer raises its contribution from 2.28 to 3.98\,kPa, which is not twice as much: the problem is nonlinear in the thicknesses.}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{d18_verde_y_nudo.png}
+\caption{The same three walls seen as the stretch of each circumferential fiber versus its unpressurized radius (black curve) and the knot of the green layer (red line). The green layer contributes only in the part of it lying above 1.08 (dark green): in A, its whole inner part; in B, a sliver next to $R=3.37$\,mm; in C, nothing.}\end{figure}
+
+\subsection{The prestretch $\delta$}
+$\delta$ shifts all the knots together: the blue one moves to $1.02+\delta$ and the green one to $1.08+\delta$. The calculation for the two-layer wall (blue from 3.0 to 3.3, green from 3.3 to 3.6\,mm, inner surface inflated to 3.3\,mm) is repeated with three values of $\delta$. The stretches of the slices do not change (they depend only on the geometry); what changes is where each material starts bearing load.
+\begin{center}\small
+\begin{tabular}{lccccc}\toprule
+ & & $\lambda$ & \multicolumn{3}{c}{$\sigma$ [kPa]}\\\cmidrule(lr){4-6}
+Layer & center $R$ [mm] & & $\delta=-0.03$ & $\delta=0$ & $\delta=+0.03$\\\midrule
+blue, $\sigma=400\max(0,\lambda-1.02-\delta)$ & 3.05 & 1.097 & 42.8 & 30.8 & 18.8\\
+ & 3.15 & 1.091 & 40.4 & 28.4 & 16.4\\
+ & 3.25 & 1.086 & 38.3 & 26.3 & 14.3\\
+green, $\sigma=1500\max(0,\lambda-1.08-\delta)$ & 3.35 & 1.081 & 46.4 & 1.4 & 0\\
+ & 3.45 & 1.076 & 39.7 & 0 & 0\\
+ & 3.55 & 1.072 & 33.6 & 0 & 0\\\midrule
+\multicolumn{3}{l}{contribution of the blue layer [kPa]} & 3.24 & 2.28 & 1.32\\
+\multicolumn{3}{l}{contribution of the green layer [kPa]} & 3.00 & 0.04 & 0\\
+\multicolumn{3}{l}{total pressure [kPa]} & 6.25 & 2.33 & 1.32\\\bottomrule
+\end{tabular}
+\end{center}
+Verification example: first blue slice with $\delta=-0.03$: the knot is $1.02-0.03=0.99$ and $\sigma=400\times(1.097-0.99)=42.8$\,kPa; its contribution is $42.8\times0.091/3.346=1.16$\,kPa. With $\delta=-0.03$ the whole green layer passes its knot (1.05) and contributes as much as the blue one; with $\delta=+0.03$ the green knot rises to 1.11 and the green layer does not work. Thus, $\delta$ selects \emph{which materials are active} in the stretch interval of each subject: a soft subject, which stretches a lot, needs knots further to the right ($\delta>0$), and a stiff one, further to the left ($\delta<0$). Without $\delta$, each subject would see only one or two of the knots of the basis.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d19_delta.png}
+\caption{Effect of $\delta$ on the two-layer wall. (a) Law of each material for $\delta=-0.03$, 0 and $+0.03$; the shaded bands are the stretches experienced by each layer with the inner surface at 3.3\,mm. (b) Contribution of each layer to the pressure in that state. (c) Pressure--stretch curve of the inner surface (right axis in mmHg): $\delta$ shifts the point at which each layer engages and changes the shape of the curve. The values belong to a toy example (0.3\,mm layers and low moduli), not to a design.}\end{figure}
+
+\begin{thebibliography}{99}\small
+\bibitem{aarts} Aarts, E., Lenstra, J.\,K. (eds.) (1997). \emph{Local Search in Combinatorial Optimization}. Wiley.
+\bibitem{tf} Abadi, M., et al. (2016). TensorFlow: a system for large-scale machine learning. \emph{Proc. 12th USENIX OSDI}, 265--283.
+\bibitem{agrell} Agrell, E., Eriksson, T., Vardy, A., Zeger, K. (2002). Closest point search in lattices. \emph{IEEE Trans. Inf. Theory} 48(8), 2201--2214.
+\bibitem{amos} Amos, B. (2023). Tutorial on amortized optimization. \emph{Found. Trends Mach. Learn.} 16(5), 592--732.
+\bibitem{layernorm} Ba, J.\,L., Kiros, J.\,R., Hinton, G.\,E. (2016). Layer normalization. arXiv:1607.06450.
+\bibitem{branch} Branch, M.\,A., Coleman, T.\,F., Li, Y. (1999). A subspace, interior, and conjugate gradient method for large-scale bound-constrained minimization problems. \emph{SIAM J. Sci. Comput.} 21(1), 1--23.
+\bibitem{brent} Brent, R.\,P. (1973). \emph{Algorithms for Minimization without Derivatives}. Prentice-Hall.
+\bibitem{cheney} Cheney, E.\,W. (1966). \emph{Introduction to Approximation Theory}. McGraw-Hill.
+\bibitem{davis} Davis, P.\,J., Rabinowitz, P. (1984). \emph{Methods of Numerical Integration}, 2nd ed. Academic Press.
+\bibitem{ding} Ding, X., Sha, D., Sun, K., Fan, Y. (2025). Biomechanical insights into the development and optimization of small-diameter vascular grafts. \emph{Acta Biomater.} doi:10.1016/j.actbio.2025.04.028.
+\bibitem{engelen13} Engelen, L., Ferreira, I., Stehouwer, C.\,D.\,A., Boutouyrie, P., Laurent, S.; Reference Values for Arterial Measurements Collaboration (2013). Reference intervals for common carotid intima-media thickness measured with echotracking: relation with risk factors. \emph{Eur. Heart J.} 34(30), 2368--2380.
+\bibitem{pchip} Fritsch, F.\,N., Carlson, R.\,E. (1980). Monotone piecewise cubic interpolation. \emph{SIAM J. Numer. Anal.} 17(2), 238--246.
+\bibitem{fung} Fung, Y.\,C. (1993). \emph{Biomechanics: Mechanical Properties of Living Tissues}, 2nd ed. Springer.
+\bibitem{furdella} Furdella, K.\,J., Higuchi, S., Behrangzade, A., Kim, K., Wagner, W.\,R., Vande Geest, J.\,P. (2021). In-vivo assessment of a tissue engineered vascular graft computationally optimized for target vessel compliance. \emph{Acta Biomater.} 123, 298--311.
+\bibitem{golub} Golub, G.\,H., Van Loan, C.\,F. (2013). \emph{Matrix Computations}, 4th ed. Johns Hopkins University Press.
+\bibitem{goodfellow} Goodfellow, I., Bengio, Y., Courville, A. (2016). \emph{Deep Learning}. MIT Press.
+\bibitem{numpy} Harris, C.\,R., et al. (2020). Array programming with NumPy. \emph{Nature} 585, 357--362.
+\bibitem{harrison} Harrison, S., Tamimi, E., Uhlorn, J., Leach, T., Vande Geest, J.\,P. (2016). Computationally optimizing the compliance of a biopolymer based tissue engineered vascular graft. \emph{J. Biomech. Eng.} 138(1), 014505.
+\bibitem{holzapfel} Holzapfel, G.\,A., Gasser, T.\,C., Ogden, R.\,W. (2000). A new constitutive framework for arterial wall mechanics and a comparative study of material models. \emph{J. Elasticity} 61, 1--48.
+\bibitem{hsu} Hsu, R., Szafron, J.\,M., Carvalho, C.\,C., Humphrey, J.\,D., Marsden, A.\,L. (2025). Constrained optimization of scaffold behavior for improving tissue engineered vascular grafts. \emph{J. Biomech.} doi:10.1016/j.jbiomech.2025.112670.
+\bibitem{highs} Huangfu, Q., Hall, J.\,A.\,J. (2018). Parallelizing the dual revised simplex method. \emph{Math. Program. Comput.} 10, 119--142.
+\bibitem{humphrey} Humphrey, J.\,D. (2002). \emph{Cardiovascular Solid Mechanics: Cells, Tissues, and Organs}. Springer.
+\bibitem{jiang} Jiang, D., Robinson, A.\,J., Nkansah, A., et al. (2025). A computational framework to optimize the mechanical behavior of synthetic vascular grafts. \emph{J. Mech. Behav. Biomed. Mater.} 163, 106847.
+\bibitem{kamenskiy} Kamenskiy, A.\,V., Dzenis, Y.\,A., MacTaggart, J.\,N., Lynch, T.\,G., Jaffar Kazmi, S.\,A., Pipinos, I.\,I. (2012). Nonlinear mechanical behavior of the human common, external, and internal carotid arteries in vivo. \emph{J. Surg. Res.}
+\bibitem{adam} Kingma, D.\,P., Ba, J. (2015). Adam: a method for stochastic optimization. \emph{Proc. ICLR}.
+\bibitem{lawson} Lawson, C.\,L., Hanson, R.\,J. (1995). \emph{Solving Least Squares Problems}. SIAM.
+\bibitem{liu} Liu, H., et al. (2012). Using in vivo Cine and 3D multi-contrast MRI to determine human atherosclerotic carotid artery material properties and circumferential shrinkage rate and their impact on stress/strain predictions. \emph{J. Biomech. Eng.} 134, 011008.
+\bibitem{masson} Masson, I., Beaussier, H., Boutouyrie, P., Laurent, S., Humphrey, J.\,D., Zidi, M. (2011). Carotid artery mechanical properties and stresses quantified using in vivo data from normotensive and hypertensive humans. \emph{Biomech. Model. Mechanobiol.} 10(6), 867--882.
+\bibitem{relu} Nair, V., Hinton, G.\,E. (2010). Rectified linear units improve restricted Boltzmann machines. \emph{Proc. ICML}.
+\bibitem{nelder} Nelder, J.\,A., Mead, R. (1965). A simplex method for function minimization. \emph{Computer J.} 7(4), 308--313.
+\bibitem{penrose} Penrose, R. (1955). A generalized inverse for matrices. \emph{Math. Proc. Cambridge Philos. Soc.} 51(3), 406--413.
+\bibitem{prechelt} Prechelt, L. (1998). Early stopping --- but when? In \emph{Neural Networks: Tricks of the Trade}, LNCS 1524, 55--69.
+\bibitem{rachev} Rachev, A., Hayashi, K. (1999). Theoretical study of the effects of vascular smooth muscle contraction on strain and stress distributions in arteries. \emph{Ann. Biomed. Eng.} 27, 459--468.
+\bibitem{rockafellar} Rockafellar, R.\,T., Uryasev, S. (2000). Optimization of conditional value-at-risk. \emph{J. Risk} 2(3), 21--41.
+\bibitem{rovas23} Rovas, G., Bikia, V., Stergiopulos, N. (2023). Design and computational optimization of compliance-matching aortic grafts. \emph{Front. Bioeng. Biotechnol.} 11, 1179174.
+\bibitem{rovas25} Rovas, G., Reymond, P., van Steenberghe, M., et al., Stergiopulos, N. (2025). Evaluation of a novel compliance-matching aortic graft in a swine model. \emph{J. Biomech.} doi:10.1016/j.jbiomech.2025.112629.
+\bibitem{sommer} Sommer, G., Holzapfel, G.\,A. (2012). 3D constitutive modeling of the biaxial mechanical response of intact and layer-dissected human carotid arteries. \emph{J. Mech. Behav. Biomed. Mater.} 5, 116--128.
+\bibitem{storn} Storn, R., Price, K. (1997). Differential evolution: a simple and efficient heuristic for global optimization over continuous spaces. \emph{J. Global Optim.} 11, 341--359.
+\bibitem{szafron} Szafron, J.\,M., Ramachandra, A.\,B., Breuer, C.\,K., Marsden, A.\,L., Humphrey, J.\,D. (2019). Optimization of tissue-engineered vascular graft design using computational modeling. \emph{Tissue Eng. Part C}. doi:10.1089/ten.tec.2019.0086.
+\bibitem{tamimi} Tamimi, E.\,A., Ardila, D.\,C., Ensley, B.\,D., Kellar, R.\,S., Vande Geest, J.\,P. (2019). Computationally optimizing the compliance of multilayered biomimetic tissue engineered vascular grafts. \emph{J. Biomech. Eng.} doi:10.1115/1.4042902.
+\bibitem{trefethen} Trefethen, L.\,N., Bau, D. (1997). \emph{Numerical Linear Algebra}. SIAM.
+\bibitem{urquiza} Urquiza, S.\,A. (2012). Doctoral thesis, Ch.~3: One-dimensional hemodynamic models (in Spanish).
+\bibitem{scipy} Virtanen, P., et al. (2020). SciPy 1.0: fundamental algorithms for scientific computing in Python. \emph{Nat. Methods} 17, 261--272.
+\end{thebibliography}
+\end{document}
