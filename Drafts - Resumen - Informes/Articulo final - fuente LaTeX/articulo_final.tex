@@ -5,7 +5,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-\noindent Un injerto vascular que se distiende distinto que la arteria que reemplaza favorece la trombosis y la hiperplasia de la íntima. Los métodos de diseño publicados ajustan un único número ---la compliancia de una arteria promedio---. Aquí se presenta un método para diseñar, paciente por paciente, un injerto multicapa que reproduzca la \emph{curva completa} de la arteria, con su forma de J. Cada material del injerto se idealiza como una fibra que no tira hasta un estiramiento propio (recta truncada), y la arteria se aproxima por una suma de esos materiales, elegidos una vez para toda la población. El método se valida primero sobre la curva tensión circunferencial--estiramiento circunferencial, $\sigma_{\theta\theta}(\lambda_\theta)$, que no depende de la presión ni de la geometría de la pared: con 41 carótidas humanas (Masson et al.) y 22\,500 curvas sintéticas, el ajuste por mínimos cuadrados y el redondeo minimax a láminas enteras cumplen la meta (peor error $\le3$\,\% del rango) en los 41 sujetos con 6 materiales; una red neuronal entrenada sobre 50\,000 curvas reproduce ese ajuste en una evaluación y generaliza a una ley constitutiva que nunca vio (exceso de error de 2,8 a 4,6\,\%); una variante en cadena, que elige los materiales de a uno sabiendo los anteriores, da directamente láminas enteras casi tan buenas como las del minimax. Sin ningún cambio, la misma base reproduce 327 curvas de otros cuatro estudios ---carótidas común, externa e interna, capas aisladas, conejo, pacientes con placa, mediciones in vivo---: con tensiones fisiológicas, todas cumplen la meta con láminas enteras. Luego el método se aplica a la curva presión--diámetro, para la que el injerto es un tubo de pared gruesa: diseñado con la ley de Laplace ningún sujeto cumple al fabricarse, mientras que con pared gruesa cumplen 40--41 de 41. El diseño se vuelve un problema no lineal entero, que se resuelve en tres pasos: arranque, mínimos cuadrados no lineales y búsqueda entera minimax contra la curva ajustada. En el caso lineal la red no mejora la solución exacta; en el no lineal, usada como punto de partida, evita los mínimos locales que con curvas medidas producen diseños inservibles (peor error de 468,7\,\% a 2,3\,\%).
+\noindent Un injerto vascular que se distiende distinto que la arteria que reemplaza favorece la trombosis y la hiperplasia de la íntima. Los métodos de diseño publicados ajustan un único número ---la compliancia de una arteria promedio---. Aquí se presenta un método para diseñar, paciente por paciente, un injerto multicapa que reproduzca la \emph{curva completa} de la arteria, con su forma de J. Cada material del injerto se idealiza como una fibra que no tira hasta un estiramiento propio (recta truncada), y la arteria se aproxima por una suma de esos materiales, elegidos una vez para toda la población. El método se valida primero sobre la curva tensión circunferencial--estiramiento circunferencial, $\sigma_{\theta\theta}(\lambda_\theta)$, que no depende de la presión ni de la geometría de la pared: con 41 carótidas humanas (Masson et al.) y 22\,500 curvas sintéticas, el ajuste por mínimos cuadrados y el redondeo minimax a láminas enteras cumplen la meta (peor error $\le3$\,\% del rango) en los 41 sujetos con 6 materiales; una red neuronal entrenada sobre 50\,000 curvas reproduce ese ajuste en una evaluación y generaliza a una ley constitutiva que nunca vio (exceso de error de 2,8 a 4,6\,\%); una variante en cadena, que elige los materiales de a uno sabiendo los anteriores, da directamente láminas enteras casi tan buenas como las del minimax. Sin ningún cambio, la misma base reproduce 98 curvas de otros tres estudios ---carótidas común, externa e interna, capas aisladas, pacientes con placa, mediciones in vivo---, cada una con su ley constitutiva y su ventana de presión, sin forzar sus tensiones: con mínimos cuadrados todas cumplen la meta y, con láminas enteras, todas las ex vivo y 38 de 57 in vivo, donde el límite es el espesor de lámina. Luego el método se aplica a la curva presión--diámetro, para la que el injerto es un tubo de pared gruesa: diseñado con la ley de Laplace ningún sujeto cumple al fabricarse, mientras que con pared gruesa cumplen 40--41 de 41. El diseño se vuelve un problema no lineal entero, que se resuelve en tres pasos: arranque, mínimos cuadrados no lineales y búsqueda entera minimax contra la curva ajustada. En el caso lineal la red no mejora la solución exacta; en el no lineal, usada como punto de partida, evita los mínimos locales que con curvas medidas producen diseños inservibles (peor error de 468,7\,\% a 2,3\,\%).
 \end{abstract}
 \tableofcontents
 
@@ -205,43 +205,53 @@ Red en cadena + búsqueda $\pm1$ & 1,09 / 2,35 · 41 & 1,13 / 3,65 · 2000 & 16 
 Elegir en cadena es lo que permite a la red compensar entre materiales, que es lo que hace el minimax al buscar la combinación. Pero ninguna red garantiza el óptimo: el peor caso de la red en cadena con búsqueda de $\pm1$ en las 2000 curvas es 3,65\,\% contra 3,28\,\% del minimax con 6 materiales, y 5,47\,\% contra 3,48\,\% con 5. \textbf{Se mantiene el minimax}, que da el mejor diseño entero que existe en unos 70\,ms por curva; la red en cadena con búsqueda de $\pm1$ es una alternativa casi equivalente y de 25 a 60 veces más rápida (2,5\,ms por curva con 6 materiales y 1,1\,ms con 5), útil si hubiera que diseñar muchas curvas.
 
 \subsection{Validación externa: mediciones de otros autores}\label{sec:externa}
-Para comprobar que el método no depende de la arteria con que se construyó, se aplicó a curvas $\sigma_{\theta\theta}(\lambda_\theta)$ de cuatro estudios independientes, con otras leyes constitutivas, otras arterias, capas aisladas, otra especie y mediciones in vivo. \textbf{No se cambió nada}: los mismos nudos y pendientes (Tabla~\ref{tab:bases}), la misma red, el mismo control de clase y el mismo minimax.
+Para comprobar que el método no depende de la arteria con que se construyó, se aplicó a curvas $\sigma_{\theta\theta}(\lambda_\theta)$ de tres estudios independientes, con otras leyes constitutivas, otras arterias, capas aisladas y mediciones in vivo. \textbf{No se cambió nada}: los mismos nudos y pendientes (Tabla~\ref{tab:bases}), la misma red, el mismo control de clase y el mismo minimax.
 
-\paragraph{Curvas.} Cada curva se recalcula con los parámetros publicados:
+\paragraph{Curvas y leyes constitutivas.} Cada curva se recalcula con la ley constitutiva y los parámetros que publicaron sus autores. La ley se usa tal cual porque es la que esos autores ajustaron a sus mediciones: es la que fija la forma de la curva y, con ella, lo que el injerto tiene que reproducir.
 \begin{itemize}
-\item \textbf{Sommer y Holzapfel}~\cite{sommer} (Tablas 1 y 2): 39 especímenes humanos de carótida común (CCA) e interna (ICA), ensayados por extensión--inflado: pared intacta (21), adventicia (13, dominio de 33\,kPa) y media--íntima (7). Ley de Holzapfel con dispersión de fibras, $\Psi=\tfrac{\mu}{2}(I_1-3)+\tfrac{k_1}{k_2}\bigl(e^{Q}-1\bigr)$, $Q=k_2\bigl[(1-\rho)(I_1-3)^2+\rho(I_4-1)^2\bigr]$; se usa $\sigma_{\theta\theta}-\sigma_{rr}$ con $\lambda_z=1{,}10$, el valor in vivo que adoptan los autores.
-\item \textbf{Holzapfel et al.}~\cite{holzapfel}: carótida de conejo, media y adventicia, ley HGO con dos familias de fibras a $\pm\beta$, $\lambda_z=1{,}10$.
-\item \textbf{Liu et al.}~\cite{liu} (Tabla 1): 12 carótidas humanas con placa, caracterizadas in vivo por resonancia; Mooney--Rivlin modificado en tracción uniaxial, $\sigma=2\lambda(\lambda-\lambda^{-2})\bigl(c_1+D_1D_2e^{D_2(\lambda^2+2/\lambda-3)}\bigr)$.
-\item \textbf{Kamenskiy et al.}~\cite{kamenskiy}: 16 pacientes, carótidas común, externa (ECA) e interna medidas in vivo durante el ciclo cardíaco (48 curvas). Por cada arteria publican la tensión y el módulo tangente en diástole y en sístole y los diámetros; con esos cuatro números se arma $\sigma(\varepsilon)=\sigma_d+\alpha\bigl(e^{\beta\varepsilon}-1\bigr)$ en $\varepsilon\in[0,\varepsilon_s]$, con $\sigma(\varepsilon_s)=\sigma_s$ exacta y $\beta$ que reproduce las dos pendientes. En las 48, la pendiente sistólica supera a la diastólica: todas son J.
+\item \textbf{Sommer y Holzapfel}~\cite{sommer}: carótidas común (CCA) e interna (ICA) de 11 donantes (77,6 años en promedio), ensayadas por extensión--inflado como tubos de pared intacta, de adventicia y de media--íntima~\cite{sommer2010}. Los autores ajustaron a cada espécimen la ley de Holzapfel, Gasser y Ogden~\cite{holzapfel} con dispersión de fibras,
+\begin{gather*}
+\Psi=\tfrac{\mu}{2}(I_1-3)+\tfrac{k_1}{k_2}\bigl(e^{Q}-1\bigr),\\
+Q=k_2\bigl[(1-\rho)(I_1-3)^2+\rho\,(I_4-1)^2\bigr],\qquad I_4=\lambda_\theta^2\cos^2\varphi+\lambda_z^2\sin^2\varphi,
+\end{gather*}
+donde $\mu$ es la rigidez de la matriz (elastina), $k_1$ y $k_2$ la rigidez y el endurecimiento del colágeno, $\varphi$ el ángulo de las fibras y $\rho$ su grado de alineación; las fibras no trabajan en compresión ($I_4<1$). Los cinco parámetros de cada espécimen están en sus Tablas~1 y~2. Se usa $\sigma_{\theta\theta}-\sigma_{rr}$ con $\lambda_z=1{,}10$, el estiramiento axial in vivo que adoptan los autores~\cite{sommer2010}.
+\item \textbf{Liu et al.}~\cite{liu}: 12 carótidas humanas con placa, caracterizadas in vivo con resonancia magnética cine y multicontraste. Los autores identificaron para cada paciente un Mooney--Rivlin modificado en tracción uniaxial,
+\begin{equation*}
+\sigma=2\lambda\bigl(\lambda-\lambda^{-2}\bigr)\Bigl(c_1+D_1D_2\,e^{D_2(\lambda^2+2/\lambda-3)}\Bigr),\qquad D_2=2,
+\end{equation*}
+con $c_1$ y $D_1$ de su Tabla~1. Publican también la contracción circunferencial $S$ entre el estado sin carga y la diástole y los perímetros diastólico y sistólico, que dan la ventana medida.
+\item \textbf{Kamenskiy et al.}~\cite{kamenskiy}: 16 pacientes, carótidas común, externa (ECA) e interna medidas in vivo por ultrasonido a lo largo del ciclo cardíaco (48 curvas). Por cada arteria publican la tensión y el módulo tangente en diástole y en sístole y los diámetros. La ley más simple que reproduce esos datos con forma de J es la exponencial, $\sigma(\varepsilon)=\sigma_d+\alpha\bigl(e^{\beta\varepsilon}-1\bigr)$ en $\varepsilon\in[0,\varepsilon_s]$: con $\sigma(\varepsilon_s)=\sigma_s$ exacta y $\beta$ que reproduce las dos pendientes. En las 48 arterias la pendiente sistólica supera a la diastólica: todas son J.
 \end{itemize}
+Se excluyó la carótida de conejo de Holzapfel et al.~\cite{holzapfel}: como capas aisladas, con la geometría del conejo, a esas presiones da tensiones de 900 a 3300\,kPa, lejos de cualquier carótida humana.
 
-\paragraph{Traslado al dominio de diseño.} Cada curva vive en su propio rango de $\lambda$. Se la lleva a $[1{,}02;\,1{,}16]$ con un cambio afín de $\lambda$, sin tocar la tensión. Ese cambio equivale a lo que el injerto real permite: un preestiramiento (corrimiento de los nudos, el $\delta$ de la Sección~\ref{sec:aplicacion}) y la elección del radio de referencia (escala). Dos protocolos:
+\paragraph{Un solo escalamiento: la ventana de presión.} Cada curva vive en su propio rango de $\lambda$ y se lleva a $[1{,}02;\,1{,}16]$ con un cambio afín de $\lambda$: el estiramiento a la presión baja va a 1,02 y el de la presión alta a 1,16. \textbf{La tensión no se toca}: cada curva conserva las suyas, sin fijar de antemano su valor en los extremos. El cambio de $\lambda$ equivale a lo que el injerto real permite: un preestiramiento (corrimiento de los nudos, el $\delta$ de la Sección~\ref{sec:aplicacion}) y la elección del radio de referencia. La ventana sale de la presión:
 \begin{itemize}
-\item \textbf{T (ventana por tensión):} la ventana de $\lambda$ en que la ley recorre las tensiones de la población de Masson en los extremos del dominio; se usan la mediana y las cuatro combinaciones de cuartiles (5 ventanas por curva). Para las leyes completas (Sommer, Holzapfel, Liu).
-\item \textbf{M (ventana medida):} el tramo diástole--sístole medido in vivo, con sus tensiones reales (Liu, Kamenskiy).
+\item \textbf{M (in vivo, medida):} Liu y Kamenskiy, entre la diástole y la sístole de cada paciente.
+\item \textbf{P (ex vivo, calculada):} Sommer y Holzapfel, entre 60 y 200\,mmHg, la misma ventana de presión del nivel tubo (Sección~\ref{sec:aplicacion}). El estiramiento a cada presión sale del equilibrio de pared delgada que usan Sommer et al.~\cite{sommer2010} (sus ecs.~1 y~2),
+\begin{equation*}
+\sigma_{\theta\theta}=p\Bigl(\frac{r}{h}-1\Bigr),\qquad r=R\,\lambda_\theta,\qquad R^2-(R-H)^2=\bigl[r^2-(r-h)^2\bigr]\lambda_z,
+\end{equation*}
+con el radio externo $R$ y el espesor $H$ sin carga medios de cada arteria y capa (su Tabla~2): pared intacta 4,15 y 1,17\,mm (CCA) y 2,67 y 0,86\,mm (ICA); adventicia 4,00 y 0,47 y 2,51 y 0,33\,mm; media--íntima 3,61 y 0,70 y 2,15 y 0,53\,mm. Tres adventicias (CCA II\,l y VIII\,r, ICA VIII\,r) ya soportan sin carga más de 60\,mmHg y no tienen ventana: se excluyen.
 \end{itemize}
-En total, 327 curvas (Fig.~\ref{fig:ext}).
+Con 60\,mmHg las curvas ex vivo arrancan entre 21 y 92\,kPa y con 200\,mmHg llegan a entre 76 y 325\,kPa; las in vivo recorren de 13 a 389\,kPa. En total, 98 curvas: 38 de Sommer y Holzapfel, 12 de Liu y 48 de Kamenskiy (Fig.~\ref{fig:ext}).
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v49_curvas_externas_6.png}
-\caption{Las 327 curvas externas en el dominio de diseño, con las escalas de la Fig.~\ref{fig:sigma}: eje izquierdo en kPa, eje derecho relativo a 150\,kPa (aquí hasta 400\,kPa, porque una curva de Liu et al.\ llega a 389\,kPa). Izquierda: protocolo T; derecha: protocolo M. Franja gris: curvas límite $y_1$--$y_2$ de la población de Masson. Punteadas: rechazadas por el control de clase.}\label{fig:ext}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v54_curvas_externas_es.png}
+\caption{Las 98 curvas externas en el dominio de diseño, con las escalas de la Fig.~\ref{fig:sigma}: eje izquierdo en kPa, eje derecho relativo a 150\,kPa (aquí hasta 400\,kPa, porque una curva de Liu et al.\ llega a 389\,kPa). Las dos con el mismo escalamiento: cada curva entre su presión baja y su presión alta, con sus propias tensiones. Izquierda: ventana de 60 a 200\,mmHg calculada con la geometría de cada arteria y capa (Sommer y Holzapfel); derecha: ventana diástole--sístole medida in vivo (Liu, Kamenskiy). Franja gris: curvas límite $y_1$--$y_2$ de la población de Masson. Punteadas: rechazadas por el control de clase.}\label{fig:ext}\end{figure}
 
 \paragraph{Resultados.} La Tabla~\ref{tab:ext} resume, por estudio y tipo de espécimen, las curvas aceptadas por el control de clase.
 \begin{table}[H]\centering\small
-\caption{Validación externa (curvas aceptadas / total). Para cada número de materiales: peor $e_{\max}$ del ajuste por mínimos cuadrados [\%]; curvas que cumplen la meta de 3\,\% con láminas enteras (minimax) y su peor $e_{\max}$ [\%]; curvas en que la red cumple la meta.}\label{tab:ext}
+\caption{Validación externa (curvas aceptadas / total). Para cada número de materiales: peor $e_{\max}$ del ajuste por mínimos cuadrados [\%]; curvas que cumplen la meta de 3\,\% con láminas enteras (minimax) y su peor $e_{\max}$ [\%]; curvas en que la red cumple la meta. Ventana: P, 60 a 200\,mmHg calculada; M, diástole--sístole medida.}\label{tab:ext}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lllc|cccc|cccc}\toprule
  & & & & \multicolumn{4}{c|}{6 materiales} & \multicolumn{4}{c}{5 materiales}\\
-Estudio & Espécimen & Prot. & Aceptadas & MCO peor & Entero $\le3$\,\% & Entero peor & Red $\le3$\,\% & MCO peor & Entero $\le3$\,\% & Entero peor & Red $\le3$\,\%\\\midrule
-Sommer y Holzapfel~\cite{sommer} & CCA adventicia & T & 27/30 & 2,83 & 27/27 & 2,03 & 24/27 & 4,16 & 27/27 & 2,89 & 24/27\\
- & CCA media-íntima & T & 20/20 & 0,99 & 20/20 & 2,11 & 20/20 & 1,54 & 20/20 & 2,22 & 20/20\\
- & CCA pared & T & 55/55 & 2,66 & 55/55 & 1,93 & 54/55 & 3,91 & 55/55 & 2,70 & 53/55\\
- & ICA adventicia & T & 25/27 & 1,16 & 25/25 & 1,86 & 25/25 & 1,83 & 25/25 & 2,62 & 25/25\\
- & ICA media-íntima & T & 15/15 & 1,13 & 15/15 & 1,65 & 15/15 & 1,76 & 15/15 & 2,54 & 15/15\\
- & ICA pared & T & 50/50 & 1,54 & 50/50 & 1,96 & 50/50 & 2,28 & 50/50 & 2,50 & 49/50\\
-Holzapfel et al.~\cite{holzapfel} & conejo adventicia & T & 5/5 & 1,16 & 5/5 & 1,94 & 5/5 & 1,80 & 5/5 & 2,15 & 5/5\\
- & conejo media & T & 5/5 & 1,13 & 5/5 & 1,85 & 5/5 & 1,75 & 5/5 & 2,25 & 5/5\\
+Estudio & Espécimen & Vent. & Aceptadas & MCO peor & Entero $\le3$\,\% & Entero peor & Red $\le3$\,\% & MCO peor & Entero $\le3$\,\% & Entero peor & Red $\le3$\,\%\\\midrule
+Sommer y Holzapfel~\cite{sommer} & CCA pared & P & 11/11 & 1,06 & 11/11 & 2,45 & 11/11 & 1,62 & 11/11 & 2,76 & 11/11\\
+ & ICA pared & P & 10/10 & 1,10 & 10/10 & 2,52 & 10/10 & 1,70 & 10/10 & 2,69 & 10/10\\
+ & CCA adventicia & P & 5/5 & 1,09 & 5/5 & 1,26 & 0/5 & 1,63 & 5/5 & 1,61 & 0/5\\
+ & ICA adventicia & P & 5/5 & 1,07 & 5/5 & 1,47 & 1/5 & 1,62 & 5/5 & 1,73 & 1/5\\
+ & CCA media-íntima & P & 4/4 & 0,82 & 4/4 & 1,30 & 4/4 & 1,28 & 4/4 & 1,49 & 4/4\\
+ & ICA media-íntima & P & 3/3 & 1,04 & 3/3 & 1,52 & 3/3 & 1,58 & 3/3 & 2,30 & 3/3\\
 Liu et al.~\cite{liu} & carótida con placa & M & 12/12 & 1,06 & 8/12 & 8,09 & 10/12 & 1,59 & 8/12 & 8,16 & 10/12\\
- & carótida con placa & T & 60/60 & 1,41 & 60/60 & 2,15 & 58/60 & 2,18 & 60/60 & 2,21 & 60/60\\
 Kamenskiy et al.~\cite{kamenskiy} & CCA & M & 16/16 & 1,28 & 11/16 & 4,57 & 16/16 & 1,84 & 8/16 & 5,21 & 16/16\\
  & ECA & M & 14/16 & 1,19 & 9/14 & 8,69 & 14/14 & 1,78 & 7/14 & 9,67 & 14/14\\
  & ICA & M & 15/16 & 1,03 & 10/15 & 6,60 & 14/15 & 1,53 & 7/15 & 6,98 & 14/15\\
@@ -249,47 +259,47 @@ Kamenskiy et al.~\cite{kamenskiy} & CCA & M & 16/16 & 1,28 & 11/16 & 4,57 & 16/1
 \end{tabular}}
 \end{table}
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v49_representativas_6.png}
-\caption{Curvas representativas, 6 materiales: el caso mediano del diseño entero de cada estudio. Arriba: curva externa (negro), mínimos cuadrados (azul) y láminas enteras por minimax (verde), con el peor error entre paréntesis y las láminas de cada material en el título; eje derecho, tensión relativa a 150\,kPa. Abajo: diseño $-$ curva en \% del rango (franja: meta de $\pm3$\,\%).}\label{fig:rep}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v54_representativas_es.png}
+\caption{Curvas representativas, 6 materiales: el caso mediano del diseño entero en cada grupo. Arriba: curva externa (negro), mínimos cuadrados (azul) y láminas enteras por minimax (verde), con el peor error entre paréntesis y las láminas de cada material en el título; eje derecho, tensión relativa a 150\,kPa. Abajo: diseño $-$ curva en \% del rango (franja: meta de $\pm3$\,\%).}\label{fig:rep}\end{figure}
 \begin{table}[H]\centering\small
-\caption{Curvas representativas de las Figs.~\ref{fig:ext} y~\ref{fig:rep} (6 materiales): láminas de cada material por mínimos cuadrados (reales) y por minimax (enteras), con $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. Las 327 curvas, con sus láminas y errores, están en el material suplementario.}\label{tab:rep}
+\caption{Curvas representativas de la Fig.~\ref{fig:rep} (6 materiales): láminas de cada material por mínimos cuadrados (reales) y por minimax (enteras), con $E_{\mathrm{rms}}$ y $e_{\max}$ [\% del rango]. Las 98 curvas, con sus parámetros, ventanas, láminas y errores, están en el material suplementario.}\label{tab:rep}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llcccccccc}\toprule
 Estudio · espécimen · curva & Ajuste & $c_1$ & $c_2$ & $c_3$ & $c_4$ & $c_5$ & $c_6$ & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
-\multirow{2}{*}{Sommer--Holzapfel · CCA pared · IV l} & Mín. cuadrados & 11,06 & 3,95 & 6,70 & 3,86 & 2,81 & 1,99 & 0,41 & 1,09\\
- & Minimax entero & 11 & 4 & 7 & 3 & 4 & 1 & 0,47 & 1,19\\
+\multirow{2}{*}{Sommer y Holzapfel · CCA pared · IX r} & Mín. cuadrados & 10,58 & 4,34 & 5,10 & 2,60 & 1,80 & 1,20 & 0,36 & 0,96\\
+ & Minimax entero & 11 & 4 & 6 & 1 & 3 & 0 & 1,14 & 1,74\\
 \addlinespace
-\multirow{2}{*}{Sommer--Holzapfel · ICA adventicia · IX l} & Mín. cuadrados & 11,11 & 4,95 & 6,09 & 3,17 & 2,22 & 1,49 & 0,38 & 1,00\\
- & Minimax entero & 11 & 5 & 7 & 2 & 2 & 2 & 0,65 & 1,30\\
+\multirow{2}{*}{Sommer y Holzapfel · ICA adventicia · IX l} & Mín. cuadrados & 28,27 & 10,98 & 13,65 & 6,81 & 4,69 & 3,09 & 0,38 & 0,99\\
+ & Minimax entero & 29 & 10 & 16 & 4 & 8 & 1 & 0,70 & 1,17\\
 \addlinespace
-\multirow{2}{*}{Sommer--Holzapfel · CCA media--íntima · VI r} & Mín. cuadrados & 8,96 & 10,93 & 1,61 & 0,89 & 0,57 & 0,38 & 0,12 & 0,98\\
- & Minimax entero & 9 & 11 & 1 & 1 & 1 & 0 & 0,32 & 1,10\\
+\multirow{2}{*}{Sommer y Holzapfel · ICA media-íntima · IX r} & Mín. cuadrados & 17,06 & 7,55 & 9,41 & 4,88 & 3,42 & 2,30 & 0,38 & 1,01\\
+ & Minimax entero & 17 & 8 & 8 & 5 & 5 & 0 & 0,53 & 1,09\\
 \addlinespace
-\multirow{2}{*}{Holzapfel et al. · conejo, media} & Mín. cuadrados & 11,10 & 4,67 & 6,24 & 3,37 & 2,40 & 1,65 & 0,38 & 1,02\\
- & Minimax entero & 11 & 5 & 5 & 4 & 3 & 1 & 0,55 & 1,26\\
+\multirow{2}{*}{Liu et al. · carótida con placa · P10} & Mín. cuadrados & 15,66 & 5,08 & 0,86 & 0,38 & 0,23 & 0,13 & 0,09 & 0,59\\
+ & Minimax entero & 16 & 5 & 0 & 1 & 0 & 0 & 1,01 & 1,97\\
 \addlinespace
-\multirow{2}{*}{Liu et al. · carótida con placa · P11} & Mín. cuadrados & 6,54 & 11,26 & 15,37 & 12,52 & 10,74 & 9,02 & 0,38 & 0,98\\
- & Minimax entero & 7 & 11 & 15 & 13 & 11 & 8 & 0,55 & 1,02\\
-\addlinespace
-\multirow{2}{*}{Kamenskiy et al. · CCA (in vivo, M) · pac. 7} & Mín. cuadrados & 8,75 & 0,19 & 2,42 & 1,21 & 0,84 & 0,55 & 0,43 & 1,27\\
+\multirow{2}{*}{Kamenskiy et al. · CCA · pac. 7} & Mín. cuadrados & 8,75 & 0,19 & 2,42 & 1,21 & 0,84 & 0,55 & 0,43 & 1,27\\
  & Minimax entero & 9 & 0 & 2 & 2 & 0 & 1 & 1,33 & 2,43\\
+\addlinespace
+\multirow{2}{*}{Kamenskiy et al. · ICA · pac. 16} & Mín. cuadrados & 12,73 & 4,76 & 0,11 & 0,06 & 0,02 & 0,01 & 0,08 & 0,91\\
+ & Minimax entero & 13 & 4 & 1 & 0 & 0 & 0 & 1,36 & 2,26\\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{v49_error_entero_6.png}
-\caption{Peor error del diseño entero por estudio y protocolo, 6 materiales (curvas aceptadas). Línea roja: meta de 3\,\%.}\label{fig:boxext}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{v54_error_entero_es.png}
+\caption{Peor error del diseño entero por estudio y espécimen, 6 materiales (curvas aceptadas). Línea roja: meta de 3\,\%.}\label{fig:boxext}\end{figure}
 
 \begin{enumerate}[label=(\roman*)]
-\item \textbf{La base alcanza.} Con 6 materiales, ninguna curva aceptada supera 2,83\,\% con mínimos cuadrados. Con 5, dos curvas (una pared y una adventicia de CCA) superan levemente la meta con cantidades reales (3,91 y 4,16\,\%), pero el minimax entero las deja en 2,70 y 2,89\,\%: el minimax controla el peor punto y los mínimos cuadrados no.
-\item \textbf{Láminas enteras.} Con tensiones fisiológicas (protocolo T) cumplen las 262 curvas, con 6 y con 5 materiales (peor 2,15 y 2,89\,\%; Figs.~\ref{fig:rep} y~\ref{fig:boxext}). En las ventanas in vivo (M) cumplen 38 de 57 (6 materiales) y 30 de 57 (5). Las que fallan son las de poco recorrido de tensión (12 a 30\,kPa, contra unos 100\,kPa en T): una lámina del primer material mueve la curva unos pocos kPa, que son muchos por ciento de ese rango. En kPa, el peor error entero en M es 2,7\,kPa. Con láminas de la mitad de espesor ---sensibilidad, sin cambiar el criterio adoptado--- cumplen 54 de 57 (6 materiales) y 52 de 57 (5). El límite lo pone el espesor de lámina, no la base ni el método.
-\item \textbf{La red.} Su peor error mediano es de 1\,\% en todos los estudios. Dentro de la franja $y_1$--$y_2$ cumple la meta en 288 de 290 curvas (6 materiales) y 286 de 290 (5), aunque ninguna de esas leyes está en su entrenamiento. Fuera de la franja empeora (22 de 29): en Liu P11, con tensiones de 88 a 389\,kPa, por encima de $y_2$, la red se equivoca en 25\,\%, mientras que los mínimos cuadrados y el minimax dan 1,1 y 0,9\,\%. Lo confirma el papel de la red: un arranque rápido dentro del espacio entrenado; el diseño final lo da el minimax, que no depende de la franja.
-\item \textbf{El control de clase.} Rechazó 8 de las 327 curvas: cinco ventanas de las adventicias VIII\,r, que con $\lambda_z=1{,}10$ ya superan en $\lambda=1$ la tensión pedida y no tienen tramo inicial blando, y tres ventanas in vivo muy cortas de Kamenskiy ($\varepsilon_s\le3$\,\%). En las 8 la red fallaba (error de 2,5 a 120\,\%) y los mínimos cuadrados daban cantidades negativas. No rechazó ninguna curva en que la red funcionara bien.
+\item \textbf{La base alcanza.} Con mínimos cuadrados cumplen la meta las 95 curvas aceptadas: peor error de 1,28\,\% con 6 materiales y 1,84\,\% con 5.
+\item \textbf{Láminas enteras.} Las 38 curvas ex vivo cumplen la meta con 6 y con 5 materiales (peor 2,52 y 2,76\,\%; Figs.~\ref{fig:rep} y~\ref{fig:boxext}). En las ventanas in vivo cumplen 38 de 57 (6 materiales) y 30 de 57 (5). Las que fallan son las de poco recorrido de tensión: la mediana es de 38\,kPa in vivo contra 97\,kPa ex vivo, y una lámina del primer material mueve la curva unos pocos kPa, que son muchos por ciento de ese rango. En kPa, el peor error entero in vivo es de 2,7\,kPa (6 materiales). Con láminas de la mitad de espesor ---sensibilidad, sin cambiar el criterio adoptado--- cumplen 54 de 57 (6 materiales) y 52 de 57 (5). El límite lo pone el espesor de lámina, no la base ni el método.
+\item \textbf{La red.} Su peor error mediano es de 1,0\,\% (6 materiales). Dentro de la franja $y_1$--$y_2$ cumple la meta en las 63 curvas, con 6 y con 5 materiales, aunque ninguna de esas leyes está en su entrenamiento. Fuera de la franja cumple en 20 de 32: falla en 9 de las 10 adventicias aisladas, que a 200\,mmHg superan a $y_2$, y en tres curvas in vivo; en Liu P11, que llega a 389\,kPa, se equivoca en 25\,\%, mientras que los mínimos cuadrados y el minimax dan 1,06 y 0,89\,\%. Lo confirma el papel de la red: un arranque rápido dentro del espacio entrenado; el diseño final lo da el minimax, que no depende de la franja.
+\item \textbf{El control de clase.} Rechazó 3 de las 98 curvas, las tres ventanas in vivo más cortas de Kamenskiy (ECA de los pacientes 11 y 15 e ICA del 15, con $\varepsilon_s\le3$\,\%), en las que la red se equivocaba entre 2,5 y 9,2\,\%. No rechazó ninguna curva ex vivo.
 \end{enumerate}
-Las 327 curvas, los parámetros de cada una y todos los errores están en el material suplementario, junto con el cuaderno que las genera y evalúa.
+Las 98 curvas, los parámetros de cada una, su ventana y todos los errores están en el material suplementario, junto con el cuaderno que las genera y evalúa.
 
 \begin{caja}{Conclusión del primer nivel}
-Con materiales tipo fibra y una base elegida una vez, la curva tensión--estiramiento de las 41 carótidas y de las 22\,500 curvas del espacio de trabajo se reproduce con láminas enteras dentro de la meta (6 materiales). El método exacto es lineal: mínimos cuadrados y minimax entero. La misma base, sin mover un nudo, reproduce curvas de otros cuatro estudios (otras arterias, capas aisladas, otra especie, pacientes con placa, mediciones in vivo): con tensiones fisiológicas, todas con láminas enteras dentro de la meta. La red lo reproduce en una evaluación y generaliza a leyes que no vio, pero no puede mejorarlo: en el caso lineal la red no es necesaria. Su papel aparece cuando la relación entre la curva y el diseño deja de ser lineal.
+Con materiales tipo fibra y una base elegida una vez, la curva tensión--estiramiento de las 41 carótidas y de las 22\,500 curvas del espacio de trabajo se reproduce con láminas enteras dentro de la meta (6 materiales). El método exacto es lineal: mínimos cuadrados y minimax entero. La misma base, sin mover un nudo, reproduce curvas de otros tres estudios (otras arterias, capas aisladas, pacientes con placa, mediciones in vivo), cada una con su ley constitutiva y su propia ventana de presión: con mínimos cuadrados, todas dentro de la meta; con láminas enteras, todas las ex vivo, y en las in vivo de poco recorrido de tensión el límite es el espesor de lámina. La red lo reproduce en una evaluación y generaliza a leyes que no vio, pero no puede mejorarlo: en el caso lineal la red no es necesaria. Su papel aparece cuando la relación entre la curva y el diseño deja de ser lineal.
 \end{caja}
 
 %=====================================================================
@@ -470,7 +480,7 @@ HT09 (el más rígido) & A & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0,725 & $-0,0394$ & 0
 \section{Discusión}
 \paragraph{Por qué dos niveles.} La curva tensión--estiramiento es una propiedad del tejido. Trabajar primero sobre ella permite validar cada pieza del método ---la base, el ajuste, el redondeo, la red--- contra soluciones exactas, sin que intervengan la geometría ni la presión, que dependen de cada arteria y de cada sitio. El paso al tubo agrega la geometría y la hipótesis de pared gruesa, pero conserva los materiales, la métrica, el criterio minimax y la conclusión sobre el ruido.
 
-\paragraph{Generalidad.} Lo que se valida en el primer nivel no es propio de la carótida: los materiales tipo fibra, la base elegida sobre un espacio amplio de curvas en J, el redondeo minimax y una red que reproduce el ajuste en curvas de una ley que nunca vio. Para otra arteria cambian la geometría, el espesor y la ventana de presión, que entran recién en el segundo nivel; la franja de curvas y, si hiciera falta, los nudos se recalculan con el mismo procedimiento. El control de clase indica cuándo una curva queda fuera del alcance del método. La validación externa (Sección~\ref{sec:externa}) lo confirma con datos: la base elegida con las carótidas de Masson reproduce, sin cambios, curvas de carótida común, externa e interna, de adventicia y media--íntima aisladas, de conejo y de pacientes con placa, de tres leyes constitutivas distintas. Lo que limita en algunas curvas in vivo es el espesor de lámina frente a un recorrido de tensión pequeño, no la forma de la curva. La red generaliza a esas leyes dentro de la franja en que fue entrenada; fuera de ella debe usarse solo como punto de partida, y el control de clase junto con la franja $y_1$--$y_2$ alcanzan para detectarlo.
+\paragraph{Generalidad.} Lo que se valida en el primer nivel no es propio de la carótida: los materiales tipo fibra, la base elegida sobre un espacio amplio de curvas en J, el redondeo minimax y una red que reproduce el ajuste en curvas de una ley que nunca vio. Para otra arteria cambian la geometría, el espesor y la ventana de presión, que entran recién en el segundo nivel; la franja de curvas y, si hiciera falta, los nudos se recalculan con el mismo procedimiento. El control de clase indica cuándo una curva queda fuera del alcance del método. La validación externa (Sección~\ref{sec:externa}) lo confirma con datos: la base elegida con las carótidas de Masson reproduce, sin cambios, curvas de carótida común, externa e interna, de adventicia y media--íntima aisladas y de pacientes con placa, de tres leyes constitutivas distintas, cada una en su ventana de presión. Lo que limita en algunas curvas in vivo es el espesor de lámina frente a un recorrido de tensión pequeño, no la forma de la curva. La red generaliza a esas leyes dentro de la franja en que fue entrenada; fuera de ella debe usarse solo como punto de partida, y el control de clase junto con la franja $y_1$--$y_2$ alcanzan para detectarlo.
 
 \paragraph{El papel de la red neuronal.} En el caso lineal la solución exacta es inmediata y la red solo puede imitarla, aunque lo hace en una evaluación y generaliza. En pared gruesa el ajuste es iterativo, local y depende del punto de partida: el arranque clásico, heredado del caso lineal, ignora el gradiente de estiramiento en el espesor y, con curvas medidas, puede llevar a mínimos locales que dan diseños inservibles. La red, entrenada sobre miles de diseños resueltos, deja al ajuste cerca del mínimo correcto. Es la idea de la optimización amortizada~\cite{amos}: la red no reemplaza al optimizador, lo inicia. Su ventaja es de robustez, clara con 6 materiales y menor con 5.
 
@@ -482,7 +492,7 @@ HT09 (el más rígido) & A & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0,725 & $-0,0394$ & 0
 \section{Conclusiones}
 \begin{enumerate}
 \item Un injerto de capas de materiales tipo fibra (rectas truncadas), con una base elegida una vez para toda la población, reproduce la curva tensión--estiramiento de 41 carótidas humanas y de 22\,500 curvas sintéticas. Con 6 materiales y láminas enteras por minimax, los 41 sujetos cumplen la meta de 3\,\%.
-\item Sin ningún cambio, la misma base reproduce 327 curvas de otros cuatro estudios (Sommer y Holzapfel, Holzapfel et al., Liu et al., Kamenskiy et al.): peor error de 2,83\,\% con cantidades reales y, con tensiones fisiológicas, el 100\,\% dentro de la meta con láminas enteras. El método no depende de la arteria con que se construyó; en curvas in vivo de poco recorrido de tensión el límite es el espesor de lámina.
+\item Sin ningún cambio, la misma base reproduce 98 curvas de otros tres estudios (Sommer y Holzapfel, Liu et al., Kamenskiy et al.), cada una con su ley constitutiva y llevada al dominio con un solo escalamiento ---su ventana de presión, sin tocar la tensión---: peor error de 1,28\,\% con cantidades reales y, con láminas enteras, las 38 curvas ex vivo dentro de la meta. El método no depende de la arteria con que se construyó; en curvas in vivo de poco recorrido de tensión el límite es el espesor de lámina.
 \item En el caso lineal, el método exacto es mínimos cuadrados más minimax entero (programación lineal entera). La red neuronal lo reproduce en una evaluación y generaliza a una ley constitutiva no vista (exceso de 2,8 a 4,6\,\%), pero no lo mejora. Una red en cadena, que elige los materiales de a uno sabiendo los anteriores, da directamente láminas enteras: con una búsqueda de $\pm1$ lámina queda casi a la par del minimax y es decenas de veces más rápida, pero sin la garantía de óptimo, por lo que se mantiene el minimax.
 \item A nivel del tubo el diseño debe hacerse en pared gruesa: diseñado con la ley de Laplace, ningún sujeto cumple al fabricarse; en pared gruesa cumplen 40--41 de 41. El problema es no lineal entero.
 \item El procedimiento de tres pasos ---arranque, mínimos cuadrados no lineales y láminas enteras por minimax contra la curva ajustada--- cumple en 40--41 de 41 sujetos con curvas limpias, en menos de medio segundo por sujeto.
@@ -628,6 +638,7 @@ Pared gruesa, 5 mat. & 11\,220 / 1530 / 2250 & 629 / 509 & 4 & 0,153 & 0,227 & 0
 \bibitem{rockafellar} Rockafellar, R.\,T., Uryasev, S. (2000). Optimization of conditional value-at-risk. \emph{J. Risk} 2(3), 21--41.
 \bibitem{rovas23} Rovas, G., Bikia, V., Stergiopulos, N. (2023). Design and computational optimization of compliance-matching aortic grafts. \emph{Front. Bioeng. Biotechnol.} 11, 1179174.
 \bibitem{rovas25} Rovas, G., Reymond, P., van Steenberghe, M., et al., Stergiopulos, N. (2025). Evaluation of a novel compliance-matching aortic graft in a swine model. \emph{J. Biomech.} doi:10.1016/j.jbiomech.2025.112629.
+\bibitem{sommer2010} Sommer, G., Regitnig, P., Költringer, L., Holzapfel, G.\,A. (2010). Biaxial mechanical properties of intact and layer-dissected human carotid arteries at physiological and supraphysiological loadings. \emph{Am. J. Physiol. Heart Circ. Physiol.} 298, H898--H912.
 \bibitem{sommer} Sommer, G., Holzapfel, G.\,A. (2012). 3D constitutive modeling of the biaxial mechanical response of intact and layer-dissected human carotid arteries. \emph{J. Mech. Behav. Biomed. Mater.} 5, 116--128.
 \bibitem{storn} Storn, R., Price, K. (1997). Differential evolution: a simple and efficient heuristic for global optimization over continuous spaces. \emph{J. Global Optim.} 11, 341--359.
 \bibitem{szafron} Szafron, J.\,M., Ramachandra, A.\,B., Breuer, C.\,K., Marsden, A.\,L., Humphrey, J.\,D. (2019). Optimization of tissue-engineered vascular graft design using computational modeling. \emph{Tissue Eng. Part C}. doi:10.1089/ten.tec.2019.0086.
