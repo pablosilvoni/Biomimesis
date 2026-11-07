@@ -1,0 +1,14 @@
+Versión 54 (5 materiales): validación externa con UN SOLO escalamiento (reemplaza el protocolo T de V49).
+
+Todas las curvas se llevan al dominio λ = 1,02–1,16 con su ventana de presión, SIN tocar la tensión:
+  • M (in vivo, medida): Liu et al. 2012 (12) y Kamenskiy et al. 2012 (48), entre diástole y sístole de cada paciente.
+  • P (ex vivo, calculada): Sommer y Holzapfel 2012 (38), entre 60 y 200 mmHg (la misma ventana del nivel tubo), con el
+    equilibrio de pared delgada de Sommer et al. 2010 (ec. 1–2) y la geometría sin carga de su Tabla 2.
+  • Excluidas: el conejo de Holzapfel et al. 2000 (900–3300 kPa como capas aisladas) y tres adventicias de Sommer
+    (CCA II l, CCA VIII r, ICA VIII r), que ya soportan más de 60 mmHg sin carga.
+
+curva_j_v54_5.ipynb — notebook ejecutado (las celdas 0–11 son las de V49; la celda V54-2 arma las ventanas).
+Necesita en la carpeta: tabla2_masson_NT.csv, tabla4_masson_HT.csv, bases_v39_5.csv, modelo_rn_curva_j_v35_5.keras,
+  scalers_curva_j_v35_5.pkl, plantilla_ensayos_v39_5.csv.
+Resultados: v54_curvas_externas_5.csv (una fila por curva: ventana, tensiones, errores, láminas), v54_resumen_*.csv,
+  v54_curvas_externas_5.png, v54_error_entero_5.png, v54_peores_casos_5.png, v54_arreglos_5.npz (curvas y ajustes).
