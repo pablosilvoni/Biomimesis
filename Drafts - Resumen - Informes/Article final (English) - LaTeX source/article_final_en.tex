@@ -186,6 +186,24 @@ A \textbf{$\pm1$ search} can be applied to the answer of either network: the $3^
 \caption{Chained network for 6 materials. A shared trunk ($999\to256\to128\to64$, ReLU and layer normalization) summarizes the curve in the vector $h$; head $j$ receives $h$ and the laminae $n_1\ldots n_{j-1}$ already chosen by the previous heads (violet dashed arrows), and chooses $n_j$ between 0 and 47 laminae. The loss is the cross-entropy of each material against the minimax integer. The optional $\pm1$ search reviews the $3^N$ neighbouring combinations of the answer.}\label{fig:cadena}
 \end{figure}
 
+\paragraph{Foundation of the chained network.} It rests on four results.
+\begin{enumerate}[label=(\alph*)]
+\item \emph{Universal approximation.} A layered network with enough neurons approximates any continuous function on a bounded set~\cite{cybenko,hornik,leshno}. What each head learns are the probabilities $p_{ij}(n)$ of using $n$ laminae of material $j$ for curve $i$, which vary continuously with the curve; the step to an integer is taken only at the end, by choosing the most probable class.
+\item \emph{Chain rule of probability.} The probability of a complete design always factorizes, without any assumption, as
+\begin{equation}\label{eq:cadena}
+p\bigl(n_{1},\dots,n_{N}\mid\mathbf{y}\bigr)=\prod_{j=1}^{N}p\bigl(n_{j}\mid\mathbf{y},n_{1},\dots,n_{j-1}\bigr),
+\end{equation}
+and each factor is what one head computes. This is the idea behind autoregressive models~\cite{larochelle} and classifier chains~\cite{read11}. The separate network, by contrast, assumes $\prod_j p(n_j\mid\mathbf{y})$, that is, independent materials; since the materials compensate each other, that assumption is false, which is why it fails.
+\item \emph{Maximum likelihood.} Each head turns its scores $z_{ij}(n)$ into probabilities with a softmax, $p_{ij}(n)=e^{z_{ij}(n)}/\sum_{m=0}^{K-1}e^{z_{ij}(m)}$, with $K=48$ classes. The loss is the cross-entropy summed over materials, plus an L2 regularization of the trunk weights:
+\begin{equation}\label{eq:perdida}
+\mathcal{L}(\theta)=\frac{1}{B}\sum_{i=1}^{B}\sum_{j=1}^{N}\Bigl[-\ln p_{ij}\bigl(n^{*}_{ij}\bigr)\Bigr]+\lambda\sum_{W\in\text{trunk}}\lVert W\rVert^{2},\qquad \lambda=10^{-5},
+\end{equation}
+where $n^{*}_{ij}$ are the minimax laminae and $B=256$ curves per batch. By~\eqref{eq:cadena}, the sum over $j$ is exactly $-\ln p(n^{*}_{i1},\dots,n^{*}_{iN}\mid\mathbf{y}_i)$: minimizing $\mathcal{L}$ maximizes the probability the network assigns to the minimax design. To train each factor of~\eqref{eq:cadena}, head $j$ receives the minimax laminae of the previous materials (\emph{teacher forcing}~\cite{williams}); in use it receives those chosen by the previous heads, $\hat n_{ij}=\arg\max_n p_{ij}(n)$.
+\item \emph{Shared representation $h$.} The $N$ heads solve tasks that depend on the same curve; a shared trunk forces $h$ to keep what is useful to all of them and improves generalization over separate networks~\cite{caruana,bengio13}. The curves depend on few parameters: Masson's law uses about 8 per subject, and the linear fit reproduces any curve of the working space with 6 coefficients and an error below 1\,\%. The 64 numbers of $h$ are more than enough, and the same trunk reproduces those coefficients with an error of about 0.02 laminae (Appendix~\ref{sec:entrenamiento}). The size 64, like 256 and 128, is a design choice and does not follow from a theorem.
+\end{enumerate}
+The theory guarantees that such a network exists, not that training finds it: that is checked with the data. Choosing the most probable class in order does not ensure the most probable combination as a whole either, and in use a head may receive an error it did not see in training (\emph{exposure bias}~\cite{bengio15}). This is why the $\pm1$ search helps, and why the only method with a guarantee of optimality remains the minimax.
+
+
 \begin{table}[H]\centering\small
 \caption{Integer laminae directly from the network. For each set of curves: median / worst $e_{\max}$ [\%] · curves that meet the target (3\,\% for the 41 subjects, 4\,\% for the 2000 curves of the working space). Same: curves for which the method gives exactly the minimax integer design (subjects / curves). All errors are against the original curve.}\label{tab:enteros}
 \resizebox{\textwidth}{!}{\begin{tabular}{lcccccc}\toprule
@@ -607,9 +625,13 @@ Thick wall, 5 mat. & 11\,220 / 1530 / 2250 & 629 / 509 & 4 & 0.153 & 0.227 & 0.2
 \bibitem{agrell} Agrell, E., Eriksson, T., Vardy, A., Zeger, K. (2002). Closest point search in lattices. \emph{IEEE Trans. Inf. Theory} 48(8), 2201--2214.
 \bibitem{amos} Amos, B. (2023). Tutorial on amortized optimization. \emph{Found. Trends Mach. Learn.} 16(5), 592--732.
 \bibitem{layernorm} Ba, J.\,L., Kiros, J.\,R., Hinton, G.\,E. (2016). Layer normalization. arXiv:1607.06450.
+\bibitem{bengio15} Bengio, S., Vinyals, O., Jaitly, N., Shazeer, N. (2015). Scheduled sampling for sequence prediction with recurrent neural networks. \emph{Advances in Neural Information Processing Systems} 28.
+\bibitem{bengio13} Bengio, Y., Courville, A., Vincent, P. (2013). Representation learning: a review and new perspectives. \emph{IEEE Trans. Pattern Anal. Mach. Intell.} 35(8), 1798--1828.
 \bibitem{branch} Branch, M.\,A., Coleman, T.\,F., Li, Y. (1999). A subspace, interior, and conjugate gradient method for large-scale bound-constrained minimization problems. \emph{SIAM J. Sci. Comput.} 21(1), 1--23.
 \bibitem{brent} Brent, R.\,P. (1973). \emph{Algorithms for Minimization without Derivatives}. Prentice-Hall.
+\bibitem{caruana} Caruana, R. (1997). Multitask learning. \emph{Machine Learning} 28, 41--75.
 \bibitem{cheney} Cheney, E.\,W. (1966). \emph{Introduction to Approximation Theory}. McGraw-Hill.
+\bibitem{cybenko} Cybenko, G. (1989). Approximation by superpositions of a sigmoidal function. \emph{Math. Control Signals Syst.} 2, 303--314.
 \bibitem{davis} Davis, P.\,J., Rabinowitz, P. (1984). \emph{Methods of Numerical Integration}, 2nd ed. Academic Press.
 \bibitem{ding} Ding, X., Sha, D., Sun, K., Fan, Y. (2025). Biomechanical insights into the development and optimization of small-diameter vascular grafts. \emph{Acta Biomater.} doi:10.1016/j.actbio.2025.04.028.
 \bibitem{engelen13} Engelen, L., Ferreira, I., Stehouwer, C.\,D.\,A., Boutouyrie, P., Laurent, S.; Reference Values for Arterial Measurements Collaboration (2013). Reference intervals for common carotid intima-media thickness measured with echotracking: relation with risk factors. \emph{Eur. Heart J.} 34(30), 2368--2380.
@@ -621,13 +643,16 @@ Thick wall, 5 mat. & 11\,220 / 1530 / 2250 & 629 / 509 & 4 & 0.153 & 0.227 & 0.2
 \bibitem{numpy} Harris, C.\,R., et al. (2020). Array programming with NumPy. \emph{Nature} 585, 357--362.
 \bibitem{harrison} Harrison, S., Tamimi, E., Uhlorn, J., Leach, T., Vande Geest, J.\,P. (2016). Computationally optimizing the compliance of a biopolymer based tissue engineered vascular graft. \emph{J. Biomech. Eng.} 138(1), 014505.
 \bibitem{holzapfel} Holzapfel, G.\,A., Gasser, T.\,C., Ogden, R.\,W. (2000). A new constitutive framework for arterial wall mechanics and a comparative study of material models. \emph{J. Elasticity} 61, 1--48.
+\bibitem{hornik} Hornik, K. (1991). Approximation capabilities of multilayer feedforward networks. \emph{Neural Networks} 4, 251--257.
 \bibitem{hsu} Hsu, R., Szafron, J.\,M., Carvalho, C.\,C., Humphrey, J.\,D., Marsden, A.\,L. (2025). Constrained optimization of scaffold behavior for improving tissue engineered vascular grafts. \emph{J. Biomech.} doi:10.1016/j.jbiomech.2025.112670.
 \bibitem{highs} Huangfu, Q., Hall, J.\,A.\,J. (2018). Parallelizing the dual revised simplex method. \emph{Math. Program. Comput.} 10, 119--142.
 \bibitem{humphrey} Humphrey, J.\,D. (2002). \emph{Cardiovascular Solid Mechanics: Cells, Tissues, and Organs}. Springer.
 \bibitem{jiang} Jiang, D., Robinson, A.\,J., Nkansah, A., et al. (2025). A computational framework to optimize the mechanical behavior of synthetic vascular grafts. \emph{J. Mech. Behav. Biomed. Mater.} 163, 106847.
 \bibitem{kamenskiy} Kamenskiy, A.\,V., Dzenis, Y.\,A., MacTaggart, J.\,N., Lynch, T.\,G., Jaffar Kazmi, S.\,A., Pipinos, I.\,I. (2012). Nonlinear mechanical behavior of the human common, external, and internal carotid arteries in vivo. \emph{J. Surg. Res.}
 \bibitem{adam} Kingma, D.\,P., Ba, J. (2015). Adam: a method for stochastic optimization. \emph{Proc. ICLR}.
+\bibitem{larochelle} Larochelle, H., Murray, I. (2011). The neural autoregressive distribution estimator. \emph{Proc. 14th Int. Conf. Artificial Intelligence and Statistics (AISTATS)}, 29--37.
 \bibitem{lawson} Lawson, C.\,L., Hanson, R.\,J. (1995). \emph{Solving Least Squares Problems}. SIAM.
+\bibitem{leshno} Leshno, M., Lin, V.\,Ya., Pinkus, A., Schocken, S. (1993). Multilayer feedforward networks with a nonpolynomial activation function can approximate any function. \emph{Neural Networks} 6, 861--867.
 \bibitem{liu} Liu, H., et al. (2012). Using in vivo Cine and 3D multi-contrast MRI to determine human atherosclerotic carotid artery material properties and circumferential shrinkage rate and their impact on stress/strain predictions. \emph{J. Biomech. Eng.} 134, 011008.
 \bibitem{masson} Masson, I., Beaussier, H., Boutouyrie, P., Laurent, S., Humphrey, J.\,D., Zidi, M. (2011). Carotid artery mechanical properties and stresses quantified using in vivo data from normotensive and hypertensive humans. \emph{Biomech. Model. Mechanobiol.} 10(6), 867--882.
 \bibitem{relu} Nair, V., Hinton, G.\,E. (2010). Rectified linear units improve restricted Boltzmann machines. \emph{Proc. ICML}.
@@ -635,6 +660,7 @@ Thick wall, 5 mat. & 11\,220 / 1530 / 2250 & 629 / 509 & 4 & 0.153 & 0.227 & 0.2
 \bibitem{penrose} Penrose, R. (1955). A generalized inverse for matrices. \emph{Math. Proc. Cambridge Philos. Soc.} 51(3), 406--413.
 \bibitem{prechelt} Prechelt, L. (1998). Early stopping --- but when? In \emph{Neural Networks: Tricks of the Trade}, LNCS 1524, 55--69.
 \bibitem{rachev} Rachev, A., Hayashi, K. (1999). Theoretical study of the effects of vascular smooth muscle contraction on strain and stress distributions in arteries. \emph{Ann. Biomed. Eng.} 27, 459--468.
+\bibitem{read11} Read, J., Pfahringer, B., Holmes, G., Frank, E. (2011). Classifier chains for multi-label classification. \emph{Machine Learning} 85, 333--359.
 \bibitem{rockafellar} Rockafellar, R.\,T., Uryasev, S. (2000). Optimization of conditional value-at-risk. \emph{J. Risk} 2(3), 21--41.
 \bibitem{rovas23} Rovas, G., Bikia, V., Stergiopulos, N. (2023). Design and computational optimization of compliance-matching aortic grafts. \emph{Front. Bioeng. Biotechnol.} 11, 1179174.
 \bibitem{rovas25} Rovas, G., Reymond, P., van Steenberghe, M., et al., Stergiopulos, N. (2025). Evaluation of a novel compliance-matching aortic graft in a swine model. \emph{J. Biomech.} doi:10.1016/j.jbiomech.2025.112629.
