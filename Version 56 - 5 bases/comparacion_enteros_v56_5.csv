@@ -1,0 +1,7 @@
+método,grupo,mediana %,peor %,cumplen,de,meta %,igual al minimax,igual o mejor que el minimax,≤ 1 lámina del minimax,ms por curva
+"Minimax (MILP, HiGHS)",41 sujetos,1.466,3.5,40,41,3.0,41,41,41,42.714
+"Minimax (MILP, HiGHS)",2000 curvas,1.442,3.481,2000,2000,4.0,2000,2000,2000,43.085
+Red en cadena,41 sujetos,1.761,3.5,40,41,3.0,16,18,31,11.633
+Red en cadena,2000 curvas,1.767,8.012,1984,2000,4.0,631,756,1561,0.295
+Red en cadena + búsqueda ±1,41 sujetos,1.516,3.5,40,41,3.0,28,32,29,7.998
+Red en cadena + búsqueda ±1,2000 curvas,1.492,5.475,1999,2000,4.0,1343,1637,1525,0.959
