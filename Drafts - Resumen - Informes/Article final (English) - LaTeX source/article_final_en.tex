@@ -1,11 +1,11 @@
 \input{pre_en.tex}
 \title{\textbf{Design of multilayer vascular grafts that reproduce the stress--stretch curve of each artery:\\ material bases, integer laminae, thick-walled tubes and a neural network}}
 \author{Pablo Silvoni \textit{et al.}}
-\date{November 9, 2026}
+\date{November 11, 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-\noindent A vascular graft whose distensibility differs from that of the artery it replaces promotes thrombosis and intimal hyperplasia. Published design methods match a single number ---the compliance of an average artery---. Here we present a method to design, patient by patient, a multilayer graft that reproduces the \emph{complete} curve of the artery, including its J shape. Each graft material is idealized as a fiber that bears no load until it reaches its own stretch (truncated line), and the artery is approximated by a sum of such materials, chosen once for the whole population, with at most 20 laminae per material. The method is first validated on the circumferential stress--circumferential stretch curve, $\sigma_{\theta\theta}(\lambda_\theta)$, which depends neither on pressure nor on wall geometry. With 41 human carotid arteries (Masson et al.), the minimax integer design ---the best integer design that exists, by integer linear programming--- meets the target (worst error $\le3$\,\% of the range) for all 41 subjects with 6 materials. A single neural network, which chooses the laminae of each material knowing those of the previous ones (chained network), with an ordinal output that respects the order of the amounts, and is trained inside the band of curves of the population, its domain of validity, directly gives the integer laminae in one evaluation, without optimizing: with a $\pm1$ lamina search it meets the target for the 31 training subjects, the 10 test subjects and 50 of 63 curves from three other studies ---common, external and internal carotid arteries, isolated layers, patients with plaque, in vivo measurements---, with other constitutive laws; the minimax meets it for 57 of those 63, and for the rest no integer design reaches the target. The method is then applied to the pressure--diameter curve, for which the graft is a thick-walled tube: designed with Laplace's law, no subject meets the target once manufactured, whereas with the thick-walled model 40--41 of 41 do. Design becomes a nonlinear integer problem, solved in three steps: initialization, nonlinear least squares, and minimax integer search against the fitted curve. There, a network used as a starting point avoids the local minima that, with measured curves, lead to unusable designs (worst error from 468.7\,\% down to 2.3\,\%).
+\noindent A vascular graft whose distensibility differs from that of the artery it replaces promotes thrombosis and intimal hyperplasia. Published design methods match a single number ---the compliance of an average artery---. Here we present a method to design, patient by patient, a multilayer graft that reproduces the \emph{complete} curve of the artery, including its J shape. Each graft material is idealized as a fiber that bears no load until it reaches its own stretch (truncated line), and the artery is approximated by a sum of such materials, chosen once for the whole population, with at most 20 laminae per material. The method is first validated on the circumferential stress--circumferential stretch curve, $\sigma_{\theta\theta}(\lambda_\theta)$, which depends neither on pressure nor on wall geometry. With 41 human carotid arteries (Masson et al.), the minimax integer design ---the best integer design that exists, by integer linear programming--- meets the target (worst error $\le3$\,\% of the range) for all 41 subjects with 6 materials. A single neural network, which chooses the laminae of each material knowing those of the previous ones (chained network), with an ordinal output that respects the order of the amounts, and is trained inside the band of curves of the population, its domain of validity, directly gives the integer laminae in one evaluation, without optimizing: with a $\pm1$ lamina search it meets the target for the 31 training subjects, the 10 test subjects and 50 of 63 curves from three other studies ---common, external and internal carotid arteries, isolated layers, patients with plaque, in vivo measurements---, with other constitutive laws; the minimax meets it for 57 of those 63, and for the rest no integer design reaches the target. The method is then applied to the pressure--diameter curve, for which the graft is a thick-walled tube: designed with Laplace's law, no subject meets the target once manufactured, whereas with the thick-walled model all 41 do. Design becomes a nonlinear integer problem; as a reference it is solved in three steps (initialization, nonlinear least squares and integer minimax), which meet the target for all 41 subjects. The same chained network, with one more head for the prestretch, gives the laminae of each layer in one evaluation: with a $\pm1$ lamina check it meets the target for all 41 subjects with 6 materials and for 40 with 5, and with noisy measured curves it meets it for more subjects than the minimax, with a smaller worst case.
 \end{abstract}
 \tableofcontents
 
@@ -20,7 +20,7 @@ This work designs the graft so that it reproduces the \emph{complete} curve of \
 \item \textbf{Material level (validation).} The target curve is the circumferential stress as a function of circumferential stretch, $\sigma_{\theta\theta}(\lambda_\theta)$. It is a property of the tissue: it does not depend on pressure, radius or wall thickness, and is therefore common to any artery whose wall has a J-shaped response. At this level the graft is a sum of materials, the design is linear, and every step of the method can be compared with an exact solution.
 \item \textbf{Tube level (application).} The target curve is the pressure borne by the wall as a function of diameter. Geometry and the thick-wall model come into play, the design is no longer linear, and the conclusions of the first level are used.
 \end{enumerate}
-The contributions are: (i) a basis of fiber-like materials chosen once for the whole population; (ii) the optimal integer design, with at most 20 laminae per material, by integer linear programming (minimax); (iii) a single chained neural network with ordinal output that directly gives the integer laminae in one evaluation, validated separately on training subjects, test subjects and curves from three other studies, within a domain of validity set beforehand; (iv) the demonstration that, at the tube level, the design must be carried out with a thick-walled model, which makes it a nonlinear integer problem; and (v) a three-step procedure in which a network acts as a starting point.
+The contributions are: (i) a basis of fiber-like materials chosen once for the whole population; (ii) the optimal integer design, with at most 20 laminae per material, by integer linear programming (minimax); (iii) a single chained neural network with ordinal output that directly gives the integer laminae in one evaluation, validated separately on training subjects, test subjects and curves from three other studies, within a domain of validity set beforehand; (iv) the demonstration that, at the tube level, the design must be carried out with a thick-walled model, which makes it a nonlinear integer problem; and (v) the same chained network applied to the thick-walled tube, compared with a three-step optimization procedure.
 
 %=====================================================================
 \section{Data}\label{sec:datos}
@@ -101,16 +101,16 @@ The minimax solves an integer optimization problem for each curve. A neural netw
 
 \paragraph{Architecture.} A shared trunk, $999\to256\to128\to64$ (ReLU~\cite{relu}, layer normalization~\cite{layernorm} and L2 regularization of $10^{-5}$), summarizes the curve in a vector $h$ of 64 numbers; the input is the standardized $\log(y+22)$. There is one head per material. Head $j$ receives $h$ and the laminae already chosen, $n_1\ldots n_{j-1}$ (divided by 20), goes through two layers (128 and 64 neurons, ReLU) and computes a single score $s_j$. The 20 questions share that score and differ only in their own threshold, $P(n_j>k)=\sigma(s_j+b_{jk})$, with $\sigma$ the logistic function~\cite{cao}; the answer is $\hat n_j=\#\{k:\ P(n_j>k)>1/2\}$. It is used in order ---material 1, then 2 knowing 1, and so on up to the last---, so it can compensate between materials: if it put one lamina too many in one, it can put one fewer in the next. It has 399\,928 parameters with 6 materials and 382\,628 with 5.
 
-\paragraph{How it works, step by step.} An ordinary neural network receives the curve and delivers all its outputs at once. The chained network, instead, builds the design one material at a time and uses its own answers as part of its input. It therefore has two inputs: the curve $\mathbf{y}$ and a vector of $N$ slots with the laminae already decided, divided by 20 so that they lie between 0 and 1 like the rest of the inputs.
+\paragraph{How it works, step by step.} An ordinary neural network receives the curve and delivers all its outputs at once. The chained network, instead, builds the design one material at a time and uses its own answers as part of its input. It therefore has two inputs: the curve $\mathbf{y}$ and the \emph{vector of decided laminae} $\mathbf{m}=(m_1,\ldots,m_N)$, with one component per material ($N=6$ or 5, the number of materials of the basis). Component $m_j$ equals $\hat n_j/20$ if the laminae of material $j$ have already been chosen, and 0 if not yet; it is divided by 20, the maximum number of laminae per material, so that it lies between 0 and 1 like the rest of the inputs. For example, with 6 materials, after choosing 5 laminae of material 1 and 7 of material 2, $\mathbf{m}=(5/20,\,7/20,\,0,\,0,\,0,\,0)$.
 \begin{enumerate}[label=(\arabic*)]
-\item \emph{Step 1.} The $N$ slots are zero. The trunk summarizes the curve in $h$, and head 1 answers the 20 questions ``more than $k$ laminae of material 1?''; $\hat n_1$ is the number of answers with probability greater than 1/2.
-\item \emph{Step $j$, for $j=2,\ldots,N$.} The network is evaluated again with the same curve and with the slots $(\hat n_1,\ldots,\hat n_{j-1},0,\ldots,0)/20$, and only head $j$ is read, which gives $\hat n_j$. Each head looks only at the slots of the materials before it.
+\item \emph{Step 1.} Nothing has been chosen yet: $\mathbf{m}=\mathbf{0}$. The trunk summarizes the curve in $h$, and head 1 answers the 20 questions ``more than $k$ laminae of material 1?''; $\hat n_1$ is the number of answers with probability greater than 1/2.
+\item \emph{Step $j$, for $j=2,\ldots,N$.} The network is evaluated again with the same curve and with $\mathbf{m}=(\hat n_1,\ldots,\hat n_{j-1},0,\ldots,0)/20$, and only head $j$ is read, which gives $\hat n_j$. Head $j$ looks only at the components $m_1,\ldots,m_{j-1}$, those of the materials before it.
 \item After $N$ evaluations, $(\hat n_1,\ldots,\hat n_N)$ is the design.
 \end{enumerate}
-For example, for subject NT01 with 6 materials, head 1 chooses 5 laminae; head 2, knowing that 5, chooses 7; head 3, knowing 5 and 7, chooses 5; and so on up to $[5,7,5,6,6,7]$ (Table~\ref{tab:suj6}). Since the trunk depends only on the curve, $h$ is the same in the $N$ steps: what changes from one step to the next is what the network knows about the materials already decided. Training does not run the $N$ steps: each head receives in the slots the minimax laminae of the previous materials and learns to choose the next one (point~(c) of the foundation). The difference from an ordinary network is that between getting all the amounts right at once, with no way to correct an error, and deciding each material knowing how the previous ones turned out, with the possibility of compensating for them.
+For example, for subject NT01 with 6 materials, head 1 chooses 5 laminae; head 2, knowing that 5, chooses 7; head 3, knowing 5 and 7, chooses 5; and so on up to $[5,7,5,6,6,7]$ (Table~\ref{tab:suj6}). Since the trunk depends only on the curve, $h$ is the same in the $N$ steps: what changes from one step to the next is what the network knows about the materials already decided. Training does not run the $N$ steps: each head receives in $\mathbf{m}$ the minimax laminae of the previous materials and learns to choose the next one (point~(c) of the foundation). The difference from an ordinary network is that between getting all the amounts right at once, with no way to correct an error, and deciding each material knowing how the previous ones turned out, with the possibility of compensating for them.
 
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{red_cadena_en.pdf}
-\caption{Chained network for 6 materials. A shared trunk ($999\to256\to128\to64$, ReLU and layer normalization) summarizes the curve in the vector $h$; head $j$ receives $h$ and the laminae $n_1\ldots n_{j-1}$ already chosen by the previous heads (dashed violet arrows), and answers the 20 questions ``more than $k$ laminae?'' with one score and 20 thresholds; $n_j$, from 0 to 20, is the number of positive answers. The loss is the binary cross-entropy of those questions against the minimax integer. The optional $\pm1$ search reviews the $3^N$ neighbouring combinations of the answer.}\label{fig:cadena}
+\caption{Chained network for 6 materials. A shared trunk ($999\to256\to128\to64$, ReLU and layer normalization) summarizes the curve in the vector $h$; head $j$ receives $h$ and the components $m_1\ldots m_{j-1}$ of the vector of decided laminae $\mathbf{m}$, that is, the laminae already chosen by the previous heads divided by 20 ($m_i=n_i/20$; dashed violet arrows), and answers the 20 questions ``more than $k$ laminae?'' with one score and 20 thresholds; $n_j$, from 0 to 20, is the number of positive answers. The loss is the binary cross-entropy of those questions against the minimax integer. The optional $\pm1$ search reviews the $3^N$ neighbouring combinations of the answer.}\label{fig:cadena}
 \end{figure}
 
 \paragraph{Foundation of the chained network.} It rests on five results.
@@ -279,158 +279,93 @@ where $P_i$ is the blood pressure and $P_a$ the pressure exerted by the adventit
 \begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{f_sujetos_relativa.png}
 \caption{The 41 subjects: pressure borne by the wall as a function of the stretch of the media--adventitia boundary, in relative form: $P=(P_i-P_a)/13.33$\,kPa on the left and $P=(P_i-P_a)/100$\,mmHg on the right. Since $13.33$\,kPa $=100$\,mmHg, both scales coincide; the 60 to 200\,mmHg window spans 0.6 to 2. Thick lines: the 60 to 200\,mmHg segment, which is the target curve.}\label{fig:presion}\end{figure}
 
-\subsection{Thin wall and thick wall}
-If the wall is thin compared with the radius, all its fibers stretch equally and the equilibrium of half a tube gives Laplace's law, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: pressure is linear in the layer thicknesses and the design inherits the whole method of the first level. Urquiza~\cite{urquiza} (Eq.~3.13 of his thesis) writes the same thin-wall equilibrium with the \emph{instantaneous} radius and thickness, $(P_i-P_a)\,R=\sigma\,h$. Taking $R$ as the deformed mean radius, $\bar r=r_i+h/2$, and letting $u=1+h/r_i$,
-\begin{equation}\label{eq:urquiza}
-P=\frac{\sigma\,h}{r_i+h/2}=\sigma\,\frac{2\,(u-1)}{u+1}.
-\end{equation}
-For a homogeneous wall with uniform stress, \eqref{eq:equil} gives exactly $P=\sigma\ln u$, and $2(u-1)/(u+1)$ is the Padé [1/1] approximant of $\ln u$: for $h/r_i\le0.2$ the error is below 0.3\,\%, whereas Laplace's law with the inner radius, $P=\sigma\,(u-1)$, overestimates the pressure by up to 10\,\%. We call \emph{Urquiza's law} Eq.~\eqref{eq:urquiza} applied to the multilayer graft with a single stretch, that of the mean radius: $P=\sum_j\sigma_j(\bar\lambda)\,h_j/\bar r$, with $\bar\lambda=\bar r/\bar R$. It is still linear in the thicknesses. The carotid artery, however, has $h/r\approx0.2$. With an incompressible wall and no axial extension, the area between the inner surface and a fiber initially at radius $R$ is conserved,
-\begin{equation}\label{eq:incomp}
-r^2-r_i^2=R^2-R_i^2,\qquad\lambda(r)=\frac{r}{R},
-\end{equation}
-and inner fibers stretch more than outer ones (Fig.~\ref{fig:fibra}). The pressure is the exact sum of the contributions of each thin layer, each with its own stretch:
+\subsection{The problem: the carotid wall is thick}
+If the wall is thin compared with the radius, all its fibres stretch the same and the equilibrium of half a tube gives Laplace's law, $P=\sum_j\sigma_jh_j/r$~\cite{fung}: pressure is linear in the layer thicknesses, and the whole first-level method would carry over to the tube unchanged. The carotid, however, has a wall of about 20\,\% of its radius. When it inflates, its inner fibres stretch more than the outer ones (Fig.~\ref{fig:fibra}), because the wall is incompressible: each fibre keeps the area enclosed inside it.
+
+\begin{figure}[H]\centering\includegraphics[width=0.78\textwidth]{d6_cada_fibra.png}
+\caption{Tube from 3.0 to 3.6\,mm inflated to an inner face of 3.3\,mm: each fibre keeps the area inside it; the inner face stretches 10\,\% and the outer one 7\,\%.}\label{fig:fibra}\end{figure}
+
+With the first-level materials, which do not pull until their knot, that difference of a few hundredths decides whether a layer works: a material with knot 1.08 pulls at the inner face of the tube in Fig.~\ref{fig:fibra} ($\lambda=1.10$) and not at the outer one ($\lambda=1.07$). Pressure is therefore computed by adding the contribution of each thin layer, each with its own stretch:
 \begin{equation}\label{eq:pgruesa}
 P=\sum_{j=1}^{N}\int_{\text{layer }j}\frac{\sigma_j\bigl(\lambda(r)\bigr)}{r}\,dr .
 \end{equation}
-If $h\ll r$, \eqref{eq:pgruesa} reduces to Laplace's law. With truncated lines, the difference in stretch decides whether a layer bears load or not: a material with knot 1.08 bears load at the inner surface of an inflated tube ($\lambda=1.10$) and not at the outer surface ($\lambda=1.07$). Moreover, the layers interact: if an inner layer grows, the outer ones are pushed to larger radii, stretch less and contribute less. In a thick wall, pressure is no longer linear in the thicknesses.
+If the wall is very thin, \eqref{eq:pgruesa} reduces to Laplace. Not in the carotid: moreover, the layers affect each other, because if an inner layer grows the outer ones end up at larger radii, stretch less and contribute less. Pressure is no longer linear in the thicknesses. Appendix~\ref{sec:ejemplo} shows this with an example that can be followed by hand.
 
-\begin{figure}[H]\centering\includegraphics[width=0.78\textwidth]{d6_cada_fibra.png}
-\caption{Tube from 3.0 to 3.6\,mm inflated to an inner radius of 3.3\,mm: each fiber conserves the area enclosed inside it; the inner surface stretches 10\,\% and the outer surface 7\,\%.}\label{fig:fibra}\end{figure}
-
-\paragraph{The thin wall fails when manufactured.} Each subject was designed with three assumptions ---Laplace (thin wall, $P=\sigma h/r$ with the undeformed radius and thickness), Urquiza's law \eqref{eq:urquiza}, with the deformed mean radius, and thick wall (Eq.~\ref{eq:pgruesa}, each layer with its own stretch)--- and each design was evaluated in the real, thick-walled tube (Table~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). In its own model, Laplace appears perfect ($e_{\max}\le1.7$\,\%); the error appears upon manufacturing and grows with wall thickness. Correcting the radius does not help, because the problem is not the radius but the fact that each layer stretches differently and engages at a different moment. With the pressure window and the adopted basis, the linear thin-wall design does not meet the target in any subject either (median 27.3\,\% with 6 materials and 29.9\,\% with 5). \textbf{The tube-level design must be carried out with the thick-walled model.}
+\subsection{The consequence: a thin-wall design fails when manufactured}
+Each subject was designed under three hypotheses ---Laplace, Urquiza's thin-wall law~\cite{urquiza}, which uses the deformed mean radius, and thick wall \eqref{eq:pgruesa}--- and each design was evaluated in the tube that is actually manufactured, which is thick-walled (Table~\ref{tab:laplace}, Fig.~\ref{fig:laplace}). Designed with Laplace, the graft looks perfect in its own model, but once manufactured \textbf{no subject meets the target}; designed as a thick wall, \textbf{all 41 do}. Correcting the radius, as Urquiza does, is not enough: the problem is not the radius, but that each layer stretches differently and starts to pull at a different moment. \textbf{The tube must be designed as a thick wall.} The details of this comparison are in Appendix~\ref{sec:calculo}.
 
 \begin{table}[H]\centering\small
-\caption{Comparison of assumptions on pressure curves for $\lambda$ from 1.02 to 1.16, with a set of knots fitted to those pressure curves (different from that of Table~\ref{tab:bases}). Each row is the assumption used to \emph{design}; all designs are \emph{evaluated} in the thick-walled tube, which is what is manufactured. In each cell, for the 41 subjects: how many meet $e_{\max}\le3$\,\%, the median $e_{\max}$ and the worst $e_{\max}$, with 5 or 6 materials.}\label{tab:laplace}
+\caption{Hypothesis with which the graft is \emph{designed}; all designs are \emph{evaluated} in the thick-walled tube, which is the one manufactured. In each cell, for the 41 subjects: how many meet $e_{\max}\le3$\,\%, the median $e_{\max}$ and the worst $e_{\max}$. Comparison made with real thicknesses and its own set of knots and moduli (Appendix~\ref{sec:calculo}).}\label{tab:laplace}
 \begin{tabular}{lcc}\toprule
-Design assumption & 5 materials & 6 materials\\\midrule
+Design hypothesis & 5 materials & 6 materials\\\midrule
 Laplace & 0/41 · 13.6\,\% · 22.7\,\% & 0/41 · 14.8\,\% · 32.5\,\%\\
 Urquiza (deformed mean radius) & 0/41 · 13.7\,\% · 24.5\,\% & 0/41 · 15.4\,\% · 34.4\,\%\\
 Thick wall & 41/41 · 0.96\,\% · 2.97\,\% & 41/41 · 0.72\,\% · 2.10\,\%\\\bottomrule
 \end{tabular}
 \end{table}
 \begin{figure}[H]\centering\includegraphics[width=0.82\textwidth]{f34_3c_6.png}
-\caption{Conditions of Table~\ref{tab:laplace}, 6 materials, from left to right: softest curve ($y_1$), hypertensive mean and stiffest curve ($y_2$). Top of each pair: curves; bottom: graft $-$ artery in \% of the range (band $\pm3$\,\%). The Laplace design evaluated in its own model (gray, dotted) appears perfect; once manufactured (orange, dashed) it departs by up to 25\,\%.}\label{fig:laplace}\end{figure}
-\begin{table}[H]\centering\small
-\caption{Designs of Fig.~\ref{fig:laplace} (pressure curves for $\lambda$ from 1.02 to 1.16, 6 materials; knots 0.8271, 1.0219, 1.0867, 1.1197, 1.1391, 1.1531 and moduli 0.18, 1.33, 4.86, 2.72, 12.94, 6.35\,MPa): thickness of the layer of each material $h_j$ [µm] (layer 1 next to the blood; 0: not used), total wall [µm] and errors against the pressure curve of the artery, $E_{\mathrm{rms}}$ and $e_{\max}$ [\% of the range]. ``Laplace, own model'' and ``Laplace, real graft'' are the same design evaluated with two models.}\label{tab:laplace3}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llccccccccc}\toprule
-Curve & Design and evaluation & $h_1$ & $h_2$ & $h_3$ & $h_4$ & $h_5$ & $h_6$ & wall & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
-$y_1$ & Laplace, own model & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 1.47 & 2.01\\
- & Laplace, real graft & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 1.98 & 3.36\\
- & Urquiza, real graft & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 2.01 & 3.29\\
- & Thick wall, real graft & 25 & 130 & 25 & 0 & 0 & 29 & 210 & 1.47 & 2.46\\
-\addlinespace
-HT mean & Laplace, own model & 235 & 203 & 59 & 205 & 67 & 136 & 905 & 0.41 & 0.76\\
- & Laplace, real graft & 235 & 203 & 59 & 205 & 67 & 136 & 905 & 5.14 & 16.79\\
- & Urquiza, real graft & 250 & 196 & 62 & 204 & 66 & 132 & 909 & 5.40 & 16.79\\
- & Thick wall, real graft & 129 & 158 & 48 & 218 & 0 & 467 & 1020 & 0.34 & 0.60\\
-\addlinespace
-$y_2$ & Laplace, own model & 449 & 229 & 139 & 461 & 193 & 30 & 1500 & 1.08 & 1.73\\
- & Laplace, real graft & 449 & 229 & 139 & 461 & 193 & 30 & 1500 & 7.95 & 24.69\\
- & Urquiza, real graft & 453 & 241 & 141 & 454 & 187 & 25 & 1500 & 8.24 & 24.30\\
- & Thick wall, real graft & 203 & 122 & 67 & 626 & 206 & 277 & 1500 & 0.61 & 0.87\\
-\bottomrule
-\end{tabular}}
-\end{table}
+\caption{Table~\ref{tab:laplace}, 6 materials, from left to right: softest curve ($y_1$), hypertensive mean and stiffest ($y_2$). Top of each pair: curves; bottom: graft $-$ artery in \% of range ($\pm3$\,\% band). The Laplace design evaluated in its own model (grey, dotted) looks perfect; manufactured (orange, dashed), it departs by up to 25\,\%.}\label{fig:laplace}\end{figure}
 
-\subsection{The thick-walled graft}
-The graft is a closed, incompressible tube in plane strain, with one layer per material stacked from inside to outside in order of increasing knot (the reverse order doubles or triples the error), centered at $R_{\mathrm{ref}}=3.421$\,mm (median of $\Theta_0R_m/\pi$ over the 41 subjects). The materials are those of the first level: the same knots and lines $\sigma_j=E_j\max(0,\lambda-\kappa_j)$, with moduli $E_j$ calibrated once so that the training subject that needs the most of each material uses 0.2\,mm of it (6 materials: from 452 to 4966\,kPa). The design is
-\begin{equation}\label{eq:theta}
-\theta=(h_1,\dots,h_N,\ \delta),\qquad 0\le h_j\le3\ \text{mm},\quad|\delta|\le0.25.
-\end{equation}
-Here $h_j$ is the thickness of the layer of material $j$ and $\delta$ is the \emph{common prestretch}: a shift of all the knots together, in units of stretch (dimensionless). Layer $j$ starts working when the mid-wall reaches $k_j+\delta$ instead of $k_j$:
+\subsection{What is chosen: the laminae of each layer and the prestretch}
+The graft is a tube with one layer per material, stacked from inside out by increasing knot. The materials are those of the first level: the same knots and the same lines, $\sigma_j=E_j\max(0,\lambda-\kappa_j)$. For each patient two things are chosen:
 \begin{itemize}
-\item $\delta<0$ advances the engagement of all layers (they are mounted tighter: they bear load earlier);
-\item $\delta=0$ keeps the knots of the first-level basis;
-\item $\delta>0$ delays it (they are mounted looser: they bear load later).
+\item \textbf{The laminae of each layer}, $n_1,\dots,n_N$: integers from 0 to 20, with laminae of 0.025\,mm. The thickness of layer $j$ is $h_j=n_j\times0.025$\,mm.
+\item \textbf{The prestretch} $\delta$: a real number that shifts all knots together. Layer $j$ starts to pull when the wall reaches $k_j+\delta$ instead of $k_j$. With $\delta<0$ the layers are mounted tighter and pull earlier; with $\delta>0$, looser, and pull later. It is needed because each subject covers its own stretch range (1.02 to 1.23): without $\delta$ it would see only one or two knots.
 \end{itemize}
-\textbf{Meaning of $|\delta|\le0.25$.} $|\delta|$ is the absolute value of $\delta$, so the condition is equivalent to $-0.25\le\delta\le0.25$: the knots can be shifted by at most 0.25 to the left or to the right. For example, with $\delta=-0.25$ the knot 1.08 moves to 0.83, and with $\delta=+0.25$, to 1.33. It is a bound of the search, not a material property: it was chosen wider than the whole stretch interval spanned by a subject (from 1.02 to 1.23, i.e.\ 0.21), so that no subject is excluded by the bound. It is not active: in the 82 designs (41 subjects, 5 and 6 materials) $\delta$ remained between $-0.04$ and $+0.09$. Appendix~\ref{sec:ejemplo} shows, with an example that can be checked by hand, what $\delta$ does in a two-layer tube.
-\begin{itemize}
-\item \textbf{Thicknesses} $h_j$, manufactured with $n_j$ integer laminae of thickness $e$.
-\item \textbf{Engagement and prestretch.} Each layer engages when the mid-wall reaches $k_j+\delta$; its local engagement stretch $\kappa_j$ is the stretch of the layer center at that moment, from \eqref{eq:incomp}. In manufacturing, $\kappa_j$ is the crimp of the fibers of that layer. The common prestretch $\delta$ shifts all the knots together: each subject occupies its own stretch interval (from 1.02 to 1.23), and without $\delta$ it would see only one or two knots, with a typical error of 11\,\%.
-\end{itemize}
-The pressure \eqref{eq:pgruesa} is integrated in each layer with 8-node Gauss--Legendre quadrature~\cite{davis} at 651 values of $\lambda$ between 0.80 and 1.45, and inverted by linear interpolation to obtain $\lambda_{\mathrm{gr}}(P_k;\theta)$. The map $\theta\mapsto\lambda_{\mathrm{gr}}$ is nonlinear: the thicknesses set the integration limits and the engagements, and $\delta$ enters inside the $\max(0,\cdot)$. With integer laminae, finding the $n_j$ is a \textbf{mixed-integer nonlinear} problem. The metric is \eqref{eq:emax} on $\lambda(P_k)$.
+\textbf{Stiffness of the materials.} The modulus $E_j$ of each material is set once for the whole population. With 0.025\,mm laminae, the cap of 20 laminae per material limits each layer to 0.5\,mm; so that no subject exceeds it, the stiffest materials were made stiffer: with 6 materials, materials 4, 5 and 6 by 11, 28 and 50\,\%; with 5, material 5 by 50\,\%. With these moduli, the subject that needs the most laminae uses 18 of one material (6 materials) and 20 (5 materials).
 
-\subsection{Design methods}
-\begin{table}[H]\centering\small
-\caption{Computational blocks at the tube level. ``Linear'' refers to the dependence of the model on the unknowns.}\label{tab:bloques}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{1.6cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{4.1cm}}\toprule
-Block & Variables & Linear? & Algorithm & Implementation\\\midrule
-A1 Linear LS (thin wall) & real & yes, with fixed $\delta$ & least squares by SVD; $\delta$ by grid and Brent & \texttt{numpy.linalg.lstsq}~\cite{numpy}; \texttt{minimize\_scalar}~\cite{brent,scipy}\\
-A2 Nonlinear LS (thick wall) & real & no & trust region reflective with bounds (TRF) & \texttt{scipy.optimize.least\_squares}~\cite{branch,scipy}\\
-A3 Integer minimax (thick wall) & integer laminae, real $\delta$ & no & floor/ceiling enumeration, $\delta$ by bounded Brent, local search & own code; \texttt{minimize\_scalar}~\cite{brent}\\
-A4 Neural network & real & --- (one evaluation) & multilayer perceptron; amortized optimization & TensorFlow/Keras~\cite{tf}\\\bottomrule
-\end{tabular}}
-\end{table}
+\subsection{How the design is computed: three steps}
+Since pressure is not linear in the thicknesses, the linear program of the first level no longer applies. The design is computed in three steps (Fig.~\ref{fig:proc}):
+\begin{enumerate}
+\item \textbf{Thin-wall start}: a first design with Laplace's law, which is linear and is solved as in the first level.
+\item \textbf{Thick-wall least squares}: starting from step 1, the thicknesses (real numbers) and $\delta$ are adjusted so that the graft curve approaches the patient's. Since a graft curve is smooth, this step also removes the noise of a measured curve.
+\item \textbf{Integer laminae by minimax}: near the thicknesses of step 2, the integer laminae, and their $\delta$, are sought that make the worst error against the step-2 curve smallest.
+\end{enumerate}
+This procedure is the reference at the tube level, as the minimax is at the first level; we also call it \emph{minimax}. The algorithms of each step are in Appendix~\ref{sec:calculo}.
 
-\paragraph{A1 · Linear thin-wall least squares.} With Laplace's law and fixed $\delta$, pressure is linear in $c_j=E_jh_j/R_{\mathrm{ref}}$: $P_k\approx\sum_jc_j\max(0,y_k-k_j-\delta)$. For each $\delta$ on a grid of 101 values the problem is solved by least squares; the pressure residual is converted to $\lambda$ with the local slope of the curve; the best $\delta$ is refined by Brent's method~\cite{brent} and $h_j=c_jR_{\mathrm{ref}}/E_j$, clipped to $[0,3]$\,mm. It is the first-level method transferred to the tube.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{f_procedimiento_v59_en.png}
+\caption{Two ways to obtain the integer design at the tube level. Top, the reference: three optimization steps. Bottom, the chained network: one evaluation and, optionally, a short check.}\label{fig:proc}\end{figure}
 
-\paragraph{A2 · Nonlinear thick-wall least squares.} It minimizes $\sum_k\bigl((\lambda_{\mathrm{gr}}(P_k;\theta)-y_k)/\Delta\bigr)^2$ subject to the bounds \eqref{eq:theta}, by the Trust Region Reflective (TRF) method~\cite{branch}. At each iteration it computes the Jacobian of the residuals by finite differences, approximates the problem by its Gauss--Newton quadratic model and takes the step that minimizes it within a \emph{trust region}, a neighborhood where the model is reliable; it enlarges the region if the step succeeded and shrinks it otherwise, and reflects inward the steps that cross a bound. Tolerances $10^{-10}$, at most 300 evaluations. It finds a \emph{local} minimum: the result depends on the starting point.
+\subsection{The chained network for the tube}
+The same network as in the first level is used (Fig.~\ref{fig:cadena}), with two changes. (1) The input is the patient's curve, the stretch $\lambda$ at the 141 pressure values. (2) It has one more head, which gives $\delta$ after the others have chosen the laminae. Each head $j$ answers the 20 questions ``more than $k$ laminae?'' and $n_j$ is the number of yes answers, as in the first level.
 
-\paragraph{A3 · Integer minimax.} It is the first-level minimax extended to the nonlinear case, where no linear program can solve it exactly. Starting from a real-valued design $\theta^\star$ and a reference curve $\tilde y$: (1) $n_j\in\{\lfloor h_j^\star/e\rfloor,\lceil h_j^\star/e\rceil\}$; the $2^N$ combinations are evaluated by $e_{\max}$ against $\tilde y$; (2) for the 8 best ones, $\delta$ is readjusted within $\pm0.03$ by bounded Brent; (3) local search~\cite{aarts}: neighbors that add or remove one lamina of a material or move one lamina from one material to another, accepting the best one if it lowers the worst error, up to 20 times. It is a heuristic: it does not guarantee the global integer optimum. Unlike the first level, here a real-valued solution is indeed the starting point: this is the usual strategy for nonlinear integer problems, solving the continuous problem and searching for integers in its neighborhood, and it is reasonable because with 0.025\,mm laminae a design has about 46 laminae and one lamina shifts the curve only slightly. The distance of this heuristic from the optimum is measured below (\emph{Distance to the integer optimum}).
+\textbf{What it is trained on.} Two kinds of curves: grafts with random laminae and $\delta$, whose correct answer is exactly what was drawn, and synthetic arteries from Masson's law plus the 31 training subjects, whose correct answer is the three-step design. The 10 test subjects are not used.
 
-\paragraph{A4 · Neural network.} A multilayer perceptron with the same trunk as the first-level network and linear outputs, $141\to256\to128\to64\to N{+}1$: it receives the standardized curve $\lambda(P_k)$ and returns $\theta$. Data: 6000 grafts with randomly drawn designs, whose label is exactly their design, and 9000 synthetic arteries of Masson's law plus the 31 training subjects, whose label is the A2 fit; new noise of 0 to 1\,\% of the range of $\lambda$ at each epoch. Split 11\,220 / 1530 / 2250; 425 epochs (6 materials) and 629 (5). It is used as \emph{amortized optimization}~\cite{amos}: a model learned on many solved cases proposes the solution of a new one, and a classical optimizer finishes it. Learning curves and metrics are given in Appendix~\ref{sec:entrenamiento}.
-
-\paragraph{The procedure.} The blocks are chained in three steps (Fig.~\ref{fig:proc}): (1) initialization, A1 (path A) or the network A4 (path B); (2) A2, which fits the design to the curve; (3) A3, which chooses the laminae against the \emph{fitted curve} of step 2. This is the first-level conclusion about noise: step 2 smooths, because the curve of a graft cannot have the jumps of the noise, and step 3 does not chase it.
-
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{f_procedimiento.png}
-\caption{The tube-level design procedure. The two paths differ only in step 1.}\label{fig:proc}\end{figure}
-
-\paragraph{Measured curves.} In practice the patient's curve is measured, with noise and at few pressures. We simulate: (a) proportional Gaussian noise of 0.3\,\% in $\lambda$ (echotracking resolves about 20\,µm in 7\,mm); (b) measurement at 10 pressures with monotone cubic interpolation (PCHIP)~\cite{pchip} to the 141; (c) both, with 0.2\,\% noise. Each path receives the measured curve and its integer design is compared with the true curve; one realization per subject and case. Since $\lambda\approx1.1$ and its range is about 0.07, a noise of 0.3\,\% of $\lambda$ corresponds to about 5\,\% of the range: larger than the target.
+\textbf{How it is used.} The network gives the laminae and $\delta$ in one evaluation. Then, with the laminae fixed, $\delta$ can be refined, which is a single variable. And, as in the first level, $\pm1$ lamina per material can be checked ($3^N$ combinations).
 
 \subsection{Results}
-\paragraph{Real-valued design.} From the linear initialization, A2 brings 40 of the 41 subjects within the target (6 materials: median 0.84\,\%, worst 3.43\,\%; 5 materials: 40/41, worst 3.14\,\%), with walls from 0.75 to 1.89\,mm and $\delta$ from $-0.04$ to $+0.09$. Starting from the network it reaches 41 of 41 with 6 materials (worst 1.79\,\%), with half the model evaluations (16 versus 35 per subject). On its own, the network falls short: median 3.43\,\% and worst 89.6\,\%. In the 10 test subjects the hybrid gives a median of 0.93\,\% and a worst case of 1.79\,\%.
-
-\paragraph{Lamina thickness.} With laminae of 0.1, 0.05 and 0.025\,mm, 38, 40 and 41 of the 41 subjects met the target (6 materials; worst 5.44, 3.69 and 1.64\,\%; about 10, 23 and 46 laminae). We adopted $e=0.025$\,mm.
-
-\paragraph{The complete procedure.} With clean curves both initializations tie (Table~\ref{tab:f2}, Fig.~\ref{fig:dis47}). The difference lies in the worst case with measured curves: with 10 pressures, the linear initialization falls into a local minimum in two subjects (NT03 and HT04, 468.7\,\%), which the network initialization avoids; with 0.3\,\% noise, the network increases the number of subjects within the target (31 versus 23 with 6 materials; 32 versus 25 with 5). With 10 pressures and noise, none exceeds 8 of 41: that noise is already comparable to the target. The time is 0.2 to 0.5\,s per subject with either initialization.
-
-\paragraph{Distance to the integer optimum.} To measure how much the A3 heuristic loses, for the 41 subjects (clean curves, linear LS initialization) we enumerated \emph{all} combinations of laminae within $\pm2$ of those of the real-valued design of step 2 (up to $5^6=15\,625$ combinations), each with $\delta$ on a grid of 13 values and refined by Brent's method for the best 200, with the same objective as A3 (worst point against the fitted curve). The exhaustive search yields the same design as A3 in 24 of the 41 subjects (6 materials) and in 34 (5 materials); the worst point decreases in 20 subjects (6 materials), on average by 0.15 and at most by 0.44 points, and in 10 subjects with 5 materials (0.14 and 0.43; sometimes with the same laminae and a different $\delta$). Against the true curve, the median goes from 1.13 to 1.03\,\% (6 materials) and from 1.69 to 1.62\,\% (5), and neither the worst case (3.26 and 3.21\,\%) nor the number of subjects meeting the target (40 of 41 in both cases) changes. The heuristic therefore stays within a few tenths of a point of the optimum in that neighborhood, in 0.5\,s instead of the 2\,min per subject of the exhaustive search (6 materials).
+Table~\ref{tab:f2} summarizes the results with integer 0.025\,mm laminae, always against the subject's true curve. As at the first level, the 31 training subjects, the 10 test subjects, which the network never saw, and 300 synthetic test arteries are reported separately.
 
 \begin{table}[H]\centering\small
-\caption{Complete procedure with 0.025\,mm laminae: worst error against the true curve [\%], 41 subjects.}\label{tab:f2}
+\caption{Tube level, integer 0.025\,mm laminae (at most 20 per material): curves that meet the 3\,\% target and worst $e_{\max}$ [\%], against the true curve. Network $\pm1$: the network, refined $\delta$ and the $\pm1$ lamina check.}\label{tab:f2}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{llcccccc}\toprule
- & & \multicolumn{3}{c}{6 materials} & \multicolumn{3}{c}{5 materials}\\\cmidrule(lr){3-5}\cmidrule(lr){6-8}
-Curve & Initialization & median & worst & meet & median & worst & meet\\\midrule
-clean & linear LS & 1.13 & 3.26 & 40/41 & 1.69 & 3.21 & 40/41\\
- & network & 1.14 & 2.19 & 41/41 & 1.68 & 3.19 & 40/41\\\addlinespace
-10 pressures & linear LS & 1.26 & 468.7 & 38/41 & 1.62 & 3.13 & 40/41\\
- & network & 1.19 & 2.27 & 41/41 & 1.61 & 2.70 & 41/41\\\addlinespace
-noise 0.3\,\% & linear LS & 2.67 & 11.87 & 23/41 & 2.66 & 7.52 & 25/41\\
- & network & 2.19 & 6.59 & 31/41 & 2.32 & 9.24 & 32/41\\\addlinespace
-10 pres. + noise 0.2\,\% & linear LS & 4.36 & 8.07 & 8/41 & 4.62 & 8.77 & 6/41\\
- & network & 3.78 & 8.54 & 8/41 & 4.75 & 10.35 & 6/41\\\bottomrule
+\begin{tabular}{lcccccc}\toprule
+ & \multicolumn{3}{c}{6 materials} & \multicolumn{3}{c}{5 materials}\\\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Curves & minimax & network & network $\pm1$ & minimax & network & network $\pm1$\\\midrule
+\multicolumn{7}{l}{\emph{Clean curves}}\\
+Masson, training (31) & 31/31 · 1.80 & 25/31 · 5.07 & 31/31 · 1.60 & 31/31 · 2.73 & 27/31 · 3.46 & 31/31 · 2.07\\
+Masson, test (10) & 10/10 · 1.81 & 7/10 · 10.23 & 10/10 · 1.97 & 10/10 · 2.88 & 5/10 · 6.26 & 9/10 · 4.22\\
+Synthetic test arteries (300) & 300/300 · 2.68 & 196/300 · 16.01 & 294/300 · 6.34 & 290/300 · 3.65 & 201/300 · 38.91 & 297/300 · 22.18\\\addlinespace
+\multicolumn{7}{l}{\emph{Measured curves, 41 subjects}}\\
+10 pressures & 41/41 · 2.07 & 32/41 · 5.07 & 41/41 · 1.88 & 41/41 · 2.93 & 32/41 · 6.27 & 40/41 · 4.34\\
+0.3\,\% noise & 24/41 · 14.14 & 19/41 · 21.00 & 29/41 · 6.10 & 21/41 · 17.81 & 14/41 · 15.44 & 28/41 · 6.07\\
+10 pressures + 0.2\,\% noise & 6/41 · 7.77 & 4/41 · 18.84 & 10/41 · 11.52 & 7/41 · 10.00 & 2/41 · 50.30 & 3/41 · 20.40\\\bottomrule
 \end{tabular}}
 \end{table}
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{disenos_6_sin_titulo.png}
-\caption{6 materials, clean curves: the softest subject, an intermediate one and the stiffest one. Black: artery; blue: path A (linear LS initialization); red: path B (network initialization). Ordinate: pressure borne by the wall, in kPa at the top and relative to 13.332\,kPa at the bottom; mmHg on the right. In brackets, laminae of each material.}\label{fig:dis47}\end{figure}
-\begin{table}[H]\centering\small
-\caption{Integer designs of Fig.~\ref{fig:dis47} (6 materials, 0.025\,mm laminae, clean curves): number of laminae of each material $n_j$ (material 1 next to the blood), total laminae, wall [mm], prestretch $\delta$ and errors against the $\lambda(P)$ curve of the artery, $E_{\mathrm{rms}}$ and $e_{\max}$ [\% of the range]. Path A: linear LS initialization; path B: network initialization.}\label{tab:dis47}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{llccccccccccc}\toprule
-Subject & Path & $n_1$ & $n_2$ & $n_3$ & $n_4$ & $n_5$ & $n_6$ & laminae & wall & $\delta$ & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
-NT04 (softest) & A & 5 & 4 & 4 & 14 & 23 & 22 & 72 & 1.800 & $+0.0861$ & 0.59 & 1.72\\
- & B & 5 & 4 & 5 & 11 & 26 & 24 & 75 & 1.875 & $+0.0890$ & 0.58 & 1.61\\
-\addlinespace
-HT20 (intermediate) & A & 4 & 1 & 12 & 9 & 15 & 13 & 54 & 1.350 & $+0.0103$ & 0.37 & 0.95\\
- & B & 4 & 1 & 12 & 9 & 15 & 13 & 54 & 1.350 & $+0.0103$ & 0.37 & 0.95\\
-\addlinespace
-HT09 (stiffest) & A & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0.725 & $-0.0394$ & 0.42 & 0.92\\
- & B & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0.725 & $-0.0394$ & 0.42 & 0.92\\
-\bottomrule
-\end{tabular}}
-\end{table}
+\paragraph{Clean curves.} The minimax meets the target for all 41 subjects, with 6 and with 5 materials. The network alone is not enough: with 6 materials it meets it for 32 of the 41. With refined $\delta$ and the $\pm1$ lamina check it meets it for all 41 with 6 materials and for 40 with 5; the missing one, NT08 (4.22\,\%), is a test subject for which the network was off by one lamina in four materials at once, and the $\pm1$ check did not find it. Fig.~\ref{fig:emax59} shows the worst error of each subject and Fig.~\ref{fig:dis59} three designs. The laminae of each subject are in Appendix~\ref{sec:tablas}.
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{curvas_medidas_v47_6.png}
-\caption{6 materials, measured curves: worst error of each subject against the true curve (logarithmic scale; blue, linear LS initialization; red, network initialization; dotted, target).}\label{fig:med47}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v59_emax_en.png}
+\caption{Tube level: worst error of each subject with integer laminae, against its $\lambda(P)$ curve: three-step minimax (circles), chained network (crosses) and network with refined $\delta$ and $\pm1$ check (squares). Subjects sorted by the minimax error; in bold, test subjects. Red line: 3\,\% target.}\label{fig:emax59}\end{figure}
 
-\paragraph{Against which curve to choose the laminae.} If step 3 chooses the laminae against the curve as measured, it chases the worst point, which with noise is a noise spike (Fig.~\ref{fig:suave}). Against the fitted curve of step 2, with 0.3\,\% noise and network initialization, 31 subjects meet the target instead of 10 (6 materials) and 32 instead of 5 (5 materials); the cost with clean curves is 0.2 points of median.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{v59_disenos_en.png}
+\caption{6 materials, clean curves: the softest subject, an intermediate one and the stiffest. Black: artery; blue, dashed: minimax; green, dotted: network $\pm1$. Ordinate: pressure carried by the wall, in kPa on the left and mmHg on the right. In brackets, laminae of each material, from the blood outward.}\label{fig:dis59}\end{figure}
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{suavizado_sin_titulo.png}
-\caption{Subject NT11, 6 materials, 0.3\,\% noise. Left: the curve fitted in step 2 (orange) passes through the middle of the measurement (gray). Right: laminae chosen against the measured curve ($e_{\max}=4.28$\,\%) and against the fitted one (2.03\,\%), both evaluated against the true curve.}\label{fig:suave}\end{figure}
+\paragraph{Many designs work.} The network gives exactly the minimax laminae for only 7\,\% of the synthetic test arteries with 6 materials (26\,\% with 5), and even so its design meets the target for 294 of 300. At the tube level there are many integer designs with almost the same curve: for HT09 (Fig.~\ref{fig:dis59}) the minimax and the network use different laminae in four materials, and both meet the target comfortably (1.04 and 0.91\,\%). The network is therefore judged by the error on the curve and not by matching the minimax.
+
+\paragraph{Measured curves.} Before the network, the measured curve is smoothed with a degree-6 polynomial in pressure, which does not change a clean curve (the minimax smooths it in its step 2). With 10 pressures, both methods meet the target for almost all subjects. With 0.3\,\% noise, which is 5\,\% of the range and larger than the target, the network with the $\pm1$ check meets it for more subjects than the minimax (29 versus 24 with 6 materials; 28 versus 21 with 5) and its worst case is less than half (6.1 versus 14.1\,\% with 6 materials and 6.1 versus 17.8\,\% with 5). With 10 pressures and noise no method exceeds 10 of 41: there the limit is the measurement.
+
+\paragraph{Time.} Both methods take less than one second per subject: with 6 materials, 0.55\,s the minimax and 0.60\,s the network with the $\pm1$ check.
 
 %=====================================================================
 \section{Discussion}
@@ -438,11 +373,11 @@ HT09 (stiffest) & A & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0.725 & $-0.0394$ & 0.42 & 0
 
 \paragraph{Generality.} What is validated at the first level is not specific to the carotid artery: the fiber-like materials, the basis chosen over a broad space of J-shaped curves, the minimax integer design and a network that gives that design for curves of laws it never saw. For another artery, the geometry, thickness and pressure window change, and these only enter at the second level; the band of curves and, if necessary, the knots are recomputed with the same procedure, and the network is retrained inside the new band. The external validation (Section~\ref{sec:externa}) confirms this with data: the basis chosen with Masson's carotid arteries reproduces, unchanged, curves of common, external and internal carotid arteries, of intact walls and media--intima and of patients with plaque, from three different constitutive laws, each in its own pressure window. What limits some in vivo curves is the division into 20 laminae per material relative to a small stress excursion, not the shape of the curve or the network.
 
-\paragraph{The role of the neural network.} At the first level, the minimax gives the best integer design, but by solving an optimization problem for each curve. The chained network gives the integer design directly, with the same operation for any curve in its domain of validity: alone, it meets the target for the 41 subjects (6 materials); with a $\pm1$ lamina search, which only evaluates 729 combinations, it reaches 91 of the 98 cases that admit an integer design within the target. It lacks the optimality guarantee of the minimax, which remains the reference to check any design, and it is not used outside the $y_1$--$y_2$ band, where it cannot ensure the target. In the thick-wall case the fit is iterative, local and dependent on the starting point: the classical initialization, inherited from the linear case, ignores the stretch gradient across the thickness and, with measured curves, can lead to local minima that yield unusable designs. A network trained on thousands of solved designs leaves the fit close to the correct minimum. This is the idea of amortized optimization~\cite{amos}: the network does not replace the optimizer, it initializes it. Its advantage is one of robustness, clear with 6 materials and smaller with 5.
+\paragraph{The role of the neural network.} At the first level, the minimax gives the best integer design, but by solving an optimization problem for each curve. The chained network gives the integer design directly, with the same operation for any curve in its domain of validity: alone, it meets the target for the 41 subjects (6 materials); with a $\pm1$ lamina search, which only evaluates 729 combinations, it reaches 91 of the 98 cases that admit an integer design within the target. It lacks the optimality guarantee of the minimax, which remains the reference to check any design, and it is not used outside the $y_1$--$y_2$ band, where it cannot ensure the target. In the thick-walled tube the same network, with the same ordinal output, gives the laminae of each layer and the prestretch; with the $\pm1$ lamina check it matches the three-step procedure on clean curves and outperforms it on noisy curves, because it chooses among designs seen in training and does not chase the noise. This is the idea of amortized optimization~\cite{amos}: a model learned on many solved cases gives the solution of a new one, and a short search finishes it. The network does not replace the minimax as the reference for checking a design.
 
 \paragraph{Why a thick wall.} The difference between the models lies in a single assumption: in a thin wall all fibers stretch equally; in a thick wall each has its own stretch, set by incompressibility. With materials that bear no load until their knot, that difference of a few hundredths decides whether a layer works. The engagement of each layer (its crimp) is as important as its thickness: between a Laplace design and a thick-wall design the thicknesses change by a few micrometers, but the outer layers engage earlier.
 
-\paragraph{Limitations.} (1) The target curves are those of the law fitted by Masson et al., not the raw measurements, and the arterial thickness is the age- and sex-specific reference value. (2) The materials are ideal (truncated lines of constant stiffness); the graft has neither axial extension nor residual stresses, and viscoelasticity and fatigue are not considered. (3) The integer search in the thick-wall case is heuristic: it stays within half a point of the optimum in a neighborhood of $\pm2$ laminae, but the global optimum was not proven; a single noise realization per subject and case was used. (4) The prestretch $\delta$ and the per-layer crimp are manufacturing variables that must be validated. (5) The first-level network is valid within the $y_1$--$y_2$ band of the Masson population; for curves outside it, the band must be widened and the network retrained, or only the minimax used. (6) There is no experimental validation.
+\paragraph{Limitations.} (1) The target curves are those of the law fitted by Masson et al., not the raw measurements, and the arterial thickness is the age- and sex-specific reference value. (2) The materials are ideal (truncated lines of constant stiffness); the graft has neither axial extension nor residual stresses, and viscoelasticity and fatigue are not considered. (3) The integer search in the thick-wall case is heuristic: it stays within half a point of the optimum in a neighborhood of $\pm2$ laminae, but the global optimum was not proven; a single noise realization per subject and case was used. To respect the 20-lamina cap the stiffest materials were made stiffer, which must be verified with real materials. (4) The prestretch $\delta$ and the per-layer crimp are manufacturing variables that must be validated. (5) The first-level network is valid within the $y_1$--$y_2$ band of the Masson population; for curves outside it, the band must be widened and the network retrained, or only the minimax used. (6) There is no experimental validation.
 
 %=====================================================================
 \section{Conclusions}
@@ -450,9 +385,9 @@ HT09 (stiffest) & A & 3 & 10 & 2 & 6 & 5 & 3 & 29 & 0.725 & $-0.0394$ & 0.42 & 0
 \item A graft made of layers of fiber-like materials (truncated lines), with a basis chosen once for the whole population and at most 20 laminae per material, reproduces the stress--stretch curve of 41 human carotid arteries: with 6 materials and integer laminae by minimax, all 41 subjects meet the 3\,\% target.
 \item A single chained neural network with ordinal output, trained inside the $y_1$--$y_2$ band ---its domain of validity---, directly gives the integer laminae in one evaluation, without optimizing. With a $\pm1$ lamina search it meets the target for the 31 training subjects and the 10 test subjects, with 6 and with 5 materials, except for one subject that does not meet it with the minimax either.
 \item Without any change, the same basis and the same network were applied to 63 curves from three other studies (Sommer and Holzapfel, Liu et al., Kamenskiy et al.) inside the domain of validity, each with its own constitutive law and pressure window: with 6 materials, the network with the $\pm1$ search meets the target for 50 and the minimax for 57; for the other 6 no integer design meets it, because their stress span is small relative to the step of one lamina. Over the 104 cases, the network reaches 91 of the 98 achievable with integer laminae.
-\item At the tube level the design must be carried out with the thick-walled model: designed with Laplace's law, no subject meets the target once manufactured; with the thick-walled model, 40--41 of 41 do. The problem is a nonlinear integer one.
-\item The three-step procedure ---initialization, nonlinear least squares and integer laminae by minimax against the fitted curve--- meets the target in 40--41 of 41 subjects with clean curves, in less than half a second per subject.
-\item In the thick-wall case, the network as a starting point avoids the local minima that, with measured curves, produce unusable designs (worst case from 468.7 to 2.3\,\%) and increases the number of subjects within the target under noise. This is the justified role of the network: to initialize the optimizer, not to replace it.
+\item At the tube level the design must be carried out with the thick-walled model: designed with Laplace's law, no subject meets the target once manufactured; with the thick-walled model, all 41 do. The problem is a nonlinear integer one.
+\item With 0.025\,mm laminae and at most 20 per material, the three-step procedure ---initialization, nonlinear least squares and integer minimax--- meets the target for all 41 subjects, with 6 and with 5 materials, in less than one second per subject.
+\item The same chained network, trained for the tube, gives the laminae of each layer in one evaluation; with refined $\delta$ and a $\pm1$ lamina check it meets the target for all 41 subjects with 6 materials and for 40 with 5. With noisy measured curves it meets it for more subjects than the minimax (29 versus 24 with 6 materials) and with a smaller worst case. A single network thus serves both levels.
 \end{enumerate}
 \paragraph{Next steps.} Test the method with raw measured curves of other arteries; test real materials to replace the ideal lines and validate crimp as a manufacturing variable; use each subject's measured thickness and pressure; and manufacture and test a graft.
 
@@ -531,39 +466,111 @@ Verification example: first blue slice with $\delta=-0.03$: the knot is $1.02-0.
 \caption{Effect of $\delta$ on the two-layer wall. (a) Law of each material for $\delta=-0.03$, 0 and $+0.03$; the shaded bands are the stretches experienced by each layer with the inner surface at 3.3\,mm. (b) Contribution of each layer to the pressure in that state. (c) Pressure--stretch curve of the inner surface (right axis in mmHg): $\delta$ shifts the point at which each layer engages and changes the shape of the curve. The values belong to a toy example (0.3\,mm layers and low moduli), not to a design.}\end{figure}
 
 \clearpage
-\section{Training of the neural networks}\label{sec:entrenamiento}
-Four networks were trained: the first-level chained network, which maps the curve $\sigma_{\theta\theta}(\lambda_\theta)$ to the integer laminae of each material (Section~\ref{sec:enteros}), and the thick-wall network (block A4), each with 6 and with 5 materials. Fig.~\ref{fig:aprendizaje} shows the training and validation loss epoch by epoch, and Table~\ref{tab:entrenamiento} summarizes the training and the final loss on the three data sets. The test loss is computed on curves the network never saw, neither to fit the weights nor to decide when to stop.
+\section{Details of the tube-level computation}\label{sec:calculo}
+\subsection{Thin wall: Laplace and Urquiza}
+Urquiza~\cite{urquiza} (eq.~3.13 of his thesis) writes thin-wall equilibrium with the \emph{current} radius and thickness, $(P_i-P_a)\,R=\sigma\,h$. Taking $R$ as the deformed mean radius, $\bar r=r_i+h/2$, and writing $u=1+h/r_i$,
+\begin{equation}\label{eq:urquiza}
+P=\frac{\sigma\,h}{r_i+h/2}=\sigma\,\frac{2\,(u-1)}{u+1}.
+\end{equation}
+For a homogeneous wall with uniform stress, \eqref{eq:equil} gives exactly $P=\sigma\ln u$, and $2(u-1)/(u+1)$ is the Padé [1/1] approximant of $\ln u$: with $h/r_i\le0.2$ the error is below 0.3\,\%, whereas Laplace with the inner radius, $P=\sigma\,(u-1)$, overestimates pressure by up to 10\,\%. We call \emph{Urquiza's law} \eqref{eq:urquiza} applied to the multilayer graft with a single stretch, that of the mean radius: $P=\sum_j\sigma_j(\bar\lambda)\,h_j/\bar r$, with $\bar\lambda=\bar r/\bar R$. It is still linear in the thicknesses. In Table~\ref{tab:laplace} Laplace uses the undeformed radius and thickness.
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{curvas_aprendizaje_en.png}
-\caption{Learning curves: training (blue) and validation (orange) loss per epoch, on a logarithmic scale. The dashed line marks the epoch whose weights are kept. The loss logged during training includes the L2 regularization term. Top: first-level chained network (binary cross-entropy summed over the 20 questions and the materials); bottom: thick-wall network (mean squared error of the standardized design).}\label{fig:aprendizaje}
+\textbf{Knot set of the comparison.} Table~\ref{tab:laplace} was computed on pressure curves in $\lambda$ from 1.02 to 1.16, with real thicknesses and a knot set fitted to those curves (different from that of Table~\ref{tab:bases}): 0.8271; 1.0219; 1.0867; 1.1197; 1.1391; 1.1531, with moduli 0.18; 1.33; 4.86; 2.72; 12.94; 6.35\,MPa. Table~\ref{tab:laplace3} gives the designs of Fig.~\ref{fig:laplace}. With the adopted pressure window and basis, the linear thin-wall design does not meet the target in any subject either (median 27.3\,\% with 6 materials and 29.9\,\% with 5).
+
+\begin{table}[H]\centering\small
+\caption{Designs of Fig.~\ref{fig:laplace} (6 materials): thickness of the layer of each material $h_j$ [µm] (layer 1 next to the blood; 0: not used), total wall [µm] and errors against the artery pressure curve, $E_{\mathrm{rms}}$ and $e_{\max}$ [\% of range]. ``Laplace, own model'' and ``Laplace, real graft'' are the same design evaluated with two models.}\label{tab:laplace3}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccccccc}\toprule
+Curve & Design and evaluation & $h_1$ & $h_2$ & $h_3$ & $h_4$ & $h_5$ & $h_6$ & wall & $E_{\mathrm{rms}}$ & $e_{\max}$\\\midrule
+$y_1$ & Laplace, own model & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 1.47 & 2.01\\
+ & Laplace, real graft & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 1.98 & 3.36\\
+ & Urquiza, real graft & 25 & 153 & 0 & 56 & 0 & 0 & 233 & 2.01 & 3.29\\
+ & Thick wall, real graft & 25 & 130 & 25 & 0 & 0 & 29 & 210 & 1.47 & 2.46\\
+\addlinespace
+HT mean & Laplace, own model & 235 & 203 & 59 & 205 & 67 & 136 & 905 & 0.41 & 0.76\\
+ & Laplace, real graft & 235 & 203 & 59 & 205 & 67 & 136 & 905 & 5.14 & 16.79\\
+ & Urquiza, real graft & 250 & 196 & 62 & 204 & 66 & 132 & 909 & 5.40 & 16.79\\
+ & Thick wall, real graft & 129 & 158 & 48 & 218 & 0 & 467 & 1020 & 0.34 & 0.60\\
+\addlinespace
+$y_2$ & Laplace, own model & 449 & 229 & 139 & 461 & 193 & 30 & 1500 & 1.08 & 1.73\\
+ & Laplace, real graft & 449 & 229 & 139 & 461 & 193 & 30 & 1500 & 7.95 & 24.69\\
+ & Urquiza, real graft & 453 & 241 & 141 & 454 & 187 & 25 & 1500 & 8.24 & 24.30\\
+ & Thick wall, real graft & 203 & 122 & 67 & 626 & 206 & 277 & 1500 & 0.61 & 0.87\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\subsection{The graft model}
+The graft is a closed, incompressible tube in plane strain, centred at $R_{\mathrm{ref}}=3.421$\,mm (median of $\Theta_0R_m/\pi$ over the 41 subjects). Layers go by increasing knot from inside out (the reverse order doubles or triples the error). With an incompressible wall and no axial extension, the area between the inner face and a fibre that was at radius $R$ is conserved:
+\begin{equation}\label{eq:incomp}
+r^2-r_i^2=R^2-R_i^2,\qquad\lambda(r)=\frac{r}{R}.
+\end{equation}
+Each layer engages when the mean wall reaches $k_j+\delta$; its local engagement $\kappa_j$ is the stretch of the layer centre at that moment, by \eqref{eq:incomp}. In manufacturing, $\kappa_j$ is the crimp of the fibres of that layer. The moduli are calibrated so that the training subject that needs the most of each material uses 0.2\,mm of it, and then multiplied by the factors of Section~\ref{sec:aplicacion} (6 materials: 452 to 7449\,kPa). The search is limited to $|\delta|\le0.25$, i.e.\ $-0.25\le\delta\le0.25$: wider than the whole stretch range a subject covers (0.21), so that no subject is excluded by the bound; in the designs, $\delta$ stays far from it.
+
+Pressure \eqref{eq:pgruesa} is integrated in each layer with 8-node Gauss--Legendre quadrature~\cite{davis} at 651 values of $\lambda$ between 0.80 and 1.45, and inverted by linear interpolation to obtain $\lambda_{\mathrm{inj}}(P_k;\theta)$, with $\theta=(h_1,\dots,h_N,\delta)$. The map $\theta\mapsto\lambda_{\mathrm{inj}}$ is nonlinear: the thicknesses set the integration limits and the engagements, and $\delta$ enters inside $\max(0,\cdot)$. With integer laminae the problem is \textbf{mixed-integer nonlinear}. The metric is \eqref{eq:emax} on $\lambda(P_k)$. One model evaluation takes 0.45\,ms.
+
+\subsection{The algorithms of the three steps}
+\begin{table}[H]\centering\small
+\caption{Tube-level computation blocks. ``Linear'' refers to the dependence of the model on the unknowns.}\label{tab:bloques}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{1.6cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{4.1cm}}\toprule
+Block & Variables & Linear? & Algorithm & Implementation\\\midrule
+Step 1: linear LS (thin wall) & real & yes, with fixed $\delta$ & least squares by SVD; $\delta$ by grid and Brent & \texttt{numpy.linalg.lstsq}~\cite{numpy}; \texttt{minimize\_scalar}~\cite{brent,scipy}\\
+Step 2: nonlinear LS (thick wall) & real & no & bounded trust region reflective (TRF) & \texttt{scipy.optimize.least\_squares}~\cite{branch,scipy}\\
+Step 3: integer minimax (thick wall) & integer laminae, real $\delta$ & no & floor/ceiling enumeration, $\delta$ by bounded Brent, local search & own; \texttt{minimize\_scalar}~\cite{brent}\\
+Chained network & integer laminae, real $\delta$ & --- (one evaluation) & network with ordinal output & TensorFlow/Keras~\cite{tf}\\\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Step 1 · Thin-wall linear LS.} With Laplace's law and fixed $\delta$, pressure is linear in $c_j=E_jh_j/R_{\mathrm{ref}}$: $P_k\approx\sum_jc_j\max(0,y_k-k_j-\delta)$. For each $\delta$ on a grid of 101 values it is solved by least squares; the pressure residual is converted to $\lambda$ with the local slope of the curve; the best $\delta$ is refined by Brent~\cite{brent} and $h_j=c_jR_{\mathrm{ref}}/E_j$, which step 2 brings inside its bounds.
+
+\paragraph{Step 2 · Thick-wall nonlinear LS.} Minimizes $\sum_k\bigl((\lambda_{\mathrm{inj}}(P_k;\theta)-y_k)/\Delta\bigr)^2$ with bounds $0\le h_j\le0.5$\,mm and $|\delta|\le0.25$, by the trust region reflective method (TRF)~\cite{branch}. At each iteration it computes the Jacobian of the residuals by finite differences, approximates the problem by its Gauss--Newton quadratic model and takes the step that minimizes it inside a \emph{trust region}, a neighbourhood where the model is credible; it enlarges the region if the step worked and shrinks it if not, and reflects inward the steps that cross a bound. Tolerances $10^{-10}$, at most 300 evaluations. It finds a \emph{local} minimum: the result depends on the starting point.
+
+\paragraph{Step 3 · Integer minimax.} From the real design $\theta^\star$ of step 2 and its curve $\tilde y$: (1) $n_j\in\{\lfloor h_j^\star/e\rfloor,\lceil h_j^\star/e\rceil\}$, not above 20; the $2^N$ combinations are evaluated by $e_{\max}$ against $\tilde y$; (2) for the best 8, $\delta$ is readjusted within $\pm0.03$ by bounded Brent; (3) local search~\cite{aarts}: neighbours that add or remove one lamina of one material or move one lamina from one to another, staying within 0 to 20, accepting the best if it lowers the worst error, up to 20 times. It is a heuristic: it does not guarantee the global integer optimum. Starting from a real solution is the usual strategy in nonlinear integer problems, and it is reasonable because a design has about 50 laminae and one lamina moves the curve little.
+
+\paragraph{Distance to the integer optimum.} With the moduli not yet recalibrated and no lamina cap, for the 41 subjects \emph{all} combinations of laminae within $\pm2$ of those of step 2 were enumerated (up to $5^6=15\,625$), each with $\delta$ on a 13-value grid refined by Brent for the best 200. The exhaustive search gave the same design as step 3 in 24 of the 41 subjects (6 materials) and in 34 (5 materials); where it improved, the worst point dropped by at most 0.44 points, without changing how many subjects meet the target. The heuristic stays within a few tenths of the optimum in that neighbourhood, in 0.5\,s instead of 2\,min per subject.
+
+\paragraph{Against which curve to choose the laminae.} If step 3 chose the laminae against the curve as measured, it would chase the worst point, which with noise is a noise spike (Fig.~\ref{fig:suave}). Against the step-2 curve that spike is not there.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{suavizado_sin_titulo.png}
+\caption{Subject NT11, 6 materials, 0.3\,\% noise (moduli not recalibrated). Left: the curve fitted by step 2 (orange) runs through the middle of the measurement (grey). Right: laminae chosen against the measured curve ($e_{\max}=4.28$\,\%) and against the fitted one (2.03\,\%), both evaluated against the true curve.}\label{fig:suave}\end{figure}
+
+\paragraph{Measured curves.} The following are simulated: (a) proportional Gaussian noise of 0.3\,\% in $\lambda$ (echotracking resolves about 20\,µm in 7\,mm); (b) measurement at 10 pressures with monotone cubic interpolation (PCHIP)~\cite{pchip} to the 141; (c) both, with 0.2\,\% noise. Each method receives the measured curve and its integer design is compared with the true curve; one realization per subject and case. Since $\lambda\approx1.1$ and its range is about 0.07, a noise of 0.3\,\% of $\lambda$ is about 5\,\% of the range: larger than the target.
+
+\section{Training of the neural networks}\label{sec:entrenamiento}
+Four networks were trained: the first-level chained network, which maps the curve $\sigma_{\theta\theta}(\lambda_\theta)$ to the integer laminae of each material (Section~\ref{sec:enteros}), and the tube chained network, which maps the curve $\lambda(P)$ to the laminae of each layer and the prestretch (Section~\ref{sec:aplicacion}), each with 6 and with 5 materials. Fig.~\ref{fig:aprendizaje} shows the training and validation loss epoch by epoch, and Table~\ref{tab:entrenamiento} summarizes the training and the final loss on the three data sets. The test loss is computed on curves the network never saw, neither to fit the weights nor to decide when to stop.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{curvas_aprendizaje_v59_en.png}
+\caption{Learning curves: training (blue) and validation (orange) loss per epoch, on a logarithmic scale. The dashed line marks the epoch whose weights are kept. The loss logged during training includes the L2 regularization term. Top: first-level chained network (binary cross-entropy summed over the 20 questions and the materials); bottom: tube network (the same sum plus 5 times the mean squared error of the standardized $\delta$). For the first-level network the final weights are kept; for the tube network, those of the validation minimum.}\label{fig:aprendizaje}
 \end{figure}
 
 \begin{table}[H]\centering\small
-\caption{Training summary. Epochs: total run and epoch whose weights are kept. Loss without the L2 term, computed with the kept weights; the chained network uses the binary cross-entropy summed over the questions and the materials (in nats) and the thick-wall network the mean squared error of the standardized design, so the two sets of values are not comparable with each other. The last column is the test loss divided by the training loss.}\label{tab:entrenamiento}
+\caption{Training summary. Epochs: total run and epoch whose weights are kept. Loss without the L2 term, computed with the kept weights; both networks use the binary cross-entropy summed over the questions and the materials (in nats); the tube network also adds 5 times the mean squared error of the standardized $\delta$, which is below 0.02. The last column is the test loss divided by the training loss.}\label{tab:entrenamiento}
 \resizebox{\textwidth}{!}{\begin{tabular}{llcccccc}\toprule
 Network & Data (train/val/test) & Epochs & LR reductions & Train & Val. & Test & Test/train\\\midrule
 Chained network, 6 mat. & 24\,151 / 3451 / 6901 & 800 / 800 & 7 & 5.65 & 6.39 & 6.39 & 1.13\\
 Chained network, 5 mat. & 24\,236 / 3463 / 6925 & 800 / 800 & 5 & 3.40 & 3.98 & 3.99 & 1.17\\
-Thick wall, 6 mat. & 11\,220 / 1530 / 2250 & 425 / 305 & 5 & 0.342 & 0.462 & 0.484 & 1.42\\
-Thick wall, 5 mat. & 11\,220 / 1530 / 2250 & 629 / 509 & 4 & 0.153 & 0.227 & 0.250 & 1.64\\\bottomrule
+Tube chained network, 6 mat. & 11\,220 / 1530 / 2250 & 288 / 228 & 5 & 14.91 & 21.72 & 22.57 & 1.51\\
+Tube chained network, 5 mat. & 11\,220 / 1530 / 2250 & 409 / 349 & 6 & 8.88 & 14.61 & 14.69 & 1.65\\\bottomrule
 \end{tabular}}
 \end{table}
 
 \paragraph{First-level chained network.} Both networks reached the maximum of 800 epochs; in the last ones the validation loss barely decreases, and the final weights are kept. The validation loss stays somewhat above the training loss (ratio of 1.13 and 1.17), and the test loss equals the validation loss (6.39 and 3.99 versus 6.39 and 3.98): the network does not degrade on new curves. That the loss does not drop further has a reason of its own: several integer combinations reproduce almost the same curve, and the label (the minimax of the noisy curve) picks only one. The network gives exactly the minimax laminae for 8.9\,\% of the test curves with 6 materials and 21.7\,\% with 5, and is within one lamina of it in every material for 30.2 and 55.8\,\%; even so, its design meets the target for 1998 and 2000 of the 2000 working-space curves (Table~\ref{tab:resumen}). The network is therefore judged by the error on the curve, which is the design criterion, and not by matching the minimax.
 
-\paragraph{Thick-wall network.} Here validation departs from training within the first 50 epochs and levels off, while the training loss keeps decreasing. Early stopping keeps the weights at the validation minimum, and the test loss stays close to the validation loss (0.484 vs.\ 0.462 and 0.250 vs.\ 0.227): the network does not degrade on new data. The loss is nevertheless high, and the reason lies in the problem, not in the network: the thick-wall inverse problem (from the curve to the design) is ill-conditioned.
+\paragraph{Tube chained network.} Validation departs from training within the first 30 epochs and levels off, while the training loss keeps decreasing. Early stopping keeps the weights at the validation minimum, and the test loss stays close to the validation loss (22.57 versus 21.72 and 14.69 versus 14.61): the network does not degrade on new curves. The loss is higher than at the first level, and the reason lies in the problem and not in the network: in the tube there are even more integer designs with almost the same curve.
 
-\emph{Conditioning.} For 60 arteries from the physiological families, the Jacobian matrix $\mathbf{D}$ of the graft curve with respect to the design $\theta=(h_1\ldots h_N,\delta)$ was computed by finite differences, with each parameter measured in standard deviations (the scale used by the network) and the curve in \% of its range. Its singular values tell how much the curve moves when the design moves in each direction. With 6 materials, in the most sensitive direction the curve changes by about 850\,\% of its range per standard deviation (8.5 times the range); in the least sensitive one, by only 1\,\% (with 5 materials: 750\,\% and 2.6\,\%). The condition number $\kappa(\mathbf{D})$ has a median of 900 with 6 materials and 300 with 5 (90th percentile: $2.4\cdot10^{4}$ and $1.5\cdot10^{4}$), compared with $\mathrm{cond}(A)=28$ at the first level. The least sensitive direction is typically more thickness of one material and less of its neighbor: it changes the design by one standard deviation and the curve by 1\,\%, the same order as the 0 to 1\,\% noise used to train the network. From the curve, such designs are indistinguishable for any method, and the network cannot guess which one is the label. This explains the high loss, and why 5 materials, which is better conditioned, has half the loss of 6.
+\emph{Conditioning.} For 60 arteries of the physiological families (with the moduli not yet recalibrated), the Jacobian matrix $\mathbf{D}$ of the graft curve with respect to the design $\theta=(h_1\ldots h_N,\delta)$ was computed by finite differences, with each parameter in standard deviations and the curve in \% of its range. With 6 materials, in the most sensitive direction the curve changes by 8.5 times its range per deviation; in the least sensitive one, by only 1\,\%. The condition number has a median of 900 with 6 materials and 300 with 5, versus $\mathrm{cond}(A)=28$ at the first level. The least sensitive direction is typically more thickness of one material and less of its neighbour. From the curve, those designs are indistinguishable for any method, and the network cannot guess which of them is the label.
 
-\emph{The measure that matters.} For the graft, two designs whose curves differ by less than 1\,\% are equally good; ill-conditioning means that there are many acceptable designs, not that the design is uncertain. The network is therefore judged by the curve error, which is the design criterion. Over 500 test curves, the curve of the design proposed by the network has a median worst-point error of 6.1\,\% of the range with 6 materials and 4.3\,\% with 5: 3 to 4\,\% for arteries and 11 to 12\,\% for grafts with random designs, which cover the whole design space. That is not enough to design with, and the network is not used that way: it is the starting point of the A2 fit, which brings the design to the target (Section~\ref{sec:aplicacion}).
+\emph{The measure that matters.} The network gives exactly the minimax laminae for 7\,\% of the synthetic test arteries with 6 materials and 26\,\% with 5; even so, with the $\pm1$ check, its design meets the target for 294 and 297 of 300. As at the first level, the network is judged by the error on the curve and not by matching the minimax.
 
 \clearpage
 \section{Laminae and errors of each curve}\label{sec:tablas}
-Integer laminae of each material and errors of the chained network, of the chained network with the $\pm1$ search and of the minimax, for the 41 Masson subjects and for the 63 external curves inside $y_1$--$y_2$, with 6 and with 5 materials. Laminae are listed from material 1 to $N$.
+\textbf{First level, stress--stretch curve} (Tables~\ref{tab:suj6} to \ref{tab:ext5}): integer laminae of each material and errors of the chained network, of the chained network with the $\pm1$ search and of the minimax, for the 41 Masson subjects and for the 63 external curves inside $y_1$--$y_2$, with 6 and with 5 materials. \textbf{Tube level, pressure--diameter curve} (Tables~\ref{tab:tubo6} and \ref{tab:tubo5}): laminae of each layer, prestretch and errors of the chained network with the $\pm1$ check and of the three-step minimax, for the 41 subjects. Laminae are listed from material 1 to $N$.
 \input{tab_suj6_en.tex}
 \input{tab_suj5_en.tex}
 \input{tab_ext6_en.tex}
 \input{tab_ext5_en.tex}
+\input{tab_tubo6_en.tex}
+\input{tab_tubo5_en.tex}
 
 \begin{thebibliography}{99}\small
 \bibitem{aarts} Aarts, E., Lenstra, J.\,K. (eds.) (1997). \emph{Local Search in Combinatorial Optimization}. Wiley.

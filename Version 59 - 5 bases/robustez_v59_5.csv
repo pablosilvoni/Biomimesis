@@ -1,0 +1,493 @@
+escenario,método,sujeto,e_max %
+"ruido 0,3 %",minimax,NT01,3.0031137212479155
+"ruido 0,3 %",red,NT01,4.044633439994138
+"ruido 0,3 %",red + δ,NT01,4.781943005648552
+"ruido 0,3 %",red ±1,NT01,4.513365566146437
+"ruido 0,3 %",minimax,NT02,2.0834803157800565
+"ruido 0,3 %",red,NT02,15.441396392410107
+"ruido 0,3 %",red + δ,NT02,8.358432217533032
+"ruido 0,3 %",red ±1,NT02,6.070686069708521
+"ruido 0,3 %",minimax,NT03,3.406723285928936
+"ruido 0,3 %",red,NT03,2.037182146276323
+"ruido 0,3 %",red + δ,NT03,1.5649202820526533
+"ruido 0,3 %",red ±1,NT03,1.6482772987305927
+"ruido 0,3 %",minimax,NT04,3.9027535584189583
+"ruido 0,3 %",red,NT04,3.085844721355006
+"ruido 0,3 %",red + δ,NT04,2.9953313719284966
+"ruido 0,3 %",red ±1,NT04,2.9953313719284966
+"ruido 0,3 %",minimax,NT05,2.228043682911223
+"ruido 0,3 %",red,NT05,3.243125725810552
+"ruido 0,3 %",red + δ,NT05,2.6997919017558716
+"ruido 0,3 %",red ±1,NT05,2.4716447860089636
+"ruido 0,3 %",minimax,NT06,2.552148579453911
+"ruido 0,3 %",red,NT06,3.439279808209309
+"ruido 0,3 %",red + δ,NT06,3.272438853417248
+"ruido 0,3 %",red ±1,NT06,2.6095360783898838
+"ruido 0,3 %",minimax,NT07,3.226410711608853
+"ruido 0,3 %",red,NT07,2.885335048577226
+"ruido 0,3 %",red + δ,NT07,1.9485102762328834
+"ruido 0,3 %",red ±1,NT07,2.123260953750814
+"ruido 0,3 %",minimax,NT08,17.8118894138382
+"ruido 0,3 %",red,NT08,3.5115904843537944
+"ruido 0,3 %",red + δ,NT08,1.063200440486743
+"ruido 0,3 %",red ±1,NT08,3.9387529968113753
+"ruido 0,3 %",minimax,NT09,3.344677009629604
+"ruido 0,3 %",red,NT09,3.5517874886870264
+"ruido 0,3 %",red + δ,NT09,3.4539391762219878
+"ruido 0,3 %",red ±1,NT09,3.9790723979956004
+"ruido 0,3 %",minimax,NT10,2.8057320971425725
+"ruido 0,3 %",red,NT10,3.6646182081485055
+"ruido 0,3 %",red + δ,NT10,2.3317091752839327
+"ruido 0,3 %",red ±1,NT10,2.3317091752839327
+"ruido 0,3 %",minimax,NT11,7.277716687427469
+"ruido 0,3 %",red,NT11,12.893580308481964
+"ruido 0,3 %",red + δ,NT11,8.624681840781568
+"ruido 0,3 %",red ±1,NT11,4.025107813151278
+"ruido 0,3 %",minimax,NT12,2.5830539514800743
+"ruido 0,3 %",red,NT12,3.918141971750126
+"ruido 0,3 %",red + δ,NT12,2.0548691573626865
+"ruido 0,3 %",red ±1,NT12,1.7622312300992655
+"ruido 0,3 %",minimax,NT13,2.7977725816731005
+"ruido 0,3 %",red,NT13,2.227456192207453
+"ruido 0,3 %",red + δ,NT13,1.6580642493246571
+"ruido 0,3 %",red ±1,NT13,1.552359781635674
+"ruido 0,3 %",minimax,NT14,2.2401724812173156
+"ruido 0,3 %",red,NT14,3.874155704806451
+"ruido 0,3 %",red + δ,NT14,3.0535202406162774
+"ruido 0,3 %",red ±1,NT14,2.9402553650934915
+"ruido 0,3 %",minimax,NT15,3.4143529659302785
+"ruido 0,3 %",red,NT15,2.3181794935753595
+"ruido 0,3 %",red + δ,NT15,2.436676373406975
+"ruido 0,3 %",red ±1,NT15,2.265891932112256
+"ruido 0,3 %",minimax,NT16,6.248054836334143
+"ruido 0,3 %",red,NT16,4.913988870664928
+"ruido 0,3 %",red + δ,NT16,5.7940313512656605
+"ruido 0,3 %",red ±1,NT16,5.7940313512656605
+"ruido 0,3 %",minimax,HT01,2.480559276038082
+"ruido 0,3 %",red,HT01,4.997836561830733
+"ruido 0,3 %",red + δ,HT01,3.3987456728885994
+"ruido 0,3 %",red ±1,HT01,2.541558723209848
+"ruido 0,3 %",minimax,HT02,1.6818282255779125
+"ruido 0,3 %",red,HT02,3.0357646018425024
+"ruido 0,3 %",red + δ,HT02,2.800036917610239
+"ruido 0,3 %",red ±1,HT02,2.1398441624130244
+"ruido 0,3 %",minimax,HT03,3.364055671576982
+"ruido 0,3 %",red,HT03,9.453833849232653
+"ruido 0,3 %",red + δ,HT03,6.218230384374659
+"ruido 0,3 %",red ±1,HT03,4.483674267724891
+"ruido 0,3 %",minimax,HT04,2.260870550082582
+"ruido 0,3 %",red,HT04,5.368068132927481
+"ruido 0,3 %",red + δ,HT04,3.116771370279259
+"ruido 0,3 %",red ±1,HT04,3.6019131073556205
+"ruido 0,3 %",minimax,HT05,3.3491606077004747
+"ruido 0,3 %",red,HT05,1.8762547304027017
+"ruido 0,3 %",red + δ,HT05,1.498768673360212
+"ruido 0,3 %",red ±1,HT05,1.4985916288639076
+"ruido 0,3 %",minimax,HT06,2.800414724601319
+"ruido 0,3 %",red,HT06,4.3193291029147876
+"ruido 0,3 %",red + δ,HT06,2.330829069177068
+"ruido 0,3 %",red ±1,HT06,3.0380414232304056
+"ruido 0,3 %",minimax,HT07,1.518030889097493
+"ruido 0,3 %",red,HT07,2.5208785807627914
+"ruido 0,3 %",red + δ,HT07,2.339397235664942
+"ruido 0,3 %",red ±1,HT07,1.678815858380471
+"ruido 0,3 %",minimax,HT08,16.223363179218378
+"ruido 0,3 %",red,HT08,14.048887507300153
+"ruido 0,3 %",red + δ,HT08,7.918553068685184
+"ruido 0,3 %",red ±1,HT08,4.260788523405218
+"ruido 0,3 %",minimax,HT09,1.7521172922513921
+"ruido 0,3 %",red,HT09,3.716056160822184
+"ruido 0,3 %",red + δ,HT09,2.395796882260329
+"ruido 0,3 %",red ±1,HT09,2.3214836556286067
+"ruido 0,3 %",minimax,HT10,4.325759200034835
+"ruido 0,3 %",red,HT10,2.085779082416804
+"ruido 0,3 %",red + δ,HT10,2.343980290303317
+"ruido 0,3 %",red ±1,HT10,2.126382865439949
+"ruido 0,3 %",minimax,HT11,3.5714942843016018
+"ruido 0,3 %",red,HT11,6.128727666702747
+"ruido 0,3 %",red + δ,HT11,4.771673202344063
+"ruido 0,3 %",red ±1,HT11,3.822490750856829
+"ruido 0,3 %",minimax,HT12,6.745421154256578
+"ruido 0,3 %",red,HT12,2.4030092841626653
+"ruido 0,3 %",red + δ,HT12,2.6524339437193993
+"ruido 0,3 %",red ±1,HT12,2.6363741331078403
+"ruido 0,3 %",minimax,HT13,2.4230703713123942
+"ruido 0,3 %",red,HT13,8.408167258739965
+"ruido 0,3 %",red + δ,HT13,3.253521518168634
+"ruido 0,3 %",red ±1,HT13,3.8739103752748876
+"ruido 0,3 %",minimax,HT14,3.069053258093738
+"ruido 0,3 %",red,HT14,3.5289684958678214
+"ruido 0,3 %",red + δ,HT14,2.801496731725434
+"ruido 0,3 %",red ±1,HT14,2.778958882487452
+"ruido 0,3 %",minimax,HT15,3.414886131084349
+"ruido 0,3 %",red,HT15,3.2934245375533684
+"ruido 0,3 %",red + δ,HT15,2.535389169834659
+"ruido 0,3 %",red ±1,HT15,2.390892294667801
+"ruido 0,3 %",minimax,HT16,2.302601547391956
+"ruido 0,3 %",red,HT16,3.2639612954926065
+"ruido 0,3 %",red + δ,HT16,2.598290047292207
+"ruido 0,3 %",red ±1,HT16,2.4778499812213584
+"ruido 0,3 %",minimax,HT17,2.3917462446343163
+"ruido 0,3 %",red,HT17,3.5237605501827107
+"ruido 0,3 %",red + δ,HT17,2.5275992083759418
+"ruido 0,3 %",red ±1,HT17,2.356336535918543
+"ruido 0,3 %",minimax,HT18,3.3114841465762357
+"ruido 0,3 %",red,HT18,2.0109269003058983
+"ruido 0,3 %",red + δ,HT18,2.5499032776339474
+"ruido 0,3 %",red ±1,HT18,2.947635148833088
+"ruido 0,3 %",minimax,HT19,2.073539291054454
+"ruido 0,3 %",red,HT19,2.1346933395132
+"ruido 0,3 %",red + δ,HT19,1.869625169700651
+"ruido 0,3 %",red ±1,HT19,1.8834781770054398
+"ruido 0,3 %",minimax,HT20,2.4020694829297007
+"ruido 0,3 %",red,HT20,2.097520955071581
+"ruido 0,3 %",red + δ,HT20,3.224747739835753
+"ruido 0,3 %",red ±1,HT20,1.9158620804396855
+"ruido 0,3 %",minimax,HT21,2.1677728002274925
+"ruido 0,3 %",red,HT21,1.9458960815900515
+"ruido 0,3 %",red + δ,HT21,1.6216384801251729
+"ruido 0,3 %",red ±1,HT21,2.2759548727055225
+"ruido 0,3 %",minimax,HT22,2.4672026040963213
+"ruido 0,3 %",red,HT22,1.6166024579462042
+"ruido 0,3 %",red + δ,HT22,1.2483351849481052
+"ruido 0,3 %",red ±1,HT22,1.129687858688204
+"ruido 0,3 %",minimax,HT23,3.0154174477972537
+"ruido 0,3 %",red,HT23,2.513407291753164
+"ruido 0,3 %",red + δ,HT23,5.142801220529963
+"ruido 0,3 %",red ±1,HT23,5.0741211798935035
+"ruido 0,3 %",minimax,HT24,1.638728589012222
+"ruido 0,3 %",red,HT24,3.6451309951530577
+"ruido 0,3 %",red + δ,HT24,2.1169296564916418
+"ruido 0,3 %",red ±1,HT24,1.4922587512925807
+"ruido 0,3 %",minimax,HT25,5.925179125149528
+"ruido 0,3 %",red,HT25,4.000420601098316
+"ruido 0,3 %",red + δ,HT25,1.9106784814404798
+"ruido 0,3 %",red ±1,HT25,2.8183295379283364
+10 presiones,minimax,NT01,1.6115695156413414
+10 presiones,red,NT01,2.061183965065347
+10 presiones,red + δ,NT01,1.5024133355089024
+10 presiones,red ±1,NT01,1.5024133355089024
+10 presiones,minimax,NT02,1.3882904381548413
+10 presiones,red,NT02,3.429112195125722
+10 presiones,red + δ,NT02,3.0397526135123556
+10 presiones,red ±1,NT02,2.7209817446572275
+10 presiones,minimax,NT03,1.8142165088134334
+10 presiones,red,NT03,3.455718421102497
+10 presiones,red + δ,NT03,1.526601786845611
+10 presiones,red ±1,NT03,1.472436215196685
+10 presiones,minimax,NT04,2.0341245238314403
+10 presiones,red,NT04,1.8310961492771456
+10 presiones,red + δ,NT04,2.00223568628677
+10 presiones,red ±1,NT04,1.8753550121612697
+10 presiones,minimax,NT05,2.5999425167310206
+10 presiones,red,NT05,2.100278727811602
+10 presiones,red + δ,NT05,1.987593284557368
+10 presiones,red ±1,NT05,1.9271326912718567
+10 presiones,minimax,NT06,1.6132761388429526
+10 presiones,red,NT06,1.6573706741270047
+10 presiones,red + δ,NT06,1.5421666151230244
+10 presiones,red ±1,NT06,1.3799729109684549
+10 presiones,minimax,NT07,1.3922317800103876
+10 presiones,red,NT07,1.3984446667558768
+10 presiones,red + δ,NT07,1.369086974497335
+10 presiones,red ±1,NT07,1.3720043597486915
+10 presiones,minimax,NT08,0.8730710127183837
+10 presiones,red,NT08,5.375639104727922
+10 presiones,red + δ,NT08,4.627600585608668
+10 presiones,red ±1,NT08,4.338002814950767
+10 presiones,minimax,NT09,2.6205294159173715
+10 presiones,red,NT09,2.697771554945747
+10 presiones,red + δ,NT09,2.1200990187697837
+10 presiones,red ±1,NT09,1.9069790761985763
+10 presiones,minimax,NT10,2.876640991090064
+10 presiones,red,NT10,5.556056581693234
+10 presiones,red + δ,NT10,2.8058404401472044
+10 presiones,red ±1,NT10,1.4839550484779755
+10 presiones,minimax,NT11,1.6492758425771579
+10 presiones,red,NT11,6.267960917837944
+10 presiones,red + δ,NT11,2.808325692215878
+10 presiones,red ±1,NT11,2.0400901446999717
+10 presiones,minimax,NT12,2.4603392664380648
+10 presiones,red,NT12,2.5357866673354397
+10 presiones,red + δ,NT12,1.843251147944758
+10 presiones,red ±1,NT12,1.7062209281471399
+10 presiones,minimax,NT13,1.5277391809333185
+10 presiones,red,NT13,2.1351958526577506
+10 presiones,red + δ,NT13,1.685986133409705
+10 presiones,red ±1,NT13,1.632627167365195
+10 presiones,minimax,NT14,2.0256914127843317
+10 presiones,red,NT14,1.843460167382873
+10 presiones,red + δ,NT14,1.7062789924225727
+10 presiones,red ±1,NT14,1.5167136595815178
+10 presiones,minimax,NT15,1.5039052873332175
+10 presiones,red,NT15,1.6134326451286227
+10 presiones,red + δ,NT15,1.394097210241553
+10 presiones,red ±1,NT15,1.2425362040243102
+10 presiones,minimax,NT16,1.4025440823395623
+10 presiones,red,NT16,1.7847687564919472
+10 presiones,red + δ,NT16,1.637769930063465
+10 presiones,red ±1,NT16,1.2943654932738222
+10 presiones,minimax,HT01,2.533936203836735
+10 presiones,red,HT01,3.1355046094484584
+10 presiones,red + δ,HT01,1.763631043949902
+10 presiones,red ±1,HT01,1.7319902736687773
+10 presiones,minimax,HT02,1.6817295144948037
+10 presiones,red,HT02,1.7186770817559502
+10 presiones,red + δ,HT02,1.6051256857066993
+10 presiones,red ±1,HT02,1.5835403494590883
+10 presiones,minimax,HT03,1.5872680801092662
+10 presiones,red,HT03,1.462216316870782
+10 presiones,red + δ,HT03,1.3705618248080949
+10 presiones,red ±1,HT03,1.3705618248080949
+10 presiones,minimax,HT04,1.2971482495888893
+10 presiones,red,HT04,1.4994623226306365
+10 presiones,red + δ,HT04,1.3298709294831474
+10 presiones,red ±1,HT04,1.3298709294831474
+10 presiones,minimax,HT05,1.3606363573555111
+10 presiones,red,HT05,2.207751055673352
+10 presiones,red + δ,HT05,1.2602695628530576
+10 presiones,red ±1,HT05,1.2318396079274627
+10 presiones,minimax,HT06,1.881144740388344
+10 presiones,red,HT06,2.0300854597465614
+10 presiones,red + δ,HT06,1.7073048656422691
+10 presiones,red ±1,HT06,1.6591748005536526
+10 presiones,minimax,HT07,1.5318309128075915
+10 presiones,red,HT07,1.5728748748273322
+10 presiones,red + δ,HT07,1.339203025769019
+10 presiones,red ±1,HT07,1.2944679731808062
+10 presiones,minimax,HT08,2.336345245142256
+10 presiones,red,HT08,3.388412438164379
+10 presiones,red + δ,HT08,1.7289921660747913
+10 presiones,red ±1,HT08,1.6715504438533397
+10 presiones,minimax,HT09,1.4300705224785695
+10 presiones,red,HT09,2.370318936074389
+10 presiones,red + δ,HT09,2.210208699529982
+10 presiones,red ±1,HT09,1.766412067289049
+10 presiones,minimax,HT10,2.109104217346616
+10 presiones,red,HT10,2.71669909939782
+10 presiones,red + δ,HT10,1.5256944505726622
+10 presiones,red ±1,HT10,1.4849591771630855
+10 presiones,minimax,HT11,1.9481413329047388
+10 presiones,red,HT11,2.156094325374545
+10 presiones,red + δ,HT11,2.181453877557598
+10 presiones,red ±1,HT11,2.017945461611171
+10 presiones,minimax,HT12,1.338942616040273
+10 presiones,red,HT12,1.586683342104128
+10 presiones,red + δ,HT12,1.142536284278196
+10 presiones,red ±1,HT12,1.142536284278196
+10 presiones,minimax,HT13,2.927527192451524
+10 presiones,red,HT13,3.253711185998632
+10 presiones,red + δ,HT13,2.7324582641341713
+10 presiones,red ±1,HT13,2.1397671612742504
+10 presiones,minimax,HT14,0.9937874351999155
+10 presiones,red,HT14,1.4650986803869612
+10 presiones,red + δ,HT14,1.0893141102399198
+10 presiones,red ±1,HT14,1.0100820950109246
+10 presiones,minimax,HT15,1.7739181610869486
+10 presiones,red,HT15,2.5669092555960993
+10 presiones,red + δ,HT15,1.687383287982962
+10 presiones,red ±1,HT15,1.6663896883427916
+10 presiones,minimax,HT16,1.6578950399339185
+10 presiones,red,HT16,2.6624328859924855
+10 presiones,red + δ,HT16,1.3542730018608862
+10 presiones,red ±1,HT16,1.3552123305050148
+10 presiones,minimax,HT17,1.6534003972027778
+10 presiones,red,HT17,2.605979610544413
+10 presiones,red + δ,HT17,1.8590116477726675
+10 presiones,red ±1,HT17,1.855868011727439
+10 presiones,minimax,HT18,1.9059456363953684
+10 presiones,red,HT18,2.8761434742150453
+10 presiones,red + δ,HT18,1.8773651778042535
+10 presiones,red ±1,HT18,1.5926266582808342
+10 presiones,minimax,HT19,1.5028864870505332
+10 presiones,red,HT19,1.9044307522108983
+10 presiones,red + δ,HT19,1.2742018338311005
+10 presiones,red ±1,HT19,1.1784852479278471
+10 presiones,minimax,HT20,2.2401945789809807
+10 presiones,red,HT20,3.0838421740325024
+10 presiones,red + δ,HT20,1.702485020891813
+10 presiones,red ±1,HT20,1.4457681348774976
+10 presiones,minimax,HT21,1.5814102076904961
+10 presiones,red,HT21,1.608791832273039
+10 presiones,red + δ,HT21,1.517760857949226
+10 presiones,red ±1,HT21,1.437801747761202
+10 presiones,minimax,HT22,1.2091668454592701
+10 presiones,red,HT22,1.1595437553362056
+10 presiones,red + δ,HT22,1.156321809563866
+10 presiones,red ±1,HT22,1.0494481311693478
+10 presiones,minimax,HT23,1.6591515538838293
+10 presiones,red,HT23,2.472662690558149
+10 presiones,red + δ,HT23,1.6106409829577668
+10 presiones,red ±1,HT23,1.6103531296433833
+10 presiones,minimax,HT24,1.5111902647629751
+10 presiones,red,HT24,2.8686485514670204
+10 presiones,red + δ,HT24,1.3354697053872309
+10 presiones,red ±1,HT24,1.3347030601755536
+10 presiones,minimax,HT25,1.3740275682946381
+10 presiones,red,HT25,1.7404115370950666
+10 presiones,red + δ,HT25,1.4819356501756271
+10 presiones,red ±1,HT25,0.9323947768373613
+"10 presiones + ruido 0,2 %",minimax,NT01,6.314336282880234
+"10 presiones + ruido 0,2 %",red,NT01,9.287723138935196
+"10 presiones + ruido 0,2 %",red + δ,NT01,7.977745296640682
+"10 presiones + ruido 0,2 %",red ±1,NT01,7.553666302861196
+"10 presiones + ruido 0,2 %",minimax,NT02,4.132192847702226
+"10 presiones + ruido 0,2 %",red,NT02,12.837271312466221
+"10 presiones + ruido 0,2 %",red + δ,NT02,8.12449198945044
+"10 presiones + ruido 0,2 %",red ±1,NT02,6.9059984939629775
+"10 presiones + ruido 0,2 %",minimax,NT03,3.256057907208483
+"10 presiones + ruido 0,2 %",red,NT03,3.5229370241339817
+"10 presiones + ruido 0,2 %",red + δ,NT03,6.577968756730249
+"10 presiones + ruido 0,2 %",red ±1,NT03,3.8996907655275117
+"10 presiones + ruido 0,2 %",minimax,NT04,3.227872744764443
+"10 presiones + ruido 0,2 %",red,NT04,14.501821738818725
+"10 presiones + ruido 0,2 %",red + δ,NT04,7.55930122249423
+"10 presiones + ruido 0,2 %",red ±1,NT04,4.422549916536121
+"10 presiones + ruido 0,2 %",minimax,NT05,1.5505875136606657
+"10 presiones + ruido 0,2 %",red,NT05,2.2986293658582553
+"10 presiones + ruido 0,2 %",red + δ,NT05,2.1036414401562484
+"10 presiones + ruido 0,2 %",red ±1,NT05,1.7377381278185757
+"10 presiones + ruido 0,2 %",minimax,NT06,3.1399197846747664
+"10 presiones + ruido 0,2 %",red,NT06,5.019988762074865
+"10 presiones + ruido 0,2 %",red + δ,NT06,4.132974128175066
+"10 presiones + ruido 0,2 %",red ±1,NT06,4.130802627985582
+"10 presiones + ruido 0,2 %",minimax,NT07,3.0988771843533027
+"10 presiones + ruido 0,2 %",red,NT07,5.143867644271157
+"10 presiones + ruido 0,2 %",red + δ,NT07,3.868385250131735
+"10 presiones + ruido 0,2 %",red ±1,NT07,3.8647974632288205
+"10 presiones + ruido 0,2 %",minimax,NT08,5.945730255093711
+"10 presiones + ruido 0,2 %",red,NT08,50.30280484182221
+"10 presiones + ruido 0,2 %",red + δ,NT08,24.00417593810702
+"10 presiones + ruido 0,2 %",red ±1,NT08,20.39623044422739
+"10 presiones + ruido 0,2 %",minimax,NT09,3.4817923171590204
+"10 presiones + ruido 0,2 %",red,NT09,3.9680101044106424
+"10 presiones + ruido 0,2 %",red + δ,NT09,5.8742339895538445
+"10 presiones + ruido 0,2 %",red ±1,NT09,4.6877888691416505
+"10 presiones + ruido 0,2 %",minimax,NT10,5.1189696546777315
+"10 presiones + ruido 0,2 %",red,NT10,8.395506912911722
+"10 presiones + ruido 0,2 %",red + δ,NT10,4.902893251477111
+"10 presiones + ruido 0,2 %",red ±1,NT10,4.728869038068862
+"10 presiones + ruido 0,2 %",minimax,NT11,4.237756376520466
+"10 presiones + ruido 0,2 %",red,NT11,6.822787675575378
+"10 presiones + ruido 0,2 %",red + δ,NT11,6.301919975329903
+"10 presiones + ruido 0,2 %",red ±1,NT11,4.292746953465897
+"10 presiones + ruido 0,2 %",minimax,NT12,2.7327354894566125
+"10 presiones + ruido 0,2 %",red,NT12,7.941498989327303
+"10 presiones + ruido 0,2 %",red + δ,NT12,6.4653548278732
+"10 presiones + ruido 0,2 %",red ±1,NT12,3.257305835700675
+"10 presiones + ruido 0,2 %",minimax,NT13,3.109840312795961
+"10 presiones + ruido 0,2 %",red,NT13,4.995087146013527
+"10 presiones + ruido 0,2 %",red + δ,NT13,3.806643181109168
+"10 presiones + ruido 0,2 %",red ±1,NT13,3.6006950984861525
+"10 presiones + ruido 0,2 %",minimax,NT14,9.995392043898088
+"10 presiones + ruido 0,2 %",red,NT14,9.067531530154412
+"10 presiones + ruido 0,2 %",red + δ,NT14,8.478502669832228
+"10 presiones + ruido 0,2 %",red ±1,NT14,7.789641130348518
+"10 presiones + ruido 0,2 %",minimax,NT15,2.382454339813097
+"10 presiones + ruido 0,2 %",red,NT15,11.562203967155618
+"10 presiones + ruido 0,2 %",red + δ,NT15,2.7387801628720663
+"10 presiones + ruido 0,2 %",red ±1,NT15,2.7387801628720663
+"10 presiones + ruido 0,2 %",minimax,NT16,4.4247229689363685
+"10 presiones + ruido 0,2 %",red,NT16,5.154914521932
+"10 presiones + ruido 0,2 %",red + δ,NT16,4.964089369711344
+"10 presiones + ruido 0,2 %",red ±1,NT16,4.007645793929045
+"10 presiones + ruido 0,2 %",minimax,HT01,4.924057794165632
+"10 presiones + ruido 0,2 %",red,HT01,23.056495957770352
+"10 presiones + ruido 0,2 %",red + δ,HT01,11.431210459179633
+"10 presiones + ruido 0,2 %",red ±1,HT01,6.1158467167079955
+"10 presiones + ruido 0,2 %",minimax,HT02,3.484356734526082
+"10 presiones + ruido 0,2 %",red,HT02,6.795982205927462
+"10 presiones + ruido 0,2 %",red + δ,HT02,3.175085529451298
+"10 presiones + ruido 0,2 %",red ±1,HT02,3.79932763396382
+"10 presiones + ruido 0,2 %",minimax,HT03,5.827736917550486
+"10 presiones + ruido 0,2 %",red,HT03,7.162720492013885
+"10 presiones + ruido 0,2 %",red + δ,HT03,5.363098398063442
+"10 presiones + ruido 0,2 %",red ±1,HT03,4.7526166627497926
+"10 presiones + ruido 0,2 %",minimax,HT04,3.4183143141749164
+"10 presiones + ruido 0,2 %",red,HT04,4.039421008400122
+"10 presiones + ruido 0,2 %",red + δ,HT04,4.2173348574407195
+"10 presiones + ruido 0,2 %",red ±1,HT04,3.9629734354956714
+"10 presiones + ruido 0,2 %",minimax,HT05,4.247524175240197
+"10 presiones + ruido 0,2 %",red,HT05,6.105193115978444
+"10 presiones + ruido 0,2 %",red + δ,HT05,5.963883243894182
+"10 presiones + ruido 0,2 %",red ±1,HT05,5.528585801389002
+"10 presiones + ruido 0,2 %",minimax,HT06,3.8224314531048047
+"10 presiones + ruido 0,2 %",red,HT06,10.013298690582703
+"10 presiones + ruido 0,2 %",red + δ,HT06,5.272058921305149
+"10 presiones + ruido 0,2 %",red ±1,HT06,4.2274976095008086
+"10 presiones + ruido 0,2 %",minimax,HT07,3.6918994208817235
+"10 presiones + ruido 0,2 %",red,HT07,8.448185459266949
+"10 presiones + ruido 0,2 %",red + δ,HT07,7.208809796582333
+"10 presiones + ruido 0,2 %",red ±1,HT07,5.081934869299085
+"10 presiones + ruido 0,2 %",minimax,HT08,6.6837325425452745
+"10 presiones + ruido 0,2 %",red,HT08,8.82798432123376
+"10 presiones + ruido 0,2 %",red + δ,HT08,6.319641958377651
+"10 presiones + ruido 0,2 %",red ±1,HT08,5.732917777337172
+"10 presiones + ruido 0,2 %",minimax,HT09,3.6138034654666775
+"10 presiones + ruido 0,2 %",red,HT09,5.604848640844562
+"10 presiones + ruido 0,2 %",red + δ,HT09,4.530169768276816
+"10 presiones + ruido 0,2 %",red ±1,HT09,3.9447485004666416
+"10 presiones + ruido 0,2 %",minimax,HT10,5.313315754599942
+"10 presiones + ruido 0,2 %",red,HT10,7.554670117742543
+"10 presiones + ruido 0,2 %",red + δ,HT10,3.9259083988558263
+"10 presiones + ruido 0,2 %",red ±1,HT10,3.41443478121308
+"10 presiones + ruido 0,2 %",minimax,HT11,4.927914514753935
+"10 presiones + ruido 0,2 %",red,HT11,5.323441521718157
+"10 presiones + ruido 0,2 %",red + δ,HT11,3.5441322263393586
+"10 presiones + ruido 0,2 %",red ±1,HT11,3.5438295426412547
+"10 presiones + ruido 0,2 %",minimax,HT12,6.031735463920595
+"10 presiones + ruido 0,2 %",red,HT12,9.080160779702782
+"10 presiones + ruido 0,2 %",red + δ,HT12,7.440701036747384
+"10 presiones + ruido 0,2 %",red ±1,HT12,3.1564765760370066
+"10 presiones + ruido 0,2 %",minimax,HT13,6.509034035066131
+"10 presiones + ruido 0,2 %",red,HT13,3.083981700592814
+"10 presiones + ruido 0,2 %",red + δ,HT13,3.9645954028732815
+"10 presiones + ruido 0,2 %",red ±1,HT13,3.393697675328171
+"10 presiones + ruido 0,2 %",minimax,HT14,3.714735723651858
+"10 presiones + ruido 0,2 %",red,HT14,6.049285134653502
+"10 presiones + ruido 0,2 %",red + δ,HT14,3.468268053441408
+"10 presiones + ruido 0,2 %",red ±1,HT14,3.3792613514679735
+"10 presiones + ruido 0,2 %",minimax,HT15,4.898793648236206
+"10 presiones + ruido 0,2 %",red,HT15,5.66228376407817
+"10 presiones + ruido 0,2 %",red + δ,HT15,4.119527592031535
+"10 presiones + ruido 0,2 %",red ±1,HT15,3.3559207195289877
+"10 presiones + ruido 0,2 %",minimax,HT16,4.087201985422679
+"10 presiones + ruido 0,2 %",red,HT16,8.1560833651874
+"10 presiones + ruido 0,2 %",red + δ,HT16,7.306749453739698
+"10 presiones + ruido 0,2 %",red ±1,HT16,2.79522180004493
+"10 presiones + ruido 0,2 %",minimax,HT17,2.4252807507040326
+"10 presiones + ruido 0,2 %",red,HT17,3.0126376010783895
+"10 presiones + ruido 0,2 %",red + δ,HT17,2.5730046555622996
+"10 presiones + ruido 0,2 %",red ±1,HT17,3.131210259532644
+"10 presiones + ruido 0,2 %",minimax,HT18,5.175788190210372
+"10 presiones + ruido 0,2 %",red,HT18,9.039445395552686
+"10 presiones + ruido 0,2 %",red + δ,HT18,5.4604235111556925
+"10 presiones + ruido 0,2 %",red ±1,HT18,4.759314787112242
+"10 presiones + ruido 0,2 %",minimax,HT19,6.331733475465526
+"10 presiones + ruido 0,2 %",red,HT19,14.057768659106177
+"10 presiones + ruido 0,2 %",red + δ,HT19,8.126913238998808
+"10 presiones + ruido 0,2 %",red ±1,HT19,8.669148051761834
+"10 presiones + ruido 0,2 %",minimax,HT20,4.693830562569255
+"10 presiones + ruido 0,2 %",red,HT20,12.698988938843414
+"10 presiones + ruido 0,2 %",red + δ,HT20,7.526211292237232
+"10 presiones + ruido 0,2 %",red ±1,HT20,7.273987851299671
+"10 presiones + ruido 0,2 %",minimax,HT21,4.528027097708263
+"10 presiones + ruido 0,2 %",red,HT21,5.862103599691118
+"10 presiones + ruido 0,2 %",red + δ,HT21,5.602714632643932
+"10 presiones + ruido 0,2 %",red ±1,HT21,6.071138006943021
+"10 presiones + ruido 0,2 %",minimax,HT22,2.520846865938119
+"10 presiones + ruido 0,2 %",red,HT22,4.499191604048145
+"10 presiones + ruido 0,2 %",red + δ,HT22,3.7230820217463387
+"10 presiones + ruido 0,2 %",red ±1,HT22,3.4948439503649325
+"10 presiones + ruido 0,2 %",minimax,HT23,5.112324670699948
+"10 presiones + ruido 0,2 %",red,HT23,3.5559384444133895
+"10 presiones + ruido 0,2 %",red + δ,HT23,3.6431579099618356
+"10 presiones + ruido 0,2 %",red ±1,HT23,4.613709983207487
+"10 presiones + ruido 0,2 %",minimax,HT24,2.8941530122540895
+"10 presiones + ruido 0,2 %",red,HT24,2.9016158579613234
+"10 presiones + ruido 0,2 %",red + δ,HT24,2.029716163530206
+"10 presiones + ruido 0,2 %",red ±1,HT24,3.02017005245041
+"10 presiones + ruido 0,2 %",minimax,HT25,1.8892490029751177
+"10 presiones + ruido 0,2 %",red,HT25,6.217304743767862
+"10 presiones + ruido 0,2 %",red + δ,HT25,6.060355872641285
+"10 presiones + ruido 0,2 %",red ±1,HT25,4.956435057457995

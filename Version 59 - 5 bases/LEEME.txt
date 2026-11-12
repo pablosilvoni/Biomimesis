@@ -1,0 +1,17 @@
+Versión 59 - 5 materiales (bases)
+==================================
+La red en cadena ORDINAL del primer nivel (Figura 3 del artículo), llevada al tubo de pared gruesa.
+- Entrada: la curva λ(P) del paciente en 141 presiones (60–200 mmHg), suavizada con un polinomio de grado 6 en P.
+- Salida: láminas enteras de cada capa (0 a 20, láminas de 0,025 mm) y el preestiramiento δ (una cabeza más).
+- Uso: red → δ afinado (Brent) → revisión ±1 lámina (3^N combinaciones; δ reajustado en las 8 mejores).
+- Referencia: el procedimiento de tres pasos de V47 (arranque de pared delgada → MCO no lineal → minimax entero), con tope de 20 láminas.
+- Rigidez recalibrada para respetar el tope: 6 materiales ×[1,1,1,1.111,1.278,1.5]; 5 materiales ×[1,1,1,1,1.5].
+
+Archivos principales
+- curva_j_v59_5.ipynb ............. notebook ejecutado
+- modelo_rn_cadena_tubo_v59_5.weights.h5, scalers_cadena_tubo_v59_5.pkl ... pesos y escaladores
+- etiquetas_enteras_tubo_v59_5.npz . etiquetas (injertos sorteados y diseños de tres pasos); si existe, no se recalcula
+- sujetos_v59_5.csv ............... 41 sujetos: láminas, δ, Erms y e_max de minimax, red, red+δ, red ±1
+- resumen_v59_5.csv, robustez_v59_5.csv ... resultados con curvas limpias y medidas
+- historial_entrenamiento_cadena_tubo_v59_5.csv  curvas de aprendizaje
+Script: construir_v59.py (arma el notebook a partir del de V47; las rutas apuntan al entorno de trabajo de Claude).

@@ -1,0 +1,13 @@
+método,mediana,peor,cumplen,grupo
+minimax,1.13,1.8,31/31,41 sujetos: entrenamiento (31)
+red,1.96,5.07,25/31,41 sujetos: entrenamiento (31)
+red + δ,1.09,2.21,31/31,41 sujetos: entrenamiento (31)
+red ±1,0.91,1.6,31/31,41 sujetos: entrenamiento (31)
+minimax,1.11,1.81,10/10,41 sujetos: prueba (10)
+red,2.48,10.23,7/10,41 sujetos: prueba (10)
+red + δ,1.49,3.94,9/10,41 sujetos: prueba (10)
+red ±1,1.16,1.97,10/10,41 sujetos: prueba (10)
+minimax,1.15,2.68,300/300,arterias sintéticas de prueba (300)
+red,2.42,16.01,196/300,arterias sintéticas de prueba (300)
+red + δ,1.27,8.87,281/300,arterias sintéticas de prueba (300)
+red ±1,1.02,6.34,294/300,arterias sintéticas de prueba (300)
