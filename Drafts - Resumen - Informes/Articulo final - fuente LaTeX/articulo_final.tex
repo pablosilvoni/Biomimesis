@@ -327,7 +327,10 @@ Este procedimiento es la referencia a nivel del tubo, como el minimax lo es en e
 \caption{Dos maneras de obtener el diseño entero a nivel del tubo. Arriba, la referencia: tres pasos de optimización. Abajo, la red en cadena: una evaluación y, si se quiere, una revisión corta.}\label{fig:proc}\end{figure}
 
 \subsection{La red en cadena para el tubo}
-Se usa la misma red del primer nivel (Fig.~\ref{fig:cadena}), con dos cambios. (1) La entrada es la curva del paciente, el estiramiento $\lambda$ en los 141 valores de presión. (2) Tiene una cabeza más, que da $\delta$ después de que las otras eligieron las láminas. Cada cabeza $j$ responde las 20 preguntas ``¿más de $k$ láminas?'' y $n_j$ es la cantidad de respuestas afirmativas, igual que en el primer nivel.
+Se usa la misma red del primer nivel (Fig.~\ref{fig:cadena}), con dos cambios (Fig.~\ref{fig:cadenatubo}). (1) La entrada es la curva del paciente, el estiramiento $\lambda$ en los 141 valores de presión. (2) Tiene una cabeza más, que da $\delta$ después de que las otras eligieron las láminas. Cada cabeza $j$ responde las 20 preguntas ``¿más de $k$ láminas?'' y $n_j$ es la cantidad de respuestas afirmativas, igual que en el primer nivel.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{red_cadena_tubo_es.pdf}
+\caption{Red en cadena del tubo (6 materiales). Es la red de la Fig.~\ref{fig:cadena} con otra entrada, la curva $\lambda(P)$ en 141 presiones, y una cabeza más: después de que las seis cabezas eligieron las láminas $n_1\ldots n_6$, la cabeza de $\delta$ recibe $h$ y el vector de láminas decididas $\mathbf{m}$ y da el preestiramiento.}\label{fig:cadenatubo}\end{figure}
 
 \textbf{Con qué se entrena.} Con dos tipos de curvas: injertos con láminas y $\delta$ sorteados, cuya respuesta correcta es exactamente lo sorteado, y arterias sintéticas de la ley de Masson más los 31 sujetos de entrenamiento, cuya respuesta correcta es el diseño de los tres pasos. Los 10 sujetos de prueba no se usan.
 

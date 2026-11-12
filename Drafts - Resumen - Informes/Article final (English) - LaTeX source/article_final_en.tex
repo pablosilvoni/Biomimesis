@@ -327,7 +327,10 @@ This procedure is the reference at the tube level, as the minimax is at the firs
 \caption{Two ways to obtain the integer design at the tube level. Top, the reference: three optimization steps. Bottom, the chained network: one evaluation and, optionally, a short check.}\label{fig:proc}\end{figure}
 
 \subsection{The chained network for the tube}
-The same network as in the first level is used (Fig.~\ref{fig:cadena}), with two changes. (1) The input is the patient's curve, the stretch $\lambda$ at the 141 pressure values. (2) It has one more head, which gives $\delta$ after the others have chosen the laminae. Each head $j$ answers the 20 questions ``more than $k$ laminae?'' and $n_j$ is the number of yes answers, as in the first level.
+The same network as in the first level is used (Fig.~\ref{fig:cadena}), with two changes (Fig.~\ref{fig:cadenatubo}). (1) The input is the patient's curve, the stretch $\lambda$ at the 141 pressure values. (2) It has one more head, which gives $\delta$ after the others have chosen the laminae. Each head $j$ answers the 20 questions ``more than $k$ laminae?'' and $n_j$ is the number of yes answers, as in the first level.
+
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{red_cadena_tubo_en.pdf}
+\caption{Tube chained network (6 materials). It is the network of Fig.~\ref{fig:cadena} with a different input, the curve $\lambda(P)$ at 141 pressures, and one more head: after the six heads have chosen the laminae $n_1\ldots n_6$, the $\delta$ head receives $h$ and the vector of decided laminae $\mathbf{m}$ and gives the prestretch.}\label{fig:cadenatubo}\end{figure}
 
 \textbf{What it is trained on.} Two kinds of curves: grafts with random laminae and $\delta$, whose correct answer is exactly what was drawn, and synthetic arteries from Masson's law plus the 31 training subjects, whose correct answer is the three-step design. The 10 test subjects are not used.
 
