@@ -269,18 +269,20 @@ Con materiales tipo fibra y una base elegida una vez, la curva tensión--estiram
 %=====================================================================
 \section{Aplicación: la curva presión--diámetro y el tubo de pared gruesa}\label{sec:aplicacion}
 \subsection{De la tensión a la presión}
-Un injerto se implanta como tubo, y lo que debe coincidir con la arteria es su diámetro a cada presión. Para pasar de la tensión a la presión hacen falta la geometría y una hipótesis sobre la pared. La configuración libre de tensiones de la arteria es un sector anular abierto de semiángulo $\Theta_0$ y radio $R_m$ en el borde media--adventicia, que representa las tensiones residuales (Fig.~\ref{fig:estados}). Un punto de radio $R$ en el sector pasa al radio $r$ en la arteria cerrada; su estiramiento y la conservación del volumen dan~\cite{masson}
+Un injerto se implanta como tubo, y lo que debe coincidir con la arteria es su diámetro a cada presión. Para pasar de la tensión a la presión hacen falta la geometría y una hipótesis sobre la pared. La configuración libre de tensiones de la arteria es un sector anular abierto: el que queda si se corta la arteria a lo largo y se la deja abrir (estado~1 de la Fig.~\ref{fig:estados}). Tiene radio $R_m$ en el borde media--adventicia y abarca un ángulo total $2\Theta_0$; $\Theta_0$ es su semiángulo, medido desde el eje de simetría hasta cada borde del corte. Ese sector representa las tensiones residuales: al cerrarlo, la cara interna queda comprimida y la externa estirada. Un punto de radio $R$ en el sector pasa al radio $r$ en la arteria cerrada; su estiramiento y la conservación del volumen dan~\cite{masson}
 \begin{equation}\label{eq:cinem}
 \lambda_\theta=\frac{\pi r}{\Theta_0R},\qquad \Theta_0\,(R_m^2-R^2)=\pi\lambda_z\,(r_m^2-r^2).
 \end{equation}
+La primera relación compara el largo de una fibra: un arco $2\Theta_0R$ en el sector y una circunferencia $2\pi r$ en la arteria. La segunda iguala el área del sector entre $R$ y $R_m$ con la del anillo entre $r$ y $r_m$, multiplicada por $\lambda_z$ porque la arteria también está estirada a lo largo. Valen para la arteria cerrada sin presión (estado~2, con $\rho$ en lugar de $r$) y con presión (estado~3). En los sujetos de Masson, $\Theta_0$, $R_m$ y $\lambda_z$ no se midieron: se identificaron junto con los demás parámetros, ajustando la presión medida (Sección~\ref{sec:datos}).
+
 El equilibrio radial integrado sobre el espesor da la presión que soporta la pared íntima--media~\cite{masson,humphrey}:
 \begin{equation}\label{eq:equil}
 P=P_i-P_a=\int_{r_i}^{r_m}\frac{\sigma_{\theta\theta}-\sigma_{rr}}{r}\,dr,
 \end{equation}
 con $P_i$ la presión de la sangre y $P_a$ la que ejercen la adventicia y el tejido que rodea a la arteria. Como $P_a$ depende del sitio, el diseño se plantea sobre $P$, la presión que soporta la pared, que es la que el injerto debe soportar con la misma deformación. El espesor íntima--media $h$ se toma de la mediana de referencia por edad y sexo medida con ecotracking~\cite{engelen13} (0,43 a 0,68\,mm), porque Masson et al.\ no publican el de cada sujeto, y $r_i=r_m-h$.
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d10_tres_estados.png}
-\caption{Sujeto NT01 en sus tres estados: (1) sector abierto sin tensiones, (2) arteria cerrada sin presión, (3) arteria con presión. De (2) a (3) la cara interna crece 16,5\,\% y el borde media--adventicia 10\,\%.}\label{fig:estados}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d10_tres_estados_es.png}
+\caption{Sujeto NT01 en sus tres estados, a la misma escala: (1) sector abierto sin tensiones, de semiángulo $\Theta_0$ a cada lado del eje de simetría; (2) arteria cerrada sin presión; (3) arteria con presión. La Ec.~\eqref{eq:cinem} lleva cada punto de radio $R$ en (1) a su radio $\rho$ en (2) o $r$ en (3). De (2) a (3) la cara interna crece 16,5\,\% y el borde media--adventicia 10\,\%.}\label{fig:estados}\end{figure}
 
 \paragraph{Ventana de presión.} Lo que define si un estado es fisiológico es la presión, no el estiramiento: en $\lambda_\theta=1{,}16$ el sujeto más rígido soporta unos 400\,mmHg y uno blando joven, unos 70. Por eso, en este nivel, todos los sujetos se evalúan en la misma ventana, $P$ de 60 a 200\,mmHg (8,0 a 26,7\,kPa) en 141 valores, que cubre con margen las presiones medias medidas (64/116\,mmHg en NT y 73/127\,mmHg en HT~\cite{masson}). La curva objetivo es el estiramiento del borde media--adventicia, $\lambda(P_k)$, proporcional al diámetro (Fig.~\ref{fig:presion}): los sujetos rígidos llegan a 200\,mmHg con $\lambda$ entre 1,12 y 1,15, los blandos con $\lambda$ entre 1,20 y 1,23.
 

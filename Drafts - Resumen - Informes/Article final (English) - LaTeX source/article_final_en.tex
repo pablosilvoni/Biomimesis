@@ -269,18 +269,20 @@ With fiber-like materials and a basis chosen once, the stress--stretch curve of 
 %=====================================================================
 \section{Application: the pressure--diameter curve and the thick-walled tube}\label{sec:aplicacion}
 \subsection{From stress to pressure}
-A graft is implanted as a tube, and what must match the artery is its diameter at each pressure. Going from stress to pressure requires the geometry and an assumption about the wall. The stress-free configuration of the artery is an open annular sector with half-angle $\Theta_0$ and radius $R_m$ at the media--adventitia boundary, which represents the residual stresses (Fig.~\ref{fig:estados}). A point at radius $R$ in the sector moves to radius $r$ in the closed artery; its stretch and volume conservation give~\cite{masson}
+A graft is implanted as a tube, and what must match the artery is its diameter at each pressure. Going from stress to pressure requires the geometry and an assumption about the wall. The stress-free configuration of the artery is an open annular sector: the one obtained by cutting the artery lengthwise and letting it open (state~1 of Fig.~\ref{fig:estados}). It has radius $R_m$ at the media--adventitia boundary and spans a total angle $2\Theta_0$; $\Theta_0$ is its half-angle, measured from the symmetry axis to each edge of the cut. That sector represents the residual stresses: when it is closed, the inner face is compressed and the outer one stretched. A point at radius $R$ in the sector moves to radius $r$ in the closed artery; its stretch and volume conservation give~\cite{masson}
 \begin{equation}\label{eq:cinem}
 \lambda_\theta=\frac{\pi r}{\Theta_0R},\qquad \Theta_0\,(R_m^2-R^2)=\pi\lambda_z\,(r_m^2-r^2).
 \end{equation}
+The first relation compares the length of a fibre: an arc $2\Theta_0R$ in the sector and a circle $2\pi r$ in the artery. The second equates the area of the sector between $R$ and $R_m$ with that of the ring between $r$ and $r_m$, multiplied by $\lambda_z$ because the artery is also stretched lengthwise. They hold for the closed unpressurized artery (state~2, with $\rho$ instead of $r$) and for the pressurized one (state~3). For Masson's subjects, $\Theta_0$, $R_m$ and $\lambda_z$ were not measured: they were identified together with the other parameters, by fitting the measured pressure (Section~\ref{sec:datos}).
+
 Radial equilibrium integrated over the thickness gives the pressure borne by the intima--media wall~\cite{masson,humphrey}:
 \begin{equation}\label{eq:equil}
 P=P_i-P_a=\int_{r_i}^{r_m}\frac{\sigma_{\theta\theta}-\sigma_{rr}}{r}\,dr,
 \end{equation}
 where $P_i$ is the blood pressure and $P_a$ the pressure exerted by the adventitia and the tissue surrounding the artery. Since $P_a$ depends on the site, the design is formulated in terms of $P$, the pressure borne by the wall, which the graft must bear with the same deformation. The intima--media thickness $h$ is taken from the age- and sex-specific reference median measured with echotracking~\cite{engelen13} (0.43 to 0.68\,mm), because Masson et al.\ do not report it for each subject, and $r_i=r_m-h$.
 
-\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d10_tres_estados.png}
-\caption{Subject NT01 in its three states: (1) stress-free open sector, (2) closed unpressurized artery, (3) pressurized artery. From (2) to (3) the inner surface grows by 16.5\,\% and the media--adventitia boundary by 10\,\%.}\label{fig:estados}\end{figure}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{d10_tres_estados_en.png}
+\caption{Subject NT01 in its three states, at the same scale: (1) stress-free open sector, with half-angle $\Theta_0$ on each side of the symmetry axis; (2) closed unpressurized artery; (3) pressurized artery. Eq.~\eqref{eq:cinem} takes each point at radius $R$ in (1) to its radius $\rho$ in (2) or $r$ in (3). From (2) to (3) the inner surface grows by 16.5\,\% and the media--adventitia boundary by 10\,\%.}\label{fig:estados}\end{figure}
 
 \paragraph{Pressure window.} What defines whether a state is physiological is the pressure, not the stretch: at $\lambda_\theta=1.16$ the stiffest subject bears about 400\,mmHg and a soft young subject about 70. Therefore, at this level, all subjects are evaluated in the same window, $P$ from 60 to 200\,mmHg (8.0 to 26.7\,kPa) at 141 values, which covers with a margin the measured mean pressures (64/116\,mmHg in NT and 73/127\,mmHg in HT~\cite{masson}). The target curve is the stretch of the media--adventitia boundary, $\lambda(P_k)$, proportional to the diameter (Fig.~\ref{fig:presion}): stiff subjects reach 200\,mmHg with $\lambda$ between 1.12 and 1.15, soft ones with $\lambda$ between 1.20 and 1.23.
 
