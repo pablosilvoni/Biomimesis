@@ -1,10 +1,10 @@
 # Biomimesis
 
-Ajuste de curvas en J con una base de rectas truncadas, coeficientes enteros y una red neuronal. Aplicado a la curva tensión–estiramiento circunferencial σθθ(λθ) de la carótida: la red da cuántas láminas de cada material hay que apilar.
+Ajuste de curvas tipo J con una base de rectas truncadas, coeficientes enteros y una red neuronal. Aplicado a la curva tensión–estiramiento circunferencial σθθ(λθ) de la carótida: la red da cuántas láminas de cada material hay que apilar.
 
 ## Resumen
 
-**[Ajuste de curvas en J - Santiago y Pablo.pdf](Ajuste%20de%20curvas%20en%20J%20-%20Santiago%20y%20Pablo.pdf)**: cómo se ajusta una curva en J con rectas truncadas y coeficientes enteros, cómo se elige la base (precisión, cond(Ã) < 30, coeficientes no negativos), por qué se usa el minimax y cómo la red neuronal en cadena da los coeficientes sin resolver ninguna optimización.
+**[Ajuste de curvas tipo J.pdf](Ajuste%20de%20curvas%20tipo%20J.pdf)**: cómo se ajusta una curva en J con rectas truncadas y coeficientes enteros, cómo se elige la base (precisión, cond(Ã) < 30, coeficientes no negativos), por qué se usa el minimax y cómo la red neuronal en cadena da los coeficientes sin resolver ninguna optimización.
 
 ## Cuaderno en Google Colab — V58
 
