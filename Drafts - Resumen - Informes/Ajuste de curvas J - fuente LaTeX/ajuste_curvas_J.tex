@@ -152,14 +152,33 @@ Aquí la entrada es la curva $y$ en sus $n$ puntos y la salida son los coeficien
 \subsection{Arquitectura: red en cadena con salida ordinal}
 Dos ideas adaptan la red a coeficientes enteros que dependen entre sí (Fig.~\ref{fig:cadena}):
 \begin{itemize}
-\item \textbf{Salida ordinal.} Los coeficientes son cantidades ordenadas: errar por una unidad no es lo mismo que errar por diez. Para cada coeficiente, la red no elige una entre 21 opciones sin orden: responde 20 preguntas, ``¿$z_j>k$?'' ($k=0,\ldots,19$), y $z_j$ es la cantidad de respuestas afirmativas~\cite{frankhall,lilin,cao}. Las 20 preguntas comparten un puntaje $s_j$ y difieren en un umbral, $P(z_j>k)=\sigma(s_j+b_{jk})$, con $\sigma$ la función logística. Cuando la red se equivoca, lo hace por poco.
+\item \textbf{Salida ordinal.} Los coeficientes son cantidades ordenadas: errar por una unidad no es lo mismo que errar por diez. Para cada coeficiente, la red no elige una entre 21 opciones sin orden: responde 20 preguntas, ``¿$z_j>k$?'' ($k=0,\ldots,19$), y $z_j$ es la cantidad de respuestas afirmativas~\cite{frankhall,lilin,cao}. Las 20 preguntas comparten un puntaje $s_j$ y difieren en un umbral, $P(z_j>k)=\sigma(s_j+b_{jk})$, con $\sigma(u)=1/(1+e^{-u})$ la función logística. Como los umbrales aprendidos decrecen con $k$, las respuestas pasan de ``sí'' a ``no'' una sola vez, y un error lleva a $z_j$ a un valor vecino del correcto (ejemplo más abajo).
 \item \textbf{Decisión en cadena.} Los coeficientes se compensan entre sí: una unidad de más en uno puede corregirse con una de menos en el siguiente. La red los decide de a uno, cada uno sabiendo los anteriores. Es la regla de la cadena de la probabilidad,
 \[
 p(z_1,\ldots,z_N\mid y)=\prod_{j=1}^{N}p(z_j\mid y,z_1,\ldots,z_{j-1}),
 \]
 en la que se basan las cadenas de clasificadores~\cite{read11,dembczynski}.
 \end{itemize}
-Un tronco común ($n\to256\to128\to64$, con activación ReLU y normalización por capa) resume la curva en un vector $h$ de 64 números. La cabeza $j$ recibe $h$ y los coeficientes ya elegidos $z_1,\ldots,z_{j-1}$, divididos por 20, pasa por dos capas (128 y 64) y responde sus 20 preguntas. Al entrenar, cada cabeza recibe los coeficientes minimax de las anteriores; al usarla, los que eligió la propia red. La pérdida es la entropía cruzada de las preguntas, que equivale a maximizar la verosimilitud de las respuestas del minimax.
+Un tronco común ($n\to256\to128\to64$, con activación ReLU y normalización por capa) resume la curva en un vector $h$ de 64 números. La cabeza $j$ recibe $h$ y los coeficientes ya elegidos $z_1,\ldots,z_{j-1}$, divididos por 20, pasa por dos capas (128 y 64) y responde sus 20 preguntas. Al entrenar, cada cabeza recibe los coeficientes minimax de las anteriores; al usarla, los que eligió la propia red. 
+
+\paragraph{Un ejemplo de salida ordinal.} Para el sujeto de prueba NT01, la cabeza~1 da el puntaje $s_1=-13{,}73$. Sus 20 umbrales decrecen de $b_{1,0}=27{,}29$ a $b_{1,19}=-24{,}28$, con un paso medio de 2,7. Sumando el puntaje a cada umbral y aplicando $\sigma$:
+\begin{center}\small
+\begin{tabular}{lccccccccc}
+\hline
+$k$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8--19\\
+$s_1+b_{1k}$ & 13,56 & 10,92 & 7,48 & 4,35 & 1,27 & $-1{,}72$ & $-4{,}70$ & $-7{,}84$ & $<-10$\\
+$P(z_1>k)$ & 1,00 & 1,00 & 1,00 & 0,99 & 0,78 & 0,15 & 0,01 & 0,00 & 0,00\\
+respuesta & sí & sí & sí & sí & sí & no & no & no & no\\
+\hline
+\end{tabular}
+\end{center}
+Hay cinco respuestas afirmativas ($P>1/2$): $z_1=5$, igual que el minimax. La única pregunta dudosa es la que está en el cambio de ``sí'' a ``no'' ($k=4$, $P=0{,}78$). Si el puntaje fuera algo menor, solo esa respuesta pasaría a ``no'' y la red daría $z_1=4$; para dar $z_1=1$ el puntaje tendría que bajar unas 11 unidades, cuatro pasos de umbral. Por eso, cuando la red se equivoca, el error es de una unidad. La cadena completa da para NT01 los coeficientes $(5,7,5,6,6,7)$; el minimax, $(5,7,5,6,7,5)$. Difieren en los dos últimos, que se compensan entre sí, y ambos tienen $e_{\max}=1{,}11\,\%$.
+
+\paragraph{La pérdida: entropía cruzada de las preguntas.} Para entrenar hace falta medir cuánto se aleja cada respuesta de la del minimax. Cada pregunta es un sí/no con la respuesta correcta $t_k=1$ si el coeficiente minimax es mayor que $k$, y $t_k=0$ si no. Si la red da la probabilidad $p_k$ de ``sí'', su error en esa pregunta es la entropía cruzada binaria
+\[
+\ell_k=-\bigl[t_k\ln p_k+(1-t_k)\ln(1-p_k)\bigr],
+\]
+que vale $-\ln p_k$ cuando la respuesta correcta es ``sí'' y $-\ln(1-p_k)$ cuando es ``no'': es casi cero si la red acierta con seguridad y crece sin límite si afirma lo contrario con seguridad. La pérdida suma $\ell_k$ sobre las 20 preguntas, los $N$ coeficientes y todas las curvas de entrenamiento. En el ejemplo, el minimax da $z_1=5$, es decir $t=(1,1,1,1,1,0,0,\ldots)$. Las preguntas $k=4$ y $k=5$ aportan $-\ln 0{,}78=0{,}25$ y $-\ln(1-0{,}15)=0{,}16$; las demás, casi nada; el total es 0,44. Si el minimax hubiera dado 6, la pregunta $k=5$ aportaría $-\ln 0{,}15=1{,}89$ y el total sería 2,16; si hubiera dado 9, el total sería 25,7. La pérdida crece con la distancia al valor correcto, que es lo que se busca para cantidades ordenadas. Minimizarla equivale a maximizar la probabilidad que la red asigna a las respuestas del minimax ($e^{-0{,}44}=0{,}65$ en el ejemplo), es decir, su verosimilitud.
 
 \begin{figure}[tb]\centering\includegraphics[width=0.95\textwidth]{red_cadena_es.pdf}
 \caption{Red en cadena para $N=6$. El tronco común resume la curva en $h$; la cabeza $j$ recibe $h$ y los coeficientes ya elegidos ($m_i=z_i/20$) y responde las 20 preguntas ``¿más de $k$?''; su coeficiente es la cantidad de respuestas afirmativas. La revisión de $\pm1$, opcional, evalúa las combinaciones vecinas de la respuesta.}\label{fig:cadena}
@@ -224,7 +243,7 @@ Otros estudios (63) & 1,91 / 5,71 · 57 & 2,26 / 9,44 · 46 & 2,12 / 6,16 · 50\
 \end{table}
 
 \begin{itemize}
-\item \textbf{Curvas de prueba.} La red ajusta dentro de la meta los 10 sujetos de prueba, sola y con la revisión de $\pm1$; con la revisión, su peor caso es igual al del minimax (1,61\,\%).
+\item \textbf{Curvas de prueba.} La red ajusta dentro de la meta los 10 sujetos de prueba, sola y con la revisión de $\pm1$; en este último caso, su peor error es igual al del minimax (1,61\,\%).
 \item \textbf{Otros estudios.} Sin cambiar nada ---la misma base, la misma red, la misma franja---, el método se aplicó a curvas de carótidas común, externa e interna recalculadas con las leyes y los parámetros publicados por Sommer y Holzapfel~\cite{sommer}, Liu et al.~\cite{liu} y Kamenskiy et al.~\cite{kamenskiy}. Cada curva se llevó al intervalo $[1{,}02;\,1{,}16]$ con un cambio afín de la abscisa, sin tocar la ordenada. De 98 curvas, 63 quedan dentro de la franja. La red con revisión cumple en 50 y el minimax en 57. En las 6 restantes ningún ajuste entero cumple: son curvas casi rectas y de poco recorrido, en las que una sola unidad mueve el ajuste más de lo que permite la meta.
 \item \textbf{Varios ajustes enteros casi equivalentes.} La red da exactamente los coeficientes del minimax en 6 de los 41 sujetos, pero donde difiere lo hace en una o dos unidades con errores parecidos. Por eso la red se juzga por el error del ajuste y no por coincidir con el minimax.
 \item \textbf{Tiempo.} El minimax tarda de 50 a 65\,ms por curva. La red, en lote, 0,3\,ms por curva, y con la revisión de $\pm1$, 2,0\,ms: de 30 a 200 veces menos.
@@ -264,7 +283,6 @@ con $k_j$ y $S_j$ fijos (Tabla~\ref{tab:bases}) y $z_j$ enteros de 0 a 20.
 
 \section{Conclusión}
 Una curva en J se ajusta con una suma de rectas truncadas de una base fija y coeficientes enteros no negativos. El ajuste es creciente y convexo por construcción. La base se elige una vez para toda una familia de curvas, con criterios de precisión en las peores curvas, condicionamiento y signo. El ajuste minimax da los mejores coeficientes enteros que existen, y con él se entrena una red neuronal que da los coeficientes de una curva nueva en una evaluación. En las curvas tensión--estiramiento de 41 carótidas, la red, con una revisión de $\pm1$, ajusta dentro de la meta los 10 sujetos de prueba y 50 de 63 curvas de otros estudios; en total, 91 de los 98 casos que admiten un ajuste entero dentro de la meta (el 93\,\%), sin resolver ninguna optimización.
-
 
 \begin{thebibliography}{99}\footnotesize\setlength{\itemsep}{0pt}
 \bibitem{tf} Abadi, M., et al. (2016). TensorFlow: a system for large-scale machine learning. \emph{Proc. 12th USENIX OSDI}, 265--283. \url{https://www.usenix.org/conference/osdi16/technical-sessions/presentation/abadi}
