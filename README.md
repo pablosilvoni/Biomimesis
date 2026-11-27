@@ -21,6 +21,8 @@ La red en cadena con salida ordinal da los coeficientes enteros (láminas por ma
 2. Abrir el cuaderno con el botón y ejecutar *Entorno de ejecución → Ejecutar todas*; aceptar la conexión con Drive.
 3. La celda de preparación toma de Drive las tablas de Masson, las bases, las etiquetas del minimax y la red ya entrenada, y el cuaderno muestra los resultados sin entrenar.
 
+**Para probar la red con una curva propia.** La última celda del cuaderno recibe una curva σθθ(λθ) [kPa] como fórmula, como puntos escritos en la celda o como archivo CSV/Excel de dos columnas (λθ, σθθ) que se sube desde la computadora. Controla que la curva tenga forma J y esté dentro de la banda y1–y2 en que se entrenó la red, y compara las láminas de la red, de la red con la revisión de ±1 y del minimax, con su error, su tiempo y una figura.
+
 **Para ver cómo entrena la red.** En la Celda 0, cambiar `ENTRENAR = "auto"` por `ENTRENAR = True`: la red se entrena de nuevo (hasta 800 épocas, con parada temprana) a partir de las etiquetas del minimax ya calculadas. Conviene elegir un entorno con GPU (*Entorno de ejecución → Cambiar tipo de entorno*). Las curvas de aprendizaje del entrenamiento original están en `historial_entrenamiento_v58_N_cadena.csv`.
 
 Cada carpeta contiene el cuaderno, las tablas de Masson et al. (2011), las bases (`bases_v40_N.csv`), las etiquetas enteras del minimax (`etiquetas_enteras_v58_N.npz`), la red en cadena (`modelo_rn_curva_j_v58_N_cadena.weights.h5`, `scalers_curva_j_v58_N_cadena.pkl`) y los resultados (`tabla_41_RN_vs_minimax_v58_N.csv`, `comparacion_enteros_v58_N.csv`, validación externa `v58_externas_N.csv`). El `LEEME.txt` describe la red.
