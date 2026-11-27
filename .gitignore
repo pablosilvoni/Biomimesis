@@ -25,3 +25,7 @@ Otras versiones/*
 
 # Archivos comprimidos sueltos (transferencias), no se suben
 /*.zip
+
+# V40 y V47: solo en la computadora por ahora, no se suben
+Colab/V40_*/
+Colab/V47_*/
