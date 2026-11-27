@@ -30,9 +30,12 @@ vale cero hasta su \emph{nudo} $k_j$ y desde ahí crece con pendiente $S_j>0$. L
 \begin{equation}\label{eq:ajuste}
 \hat y(x)=\sum_{j=1}^{N}z_j\,A_j(x)=(Az)(x),\qquad z_j\in\{0,1,\ldots,20\},
 \end{equation}
-con $A\in\mathbb R^{n\times N}$ la matriz de la base (una fila por punto $x_i$, una columna por recta). Cada nudo produce un quiebre en el que la pendiente aumenta en $z_jS_j$; con pocos nudos bien ubicados, la suma arma la J.
+con $A\in\mathbb R^{n\times N}$ la matriz de la base (una fila por punto $x_i$, una columna por recta). Cada nudo produce un quiebre en el que la pendiente aumenta en $z_jS_j$; con pocos nudos bien ubicados, la suma arma la J (Fig.~\ref{fig:ejbase}).
 
 \textbf{La forma se conserva por construcción.} Cada $A_j$ es no decreciente y convexa, y una combinación con coeficientes no negativos de funciones no decrecientes y convexas también lo es: todo ajuste~\eqref{eq:ajuste} es una curva en J, poligonal. Para nudos fijos, además, $\hat y$ es \textbf{lineal} en los coeficientes.
+
+\begin{figure}[tb]\centering\includegraphics[width=\textwidth]{base_ejemplo.png}
+\caption{Izquierda: las 6 rectas truncadas de la base usada en la Sección~\ref{sec:aplic}, con cada columna dividida por su máximo, de modo que todas valen 1 en $x=b$; la primera tiene su nudo antes del intervalo. Derecha: ajuste por mínimos cuadrados de una curva en J de prueba, $y=5+15\,(e^{20(x-1{,}02)}-1)$; cada franja de color es el aporte $z_j\tilde A_j$ de una recta, y su suma (rojo) sigue la curva (negro). Las líneas punteadas marcan los nudos.}\label{fig:ejbase}\end{figure}
 
 \textbf{Error.} Para una curva con rango $\Delta=\max y-\min y$,
 \begin{equation}\label{eq:emax}
@@ -45,14 +48,30 @@ $e_{\max}$ es el peor punto, en porcentaje del rango, y es tan exigente con una 
 Los nudos $k=(k_1,\ldots,k_N)$ se eligen \textbf{una sola vez, para toda la familia de curvas}, minimizando una función de costo $\Phi(k)$ evaluada sobre un conjunto grande de curvas representativas de la familia (aquí, 22\,500 curvas y los 31 sujetos de entrenamiento). $\Phi$ reúne tres exigencias: precisión en las peores curvas, buen condicionamiento y coeficientes no negativos.
 
 \subsection{Precisión en las peores curvas}
-Para cada curva se calcula el $e_{\max}$ del ajuste por mínimos cuadrados, y se minimiza su CVaR 99\,\%~\cite{rockafellar}: el promedio de $e_{\max}$ sobre el 1\,\% de las curvas con mayor error. Minimizar el promedio de todas dejaría sin control a las peores; minimizar solo la peor haría depender la elección de una única curva. El CVaR está entre ambos. Se suma un término menor, 0,25 veces el $E_{\mathrm{rms}}$ medio, para que mejore también el ajuste típico.
+Para cada curva de la familia se calcula el $e_{\max}$ de su ajuste por mínimos cuadrados. Eso da una distribución de errores, una por curva, y hay que resumirla en un número.
+
+\paragraph{Qué es el CVaR.} El CVaR (\emph{conditional value at risk}, valor en riesgo condicional) es una medida de la cola de una distribución, tomada de la gestión de riesgo financiero~\cite{rockafellar}. Para una variable aleatoria $X$ ---aquí, el $e_{\max}$ de una curva de la familia--- y un nivel $\alpha$, es el valor medio de $X$ en la fracción $1-\alpha$ de los casos peores:
+\begin{equation}\label{eq:cvar}
+\mathrm{CVaR}_\alpha(X)=\min_{t}\Bigl\{\,t+\frac{1}{1-\alpha}\,\mathbb E\bigl[\max(0,\,X-t)\bigr]\Bigr\},
+\end{equation}
+donde el $t$ que minimiza es el cuantil $\alpha$ de $X$. Con $M$ curvas se calcula sin optimizar: se ordenan los $e_{\max}$ de mayor a menor y se promedian los $\lceil(1-\alpha)M\rceil$ primeros. Aquí $\alpha=0{,}99$ y la muestra tiene 2532 curvas (2500 de la familia, los 31 sujetos de entrenamiento y la curva límite superior; paso~3 de la metodología, más abajo), de modo que $\mathrm{CVaR}_{99}$ es \textbf{el promedio de los $e_{\max}$ de las 26 peores curvas}.
+
+\paragraph{Por qué el CVaR.} El CVaR está entre los dos resúmenes obvios. El promedio de todas las curvas ($\alpha=0$) dejaría sin control a las peores, que son las que deciden si se cumple la meta. El máximo ($\alpha\to1$) haría depender la elección de una única curva, y una sola curva rara cambiaría la base. El CVaR mira las peores sin depender de una sola. Se suma un término menor, 0,25 veces el $E_{\mathrm{rms}}$ medio, para que mejore también el ajuste típico.
 
 \subsection{Condicionamiento: el criterio $\kappa(A)<30$}
-\paragraph{Definición.} Sea $\tilde A$ la matriz de la base con cada columna dividida por su máximo, de modo que todas valen 1 en $x=b$. Su número de condición es el cociente entre el mayor y el menor de sus valores singulares,
+\paragraph{Definición.} Sea $\tilde A$ la matriz de la base con cada columna dividida por su máximo:
+\[
+\tilde A_{ij}=\frac{\max(0,\,x_i-k_j)}{b-k_j}.
+\]
+Como cada recta es creciente, su máximo está en el extremo derecho $x=b$, y ahí todas las columnas valen 1 (Fig.~\ref{fig:ejbase}, izquierda). La descomposición en valores singulares~\cite{golub} escribe $\tilde A=U\Sigma V^{\top}$, con $U$ ($n\times N$) y $V$ ($N\times N$) de columnas ortonormales y $\Sigma$ diagonal con los valores singulares $s_1\ge\dots\ge s_N\ge0$, que son las raíces cuadradas de los autovalores de $\tilde A^{\top}\tilde A$. El mayor y el menor tienen un sentido directo:
+\[
+s_{\max}=\max_{\lVert v\rVert=1}\lVert\tilde Av\rVert,\qquad s_{\min}=\min_{\lVert v\rVert=1}\lVert\tilde Av\rVert:
+\]
+cuánto se estira y cuánto se encoge, como mucho, un vector de coeficientes al convertirse en curva. El número de condición es su cociente,
 \begin{equation}\label{eq:kappa}
 \kappa(A)=\frac{s_{\max}(\tilde A)}{s_{\min}(\tilde A)},
 \end{equation}
-calculados por descomposición en valores singulares~\cite{golub,trefethen}. Se normalizan las columnas porque las pendientes $S_j$ son una escala arbitraria (la unidad de cada recta): normalizadas, $\kappa$ depende solo de dónde están los nudos.
+y mide cuán distintas son esas dos situaciones extremas~\cite{trefethen}. Se normalizan las columnas porque las pendientes $S_j$ son una escala arbitraria (la unidad de cada recta): normalizadas, $\kappa$ depende solo de dónde están los nudos.
 
 \paragraph{Qué mide.} Para mínimos cuadrados con residuo chico, como aquí (menos del 1,5\,\% del rango), una perturbación relativa de la curva se traslada a los coeficientes amplificada a lo sumo, a primer orden, por un factor del orden de $\kappa$~\cite{golub}:
 \[
@@ -64,12 +83,12 @@ Geométricamente, $s_{\min}$ chico significa que existe una combinación de colu
 
 \paragraph{Por qué importa aquí.} Un coeficiente mal determinado es un problema por tres razones: (1) puede salir negativo, y eso rompe la convexidad garantizada y no se fabrica; (2) al pasar a enteros, una unidad en una dirección mal condicionada mueve mucho la curva; y (3) la red debe aprender la relación curva $\to$ coeficientes, y una relación que amplifica mucho las diferencias entre curvas es más difícil de aprender.
 
-\paragraph{Por qué 30 y qué limita.} El umbral es una elección de diseño, no sale de un teorema: con un error de 1\,\% en la curva, acota en el peor caso en 30\,\% el error relativo de los coeficientes, y en la práctica, como en el ejemplo, el error es mucho menor. $\kappa$ crece cuando los nudos se acercan y, por lo tanto, cuando se ponen más rectas en el mismo intervalo (Fig.~\ref{fig:cond}). Con nudos equiespaciados, 6 rectas ya superan el umbral ($\kappa=46$); la búsqueda ubica los nudos de modo que 6 rectas quedan en 28,0 y 5 en 19,0. Así, el umbral es, junto con la precisión, lo que limita cuántas rectas caben en el intervalo.
+\paragraph{Por qué 30 y qué limita.} El umbral es una elección de diseño, no sale de un teorema: con un error de 1\,\% en la curva, acota en el peor caso en 30\,\% el error relativo de los coeficientes, y en la práctica, como en el ejemplo, el error es mucho menor. $\kappa$ crece cuando los nudos se acercan y, por lo tanto, cuando se ponen más rectas en el mismo intervalo. La Fig.~\ref{fig:cond} lo muestra con dos cálculos hechos para este trabajo: correr un nudo hacia otro en la base de 6 rectas, y repartir $N$ nudos en partes iguales. Con nudos equiespaciados, 6 rectas ya superan el umbral ($\kappa=46$); la búsqueda ubica los nudos de modo que 6 rectas quedan en 28,0 y 5 en 19,0. Así, el umbral es, junto con la precisión, lo que limita cuántas rectas caben en el intervalo.
 
 \paragraph{Cómo se impone.} De dos maneras: una separación mínima de 0,008 entre nudos, como restricción dura, y un término de penalización en $\Phi$, $50\,\max\bigl(0,\ \kappa-29\bigr)$, que empieza a actuar una unidad antes del umbral para dejar margen. La separación mínima sola no alcanza (en el ejemplo de la Fig.~\ref{fig:cond}, con 0,008 de separación $\kappa\approx57$); es la penalización la que lleva la base por debajo de 30.
 
 \begin{figure}[tb]\centering\includegraphics[width=\textwidth]{condicion_base.png}
-\caption{Número de condición de la base (columnas normalizadas, 999 puntos en $[1{,}02;\,1{,}16]$). Izquierda: en la base de 6 rectas se acerca el nudo 5 al 4; $\kappa$ crece rápidamente al juntarse los nudos. Derecha: con nudos equiespaciados (primer nudo en 0,82), $\kappa$ crece con el número de rectas y supera el umbral desde $N=6$; los nudos optimizados de las bases adoptadas quedan debajo.}\label{fig:cond}\end{figure}
+\caption{Número de condición~\eqref{eq:kappa}, calculado para este trabajo con 999 puntos en $[1{,}02;\,1{,}16]$. Izquierda: en la base de 6 rectas de la Tabla~\ref{tab:bases} se dejan fijos todos los nudos salvo el 5, que se corre hacia el 4, $k_5=k_4+d$, con la separación $d$ de 0,001 a 0,0219 (la de la base adoptada); $\kappa$ crece rápidamente al juntarse los nudos. Derecha: bases sin optimizar, con $k_1=0{,}82$ y $k_2,\ldots,k_N$ equiespaciados entre 1,023 y 1,148 (cuadrados); puntos azules: las bases optimizadas de la Tabla~\ref{tab:bases}. Con nudos equiespaciados, $\kappa$ supera el umbral desde $N=6$; con los nudos optimizados, 6 rectas quedan debajo.}\label{fig:cond}\end{figure}
 
 \subsection{Coeficientes no negativos}
 El ajuste libre por mínimos cuadrados no debe necesitar coeficientes negativos en ninguna curva de la familia: un coeficiente negativo rompería la convexidad garantizada y no corresponde a ninguna cantidad fabricable. Se exige en las 22\,500 curvas, en los sujetos de entrenamiento y en las curvas límite, con una tolerancia de 0,01 unidad. Como el signo de un coeficiente no cambia al escalar su columna, esta condición queda fijada por los nudos.
@@ -79,20 +98,30 @@ Con todo,
 \begin{equation}\label{eq:costo}
 \Phi(k)=\mathrm{CVaR}_{99}(e_{\max})+0{,}25\,\overline{E_{\mathrm{rms}}}+50\,\max\bigl(0,\ \kappa(A)-29\bigr)+1000\,\overline{n^{-}},
 \end{equation}
-con $\overline{n^{-}}$ la suma de los coeficientes negativos de cada curva, promediada. Si los nudos violan una restricción, $\Phi=10^{9}$ y ese juego se descarta.
+con $\overline{n^{-}}$ el promedio, sobre las curvas, de $n^{-}=\sum_j\max\bigl(0,\,-10\,z_j/z_j^{\max}\bigr)$: la suma de los coeficientes negativos de una curva, medidos en décimas del mayor valor $z_j^{\max}$ que toma ese coeficiente en la familia.
+
+\paragraph{De dónde sale y cómo se justifica.} $\Phi$ convierte las tres exigencias en un solo número a minimizar. El primer par de términos es el \emph{objetivo}: la precisión. Los otros dos son \emph{restricciones}, impuestas por penalización exterior~\cite{nocedal}: valen cero mientras se cumplen y crecen en cuanto se violan. Los pesos no se deducen de un principio: se eligen por escala, para que cada término cumpla su papel. El CVaR y el $E_{\mathrm{rms}}$ están en porcentaje del rango y valen unos pocos puntos (1 a 3), y en esa escala:
+\begin{itemize}
+\item \textbf{0,25} hace del $E_{\mathrm{rms}}$ un criterio secundario: desempata entre bases de CVaR parecido sin imponerse sobre él;
+\item \textbf{50} por unidad de $\kappa$ por encima de 29: pasar de 29 a 30 ya cuesta 50 puntos, más que cualquier mejora de precisión posible, así que el mínimo de $\Phi$ nunca está en una base con $\kappa\ge30$;
+\item \textbf{1000} por décima de coeficiente negativo: un coeficiente negativo de solo el 0,1\,\% de su máximo, si aparece en todas las curvas, ya cuesta 10 puntos.
+\end{itemize}
+Con estos pesos, el mínimo de $\Phi$ es la base más precisa entre las que cumplen $\kappa<30$ y no necesitan coeficientes negativos: las penalizaciones hacen de restricciones. Por eso el último paso de la metodología verifica que la base obtenida las cumpla de verdad. Las restricciones geométricas (separación y límites de los nudos) son, en cambio, duras: si un juego de nudos las viola, $\Phi=10^{9}$ y se descarta.
 
 \begin{caja}{Metodología de elección de la base}
 \begin{enumerate}[label=\arabic*.]
-\item \textbf{Fijar $N$} y las restricciones: $k_1$ antes del intervalo (aquí entre 0,6 y 0,98); $k_2,\ldots,k_N$ dentro, separados al menos 0,008, y el último a más de 0,012 del extremo $b$.
+\item \textbf{Fijar $N$} y las restricciones: $k_1$ antes del intervalo (aquí entre 0,6 y 0,98); $k_2,\ldots,k_N$ entre 1,00 y $b-0{,}012$, separados al menos 0,008. El último queda así a más de 0,012 del extremo $b$, para que su recta actúe en suficientes puntos.
 \item \textbf{Generar la familia}: curvas representativas dentro de la franja (aquí, 22\,500 de la ley de Masson con parámetros de los sujetos de entrenamiento mezclados, perturbados o sorteados) y los sujetos de entrenamiento. Los sujetos de prueba no intervienen.
-\item \textbf{Para cada candidato $k$}: armar $\tilde A$ y calcular $\kappa$ por SVD; ajustar por mínimos cuadrados una muestra de la familia (2500 curvas y los sujetos, en uno de cada dos puntos, para abaratar) y calcular el CVaR 99\,\% de $e_{\max}$ y el $E_{\mathrm{rms}}$ medio; contar los coeficientes negativos en toda la familia; evaluar $\Phi$.
+\item \textbf{Para cada candidato $k$}: armar $\tilde A$ y calcular $\kappa$ por SVD; ajustar por mínimos cuadrados una muestra de la familia (2500 curvas, los sujetos y la curva límite superior, en uno de cada dos puntos, para abaratar) y calcular el CVaR 99\,\% de $e_{\max}$ y el $E_{\mathrm{rms}}$ medio; contar los coeficientes negativos en toda la familia; evaluar $\Phi$.
 \item \textbf{Minimizar $\Phi$}: evolución diferencial~\cite{storn} (hasta 300 generaciones, tolerancia $10^{-6}$), que no usa derivadas y explora todo el dominio sin quedarse en el primer mínimo local, y refinamiento con el simplex de Nelder--Mead~\cite{nelder} (hasta 6000 iteraciones).
 \item \textbf{Fijar las pendientes}: $S_j=\mathrm{PEND}_{\max,j}/20$, con $\mathrm{PEND}_{\max,j}$ la mayor pendiente que la recta $j$ debe aportar en la familia (calculada con la seudoinversa), para que ninguna curva necesite más de 20 unidades.
 \item \textbf{Verificar}: $\kappa<30$ y ningún coeficiente negativo en la familia.
 \end{enumerate}
 \end{caja}
 
-\paragraph{El primer nudo antes del intervalo.} Las curvas de la familia ya tienen valor positivo en $x=a$, y en ese punto solo puede aportarlo una recta que ya esté activa. Ninguno de los límites de $k_1$ está activo en el óptimo ($k_1=0{,}82$ con 5 y con 6 rectas): la elección no depende de ellos.
+Las bases que resultan para la aplicación están en la Tabla~\ref{tab:bases} y en las Figs.~\ref{fig:ejbase} y~\ref{fig:bases}.
+
+\paragraph{El primer nudo antes del intervalo.} $[a,b]$ es el intervalo en que están dadas las curvas; en la aplicación, $a=1{,}02$ y $b=1{,}16$. En $x=a$ las curvas de la familia ya valen más que cero (de 4,7 a 49\,kPa en la aplicación). Una recta con nudo $k_j\ge a$ vale cero en $x=a$, así que ese valor solo puede darlo una recta con el nudo antes de $a$. Por eso $k_1$, el nudo de la primera recta, se busca en $[0{,}6;\,0{,}98]$, debajo de $a$, y los demás cerca del intervalo o dentro de él. El valor de $k_1$ que resulta de minimizar $\Phi$ es 0,8193 con 6 rectas y 0,8228 con 5 (Tabla~\ref{tab:bases}): queda lejos de los dos extremos de su rango de búsqueda, 0,6 y 0,98, de modo que esos extremos no condicionan el resultado.
 
 \paragraph{Pendientes.} La escala $S_j$ no cambia el ajuste ---cuenta el producto $z_jS_j$---, pero fija el tamaño de una unidad: con el tope de 20, cada unidad es la vigésima parte de lo más que esa recta debe aportar en la familia.
 
@@ -143,7 +172,7 @@ A la respuesta de la red se le aplica, opcionalmente, una revisión: se evalúan
 La red se entrena con curvas de la familia y solo dentro de ese rango se garantiza su resultado. Antes de usarla se verifica que la curva nueva (1) tenga forma de J, es decir, que admita una aproximación no negativa con muchas rectas truncadas (40, con $E_{\mathrm{rms}}\le2$\,\%, por mínimos cuadrados no negativos~\cite{lawson}), y (2) quede dentro de la franja de curvas con que se entrenó. Si no cumple (2), la red no se usa y se resuelve el minimax~\eqref{eq:minimax}.
 
 %=====================================================================
-\section{Aplicación: la curva tensión--estiramiento arterial}
+\section{Aplicación: la curva tensión--estiramiento arterial}\label{sec:aplic}
 \subsection{Las variables con nombre físico}
 Si la abscisa es el estiramiento circunferencial de una pared arterial, $x=\lambda_\theta$, y la ordenada la tensión circunferencial, $y=\sigma_{\theta\theta}$, la curva en J es la respuesta mecánica del tejido: blanda a bajo estiramiento, cuando trabajan la elastina y el músculo, y rígida a alto estiramiento, cuando se reclutan las fibras de colágeno~\cite{holzapfel,humphrey}. Con esos nombres, cada elemento del método toma un significado:
 \begin{itemize}
@@ -258,6 +287,7 @@ Una curva en J se ajusta con una suma de rectas truncadas de una base fija y coe
 \bibitem{masson} Masson, I., Beaussier, H., Boutouyrie, P., Laurent, S., Humphrey, J.\,D., Zidi, M. (2011). Carotid artery mechanical properties and stresses quantified using in vivo data from normotensive and hypertensive humans. \emph{Biomech. Model. Mechanobiol.} 10(6), 867--882. \href{https://doi.org/10.1007/s10237-010-0279-6}{doi:10.1007/s10237-010-0279-6}
 \bibitem{nair} Nair, V., Bartunov, S., Gimeno, F., et al. (2020). Solving mixed integer programs using neural networks. arXiv:2012.13349. \url{https://arxiv.org/abs/2012.13349}
 \bibitem{nelder} Nelder, J.\,A., Mead, R. (1965). A simplex method for function minimization. \emph{Computer J.} 7(4), 308--313. \href{https://doi.org/10.1093/comjnl/7.4.308}{doi:10.1093/comjnl/7.4.308}
+\bibitem{nocedal} Nocedal, J., Wright, S.\,J. (2006). \emph{Numerical Optimization}, 2.ª ed. Springer, Nueva York (cap.~17: métodos de penalización).
 \bibitem{penrose} Penrose, R. (1955). A generalized inverse for matrices. \emph{Math. Proc. Cambridge Philos. Soc.} 51(3), 406--413. \href{https://doi.org/10.1017/S0305004100030401}{doi:10.1017/S0305004100030401}
 \bibitem{read11} Read, J., Pfahringer, B., Holmes, G., Frank, E. (2011). Classifier chains for multi-label classification. \emph{Machine Learning} 85, 333--359. \href{https://doi.org/10.1007/s10994-011-5256-5}{doi:10.1007/s10994-011-5256-5}
 \bibitem{rockafellar} Rockafellar, R.\,T., Uryasev, S. (2000). Optimization of conditional value-at-risk. \emph{J. Risk} 2(3), 21--41. \href{https://doi.org/10.21314/JOR.2000.038}{doi:10.21314/JOR.2000.038}
